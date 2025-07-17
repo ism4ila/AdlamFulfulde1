@@ -15,7 +15,7 @@ class ProManager(private val context: Context) {
     private val _proStatus = MutableStateFlow(loadProStatus())
     val proStatus: StateFlow<ProStatus> = _proStatus.asStateFlow()
     
-    val isProUser: StateFlow<Boolean> = MutableStateFlow(prefs.getBoolean("is_pro", false))
+        val isProUser: StateFlow<Boolean> = MutableStateFlow(false)
 
     private fun loadProStatus(): ProStatus {
         val isPro = prefs.getBoolean("is_pro", false)
@@ -67,27 +67,8 @@ class ProManager(private val context: Context) {
         )
     }
 
-    fun checkSubscriptionStatus(): Boolean {
-        val status = _proStatus.value
-        val currentTime = System.currentTimeMillis()
-
-        if (status.isPro && status.expirationDate != null && status.expirationDate < currentTime) {
-            // Abonnement expiré
-            prefs.edit()
-                .putBoolean("is_pro", false)
-                .putString("subscription_plan", null)
-                .putLong("expiration_date", 0)
-                .apply()
-
-            _proStatus.value = status.copy(
-                isPro = false,
-                subscriptionPlan = null,
-                expirationDate = null
-            )
-            return false
-        }
-
-        return status.isPro || status.isTrialActive
+        fun checkSubscriptionStatus(): Boolean {
+        return false
     }
 
     fun getProFeatures(): List<ProFeature> {

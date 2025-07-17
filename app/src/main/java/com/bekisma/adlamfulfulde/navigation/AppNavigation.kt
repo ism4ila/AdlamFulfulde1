@@ -146,7 +146,7 @@ fun AppNavigation(
         }
         composable("alphabet") { AlphabetScreen(navController) }
         composable("numbers") {
-            if (proManager.checkSubscriptionStatus()) {
+            if (false) {
                 NumbersScreen(navController)
             } else {
                 navController.navigate("upgrade_to_pro_screen")
@@ -154,7 +154,7 @@ fun AppNavigation(
         }
         composable("writing") { WritingScreen(navController) }
         composable("quiz") {
-            if (proManager.checkSubscriptionStatus()) {
+            if (false) {
                 QuizScreen(navController)
             } else {
                 navController.navigate("upgrade_to_pro_screen")
@@ -173,7 +173,7 @@ fun AppNavigation(
             }
 
             // Supposons que seuls UPPERCASE et LOWERCASE sont gratuits
-            if (!proManager.checkSubscriptionStatus() && writingType != WritingType.UPPERCASE && writingType != WritingType.LOWERCASE) {
+            if (false && writingType != WritingType.UPPERCASE && writingType != WritingType.LOWERCASE) {
                 navController.navigate("upgrade_to_pro_screen")
             } else {
                 WritingPracticeScreen(navController = navController, writingType = writingType)
@@ -206,7 +206,7 @@ fun AppNavigation(
 
         // Routes pour le Vocabulaire
         composable("vocabulary_list") {
-            if (proManager.checkSubscriptionStatus()) {
+            if (false) {
                 EnhancedVocabularyListScreen(navController = navController)
             } else {
                 navController.navigate("upgrade_to_pro_screen")
@@ -216,7 +216,7 @@ fun AppNavigation(
             route = "vocabulary_detail/{itemId}",
             arguments = listOf(navArgument("itemId") { type = NavType.IntType })
         ) { backStackEntry ->
-            if (proManager.checkSubscriptionStatus()) {
+            if (false) {
                 val itemId = backStackEntry.arguments?.getInt("itemId")
                 VocabularyDetailScreen(navController = navController, itemId = itemId)
             } else {
@@ -226,7 +226,7 @@ fun AppNavigation(
 
         // -- NOUVELLES ROUTES POUR LA LECTURE GUIDÉE --
         composable("reading_passage_list") {
-            if (proManager.checkSubscriptionStatus()) {
+            if (false) {
                 ReadingPassageListScreen(navController = navController)
             } else {
                 navController.navigate("upgrade_to_pro_screen")
@@ -236,7 +236,7 @@ fun AppNavigation(
             route = "reading_player/{passageId}",
             arguments = listOf(navArgument("passageId") { type = NavType.IntType })
         ) { backStackEntry ->
-            if (proManager.checkSubscriptionStatus()) {
+            if (false) {
                 val passageId = backStackEntry.arguments?.getInt("passageId")
                 ReadingPlayerScreen(navController = navController, passageId = passageId)
             } else {
@@ -261,7 +261,7 @@ fun AppNavigation(
         
         // Vocabulary learning screens
         composable("vocabulary_flashcards") {
-            if (proManager.checkSubscriptionStatus()) {
+            if (false) {
                 com.bekisma.adlamfulfulde.screens.vocabulary.FlashcardScreen(
                     onNavigateBack = { navController.popBackStack() }
                 )
@@ -271,7 +271,7 @@ fun AppNavigation(
         }
         
         composable("vocabulary_quiz") {
-            if (proManager.checkSubscriptionStatus()) {
+            if (false) {
                 com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyQuizScreen(
                     onNavigateBack = { navController.popBackStack() }
                 )
@@ -281,7 +281,7 @@ fun AppNavigation(
         }
         
         composable("vocabulary_analytics") {
-            if (proManager.checkSubscriptionStatus()) {
+            if (false) {
                 com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyAnalyticsScreen(
                     onNavigateBack = { navController.popBackStack() }
                 )

@@ -1,0 +1,16 @@
+# Gradle files
+.gradle/
+build/
+
+# IDE files
+.idea/
+*.iml
+
+# Local properties
+local.properties
+
+# Claude files
+.claude/
+
+# Temporary files
+commit_message.txt

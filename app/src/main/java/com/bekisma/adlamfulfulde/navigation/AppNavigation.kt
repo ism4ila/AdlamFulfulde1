@@ -7,8 +7,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bekisma.adlamfulfulde.screens.*
-import com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyDetailScreen
-import com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyListScreen
 import com.bekisma.adlamfulfulde.screens.reading.ReadingPassageListScreen
 import com.bekisma.adlamfulfulde.screens.reading.ReadingPlayerScreen
 import com.bekisma.adlamfulfulde.ThemeMode
@@ -54,6 +52,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.bekisma.adlamfulfulde.R
+import com.bekisma.adlamfulfulde.screens.vocabulary.EnhancedVocabularyListScreen
+import com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyDetailScreen
 
 // ========================================
 // CONSTANTES - Données de l'application
@@ -207,7 +207,7 @@ fun AppNavigation(
         // Routes pour le Vocabulaire
         composable("vocabulary_list") {
             if (proManager.checkSubscriptionStatus()) {
-                VocabularyListScreen(navController = navController)
+                EnhancedVocabularyListScreen(navController = navController)
             } else {
                 navController.navigate("upgrade_to_pro_screen")
             }
@@ -253,6 +253,42 @@ fun AppNavigation(
                 proManager = proManager
             )
         }
+        composable("analytics") {
+            AnalyticsScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        
+        // Vocabulary learning screens
+        composable("vocabulary_flashcards") {
+            if (proManager.checkSubscriptionStatus()) {
+                com.bekisma.adlamfulfulde.screens.vocabulary.FlashcardScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            } else {
+                navController.navigate("upgrade_to_pro_screen")
+            }
+        }
+        
+        composable("vocabulary_quiz") {
+            if (proManager.checkSubscriptionStatus()) {
+                com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyQuizScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            } else {
+                navController.navigate("upgrade_to_pro_screen")
+            }
+        }
+        
+        composable("vocabulary_analytics") {
+            if (proManager.checkSubscriptionStatus()) {
+                com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyAnalyticsScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            } else {
+                navController.navigate("upgrade_to_pro_screen")
+            }
+        }
     }
 }
 
@@ -296,6 +332,19 @@ fun AppDrawerContent(
                         closeDrawer()
                     },
                     icon = { Icon(Icons.Default.Settings, contentDescription = null) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+            }
+            // Ajouter un élément pour "Analytics"
+            item {
+                NavigationDrawerItem(
+                    label = { Text("Analytics") },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("analytics")
+                        closeDrawer()
+                    },
+                    icon = { Icon(painterResource(id = R.drawable.ic_analytics), contentDescription = null) },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
             }

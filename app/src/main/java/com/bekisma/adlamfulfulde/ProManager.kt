@@ -14,6 +14,8 @@ class ProManager(private val context: Context) {
     private val prefs = context.getSharedPreferences("pro_prefs", Context.MODE_PRIVATE)
     private val _proStatus = MutableStateFlow(loadProStatus())
     val proStatus: StateFlow<ProStatus> = _proStatus.asStateFlow()
+    
+    val isProUser: StateFlow<Boolean> = MutableStateFlow(prefs.getBoolean("is_pro", false))
 
     private fun loadProStatus(): ProStatus {
         val isPro = prefs.getBoolean("is_pro", false)

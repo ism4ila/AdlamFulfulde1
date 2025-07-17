@@ -1,0 +1,317 @@
+package com.bekisma.adlamfulfulde.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.bekisma.adlamfulfulde.screens.*
+import com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyDetailScreen
+import com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyListScreen
+import com.bekisma.adlamfulfulde.screens.reading.ReadingPassageListScreen
+import com.bekisma.adlamfulfulde.screens.reading.ReadingPlayerScreen
+import com.bekisma.adlamfulfulde.ThemeMode
+import com.bekisma.adlamfulfulde.ColorTheme
+import com.bekisma.adlamfulfulde.data.MenuItem
+import com.bekisma.adlamfulfulde.BuildConfig
+import com.bekisma.adlamfulfulde.ProManager
+import com.bekisma.adlamfulfulde.screens.ProUpgradeScreen
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.Text
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import com.bekisma.adlamfulfulde.R
+
+// ========================================
+// CONSTANTES - Données de l'application
+// ========================================
+
+/**
+ * Liste des modules d'apprentissage de l'application
+ * Organisée par ordre logique d'apprentissage
+ */
+private val menuItems = listOf(
+    // Modules de base
+    MenuItem(R.drawable.abc64, R.string.alphabet_learning, R.string.discover_the_adlam_alphabet, "alphabet"),
+    MenuItem(R.drawable.number, R.string.numbers, R.string.practice_adlam_numbers, "numbers"),
+
+    // Modules de pratique
+    MenuItem(R.drawable.writing, R.string.learn_to_write, R.string.improve_your_writing_skills, "writing"),
+    MenuItem(R.drawable.quiz, R.string.quiz, R.string.test_your_knowledge, "quiz"),
+    MenuItem(R.drawable.abc_24, R.string.vocabulary_module_title, R.string.vocabulary_module_subtitle, "vocabulary_list"),
+
+    // Modules d'outils
+    MenuItem(R.drawable.numbered_24, R.string.reading_module_title, R.string.reading_module_subtitle, "reading_passage_list"),
+    MenuItem(R.drawable.keyboard_icon, R.string.adlam_keyboard, R.string.adlam_keyboard_subtitle, "adlam_keyboard"),
+    MenuItem(R.drawable.keyboard_icon, R.string.adlam_keyboard, R.string.adlam_keyboard_subtitle, "adlam_transcription"),
+)
+
+// Constantes pour l'organisation des modules
+private object ModuleIndices {
+    const val BASICS_START = 0
+    const val BASICS_END = 2
+    const val PRACTICE_START = 2
+    const val PRACTICE_END = 5
+    const val TOOLS_START = 5
+}
+
+/**
+ * Retourne le premier module (alphabet)
+ */
+private fun getFirstModule(): MenuItem = menuItems.first()
+
+/**
+ * Retourne les modules de base (alphabet, nombres)
+ */
+private fun getBasicsModules(): List<MenuItem> =
+    menuItems.subList(ModuleIndices.BASICS_START, ModuleIndices.BASICS_END)
+
+/**
+ * Retourne les modules de pratique (écriture, quiz, vocabulaire)
+ */
+private fun getPracticeModules(): List<MenuItem> =
+    menuItems.subList(ModuleIndices.PRACTICE_START, ModuleIndices.PRACTICE_END)
+
+/**
+ * Retourne les modules d'outils (lecture, clavier, transcription)
+ */
+private fun getToolsModules(): List<MenuItem> =
+    menuItems.subList(ModuleIndices.TOOLS_START, menuItems.size)
+
+@Composable
+fun AppNavigation(
+    navController: NavHostController,
+    onNavigation: (MenuItem) -> Unit,
+    themeManager: com.bekisma.adlamfulfulde.ThemeManager,
+    proManager: com.bekisma.adlamfulfulde.ProManager
+) {
+    NavHost(
+        navController = navController,
+        startDestination = "main"
+    ) {
+        composable("main") {
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            val scope = rememberCoroutineScope()
+
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    AppDrawerContent(
+                        navController = navController,
+                        closeDrawer = { scope.launch { drawerState.close() } },
+                        onNavigation = { item ->
+                            onNavigation(item)
+                        }
+                    )
+                }
+            ) {
+                MainScreen(
+                    drawerState = drawerState,
+                    onNavigation = { item -> onNavigation(item) }
+                )
+            }
+        }
+        composable("alphabet") { AlphabetScreen(navController) }
+        composable("numbers") {
+            if (proManager.checkSubscriptionStatus()) {
+                NumbersScreen(navController)
+            } else {
+                navController.navigate("upgrade_to_pro_screen")
+            }
+        }
+        composable("writing") { WritingScreen(navController) }
+        composable("quiz") {
+            if (proManager.checkSubscriptionStatus()) {
+                QuizScreen(navController)
+            } else {
+                navController.navigate("upgrade_to_pro_screen")
+            }
+        }
+        composable("about") { AboutScreen(navController) }
+        composable(
+            route = "writingPractice/{writingType}",
+            arguments = listOf(navArgument("writingType") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val typeString = backStackEntry.arguments?.getString("writingType")
+            val writingType = try {
+                WritingType.valueOf(typeString ?: WritingType.UPPERCASE.name)
+            } catch (e: IllegalArgumentException) {
+                WritingType.UPPERCASE
+            }
+
+            // Supposons que seuls UPPERCASE et LOWERCASE sont gratuits
+            if (!proManager.checkSubscriptionStatus() && writingType != WritingType.UPPERCASE && writingType != WritingType.LOWERCASE) {
+                navController.navigate("upgrade_to_pro_screen")
+            } else {
+                WritingPracticeScreen(navController = navController, writingType = writingType)
+            }
+        }
+
+        composable("settings") {
+            val scope = androidx.compose.runtime.rememberCoroutineScope()
+            val currentTheme = themeManager.themeMode.collectAsState(initial = ThemeMode.SYSTEM).value
+            val currentColorTheme = themeManager.colorTheme.collectAsState(initial = ColorTheme.DEFAULT).value
+            SettingsScreen(
+                navController = navController,
+                currentTheme = currentTheme,
+                currentColorTheme = currentColorTheme,
+                onThemeChanged = { theme ->
+                    scope.launch { themeManager.saveThemeMode(theme) }
+                },
+                onColorThemeChanged = { colorTheme ->
+                    scope.launch { themeManager.saveColorTheme(colorTheme) }
+                }
+            )
+        }
+        composable(
+            route = "DetailAlphabetScreen/{letter}",
+            arguments = listOf(navArgument("letter") { type = NavType.StringType; nullable = true })
+        ) { backStackEntry ->
+            val letter = backStackEntry.arguments?.getString("letter")
+            DetailAlphabetScreen(letter = letter ?: "", navController = navController)
+        }
+
+        // Routes pour le Vocabulaire
+        composable("vocabulary_list") {
+            if (proManager.checkSubscriptionStatus()) {
+                VocabularyListScreen(navController = navController)
+            } else {
+                navController.navigate("upgrade_to_pro_screen")
+            }
+        }
+        composable(
+            route = "vocabulary_detail/{itemId}",
+            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            if (proManager.checkSubscriptionStatus()) {
+                val itemId = backStackEntry.arguments?.getInt("itemId")
+                VocabularyDetailScreen(navController = navController, itemId = itemId)
+            } else {
+                navController.navigate("upgrade_to_pro_screen")
+            }
+        }
+
+        // -- NOUVELLES ROUTES POUR LA LECTURE GUIDÉE --
+        composable("reading_passage_list") {
+            if (proManager.checkSubscriptionStatus()) {
+                ReadingPassageListScreen(navController = navController)
+            } else {
+                navController.navigate("upgrade_to_pro_screen")
+            }
+        }
+        composable(
+            route = "reading_player/{passageId}",
+            arguments = listOf(navArgument("passageId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            if (proManager.checkSubscriptionStatus()) {
+                val passageId = backStackEntry.arguments?.getInt("passageId")
+                ReadingPlayerScreen(navController = navController, passageId = passageId)
+            } else {
+                navController.navigate("upgrade_to_pro_screen")
+            }
+        }
+        // -- FIN DES NOUVELLES ROUTES --
+        composable("adlam_keyboard") { AdlamKeyboardScreen(navController) }
+        composable("adlam_transcription") { AdlamLatinTranscriptionScreen(navController) }
+        composable("upgrade_to_pro_screen") {
+            ProUpgradeScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onPurchaseSuccess = { navController.popBackStack() },
+                proManager = proManager
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppDrawerContent(
+    navController: NavHostController,
+    closeDrawer: () -> Unit,
+    onNavigation: (MenuItem) -> Unit
+) {
+    ModalDrawerSheet {
+        // En-tête du tiroir
+        Text(
+            text = "Adlam Fulfulde",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(16.dp)
+        )
+        HorizontalDivider()
+
+        // Éléments du menu
+        LazyColumn {
+            items(menuItems) { item: MenuItem ->
+                NavigationDrawerItem(
+                    label = { Text(stringResource(id = item.titleRes)) },
+                    selected = false, // Vous pouvez ajouter une logique pour marquer l'élément sélectionné
+                    onClick = {
+                        onNavigation(item)
+                        closeDrawer()
+                    },
+                    icon = { Icon(painterResource(id = item.imageRes), contentDescription = null) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+            }
+            // Ajouter un élément pour les paramètres
+            item {
+                NavigationDrawerItem(
+                    label = { Text(stringResource(id = R.string.settings)) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("settings")
+                        closeDrawer()
+                    },
+                    icon = { Icon(Icons.Default.Settings, contentDescription = null) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+            }
+            // Ajouter un élément pour "À propos"
+            item {
+                NavigationDrawerItem(
+                    label = { Text(stringResource(id = R.string.about)) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("about")
+                        closeDrawer()
+                    },
+                    icon = { Icon(Icons.Default.Info, contentDescription = null) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+            }
+        }
+    }
+}

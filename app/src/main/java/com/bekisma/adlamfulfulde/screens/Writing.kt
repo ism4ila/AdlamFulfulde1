@@ -9,6 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Create // Icône pour Majuscules
 import androidx.compose.material.icons.filled.Edit // Icône pour Minuscules
+import androidx.compose.material.icons.filled.Book // Icône pour Mots culturels
+import androidx.compose.material.icons.filled.Compare // Icône pour Mode comparaison
 import androidx.compose.material.icons.outlined.Numbers // Icône pour Chiffres
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -155,6 +157,18 @@ private fun WritingActions(navController: NavController) {
             route = "writingPractice/${WritingType.NUMBERS.name}",
             text = stringResource(R.string.numbers),
             icon = Icons.Outlined.Numbers
+        )
+        WritingActionButton(
+            navController = navController,
+            route = "culturalWords",
+            text = "Mots culturels",
+            icon = Icons.Default.Book
+        )
+        WritingActionButton(
+            navController = navController,
+            route = "comparisonMode/${WritingType.UPPERCASE.name}",
+            text = "Mode comparaison",
+            icon = Icons.Default.Compare
         )
     }
 }

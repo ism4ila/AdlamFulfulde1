@@ -6,7 +6,18 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.bekisma.adlamfulfulde.screens.*
+import com.bekisma.adlamfulfulde.screens.alphabet.DetailAlphabetScreen
+import com.bekisma.adlamfulfulde.screens.MainScreen
+import com.bekisma.adlamfulfulde.screens.AboutScreen
+import com.bekisma.adlamfulfulde.screens.NumbersScreen
+import com.bekisma.adlamfulfulde.screens.QuizScreen
+import com.bekisma.adlamfulfulde.screens.SettingsScreen
+import com.bekisma.adlamfulfulde.screens.WritingScreen
+import com.bekisma.adlamfulfulde.screens.WritingType
+import com.bekisma.adlamfulfulde.screens.WritingPracticeScreen
+import com.bekisma.adlamfulfulde.screens.AdlamKeyboardScreen
+import com.bekisma.adlamfulfulde.screens.AdlamLatinTranscriptionScreen
+import com.bekisma.adlamfulfulde.screens.AnalyticsScreen
 import com.bekisma.adlamfulfulde.screens.reading.ReadingPassageListScreen
 import com.bekisma.adlamfulfulde.screens.reading.ReadingPlayerScreen
 import com.bekisma.adlamfulfulde.ThemeMode
@@ -14,7 +25,6 @@ import com.bekisma.adlamfulfulde.ColorTheme
 import com.bekisma.adlamfulfulde.data.MenuItem
 import com.bekisma.adlamfulfulde.BuildConfig
 import com.bekisma.adlamfulfulde.ProManager
-import com.bekisma.adlamfulfulde.screens.ProUpgradeScreen
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,6 +64,8 @@ import androidx.compose.ui.text.style.TextAlign
 import com.bekisma.adlamfulfulde.R
 import com.bekisma.adlamfulfulde.screens.vocabulary.EnhancedVocabularyListScreen
 import com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyDetailScreen
+import com.bekisma.adlamfulfulde.screens.writing.CulturalWordsScreen
+import com.bekisma.adlamfulfulde.screens.writing.ComparisonModeScreen
 
 // ========================================
 // CONSTANTES - Données de l'application
@@ -76,7 +88,7 @@ private val menuItems = listOf(
     // Modules d'outils
     MenuItem(R.drawable.numbered_24, R.string.reading_module_title, R.string.reading_module_subtitle, "reading_passage_list"),
     MenuItem(R.drawable.keyboard_icon, R.string.adlam_keyboard, R.string.adlam_keyboard_subtitle, "adlam_keyboard"),
-    MenuItem(R.drawable.keyboard_icon, R.string.adlam_keyboard, R.string.adlam_keyboard_subtitle, "adlam_transcription"),
+    MenuItem(R.drawable.translate_icon, R.string.adlam_transcription, R.string.adlam_transcription_subtitle, "adlam_transcription"),
 )
 
 // Constantes pour l'organisation des modules
@@ -94,22 +106,25 @@ private object ModuleIndices {
 private fun getFirstModule(): MenuItem = menuItems.first()
 
 /**
- * Retourne les modules de base (alphabet, nombres)
+ * Fonctions publiques pour accéder aux modules depuis MainScreen
  */
-private fun getBasicsModules(): List<MenuItem> =
+fun getBasicsModules(): List<MenuItem> = try {
     menuItems.subList(ModuleIndices.BASICS_START, ModuleIndices.BASICS_END)
+} catch (e: Exception) {
+    emptyList()
+}
 
-/**
- * Retourne les modules de pratique (écriture, quiz, vocabulaire)
- */
-private fun getPracticeModules(): List<MenuItem> =
+fun getPracticeModules(): List<MenuItem> = try {
     menuItems.subList(ModuleIndices.PRACTICE_START, ModuleIndices.PRACTICE_END)
+} catch (e: Exception) {
+    emptyList()
+}
 
-/**
- * Retourne les modules d'outils (lecture, clavier, transcription)
- */
-private fun getToolsModules(): List<MenuItem> =
+fun getToolsModules(): List<MenuItem> = try {
     menuItems.subList(ModuleIndices.TOOLS_START, menuItems.size)
+} catch (e: Exception) {
+    emptyList()
+}
 
 @Composable
 fun AppNavigation(
@@ -144,21 +159,17 @@ fun AppNavigation(
                 )
             }
         }
-        composable("alphabet") { AlphabetScreen(navController) }
+        composable("alphabet") { 
+            com.bekisma.adlamfulfulde.screens.alphabet.AlphabetDisplayScreen(
+                navController = navController
+            )
+        }
         composable("numbers") {
-            if (false) {
-                NumbersScreen(navController)
-            } else {
-                navController.navigate("upgrade_to_pro_screen")
-            }
+            NumbersScreen(navController)
         }
         composable("writing") { WritingScreen(navController) }
         composable("quiz") {
-            if (false) {
-                QuizScreen(navController)
-            } else {
-                navController.navigate("upgrade_to_pro_screen")
-            }
+            QuizScreen(navController)
         }
         composable("about") { AboutScreen(navController) }
         composable(
@@ -172,12 +183,7 @@ fun AppNavigation(
                 WritingType.UPPERCASE
             }
 
-            // Supposons que seuls UPPERCASE et LOWERCASE sont gratuits
-            if (false && writingType != WritingType.UPPERCASE && writingType != WritingType.LOWERCASE) {
-                navController.navigate("upgrade_to_pro_screen")
-            } else {
-                WritingPracticeScreen(navController = navController, writingType = writingType)
-            }
+            WritingPracticeScreen(navController = navController, writingType = writingType)
         }
 
         composable("settings") {
@@ -206,53 +212,30 @@ fun AppNavigation(
 
         // Routes pour le Vocabulaire
         composable("vocabulary_list") {
-            if (false) {
-                EnhancedVocabularyListScreen(navController = navController)
-            } else {
-                navController.navigate("upgrade_to_pro_screen")
-            }
+            EnhancedVocabularyListScreen(navController = navController)
         }
         composable(
             route = "vocabulary_detail/{itemId}",
             arguments = listOf(navArgument("itemId") { type = NavType.IntType })
         ) { backStackEntry ->
-            if (false) {
-                val itemId = backStackEntry.arguments?.getInt("itemId")
-                VocabularyDetailScreen(navController = navController, itemId = itemId)
-            } else {
-                navController.navigate("upgrade_to_pro_screen")
-            }
+            val itemId = backStackEntry.arguments?.getInt("itemId")
+            VocabularyDetailScreen(navController = navController, itemId = itemId)
         }
 
         // -- NOUVELLES ROUTES POUR LA LECTURE GUIDÉE --
         composable("reading_passage_list") {
-            if (false) {
-                ReadingPassageListScreen(navController = navController)
-            } else {
-                navController.navigate("upgrade_to_pro_screen")
-            }
+            ReadingPassageListScreen(navController = navController)
         }
         composable(
             route = "reading_player/{passageId}",
             arguments = listOf(navArgument("passageId") { type = NavType.IntType })
         ) { backStackEntry ->
-            if (false) {
-                val passageId = backStackEntry.arguments?.getInt("passageId")
-                ReadingPlayerScreen(navController = navController, passageId = passageId)
-            } else {
-                navController.navigate("upgrade_to_pro_screen")
-            }
+            val passageId = backStackEntry.arguments?.getInt("passageId")
+            ReadingPlayerScreen(navController = navController, passageId = passageId)
         }
         // -- FIN DES NOUVELLES ROUTES --
         composable("adlam_keyboard") { AdlamKeyboardScreen(navController) }
         composable("adlam_transcription") { AdlamLatinTranscriptionScreen(navController) }
-        composable("upgrade_to_pro_screen") {
-            ProUpgradeScreen(
-                onNavigateBack = { navController.popBackStack() },
-                onPurchaseSuccess = { navController.popBackStack() },
-                proManager = proManager
-            )
-        }
         composable("analytics") {
             AnalyticsScreen(
                 onNavigateBack = { navController.popBackStack() }
@@ -261,33 +244,54 @@ fun AppNavigation(
         
         // Vocabulary learning screens
         composable("vocabulary_flashcards") {
-            if (false) {
-                com.bekisma.adlamfulfulde.screens.vocabulary.FlashcardScreen(
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            } else {
-                navController.navigate("upgrade_to_pro_screen")
-            }
+            com.bekisma.adlamfulfulde.screens.vocabulary.FlashcardScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
         
         composable("vocabulary_quiz") {
-            if (false) {
-                com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyQuizScreen(
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            } else {
-                navController.navigate("upgrade_to_pro_screen")
-            }
+            com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyQuizScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
         
         composable("vocabulary_analytics") {
-            if (false) {
-                com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyAnalyticsScreen(
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            } else {
-                navController.navigate("upgrade_to_pro_screen")
+            com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyAnalyticsScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        
+        // Alphabet Learning Routes
+        
+        
+        composable("alphabet_quiz") {
+            com.bekisma.adlamfulfulde.screens.alphabet.AlphabetQuizScreen(
+                navController = navController
+            )
+        }
+        
+        composable("audio_quiz") {
+            com.bekisma.adlamfulfulde.screens.alphabet.AudioQuizScreen(
+                navController = navController
+            )
+        }
+        
+        // Routes pour les nouvelles fonctionnalités d'écriture
+        composable("culturalWords") {
+            CulturalWordsScreen(navController = navController)
+        }
+        
+        composable(
+            route = "comparisonMode/{writingType}",
+            arguments = listOf(navArgument("writingType") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val typeString = backStackEntry.arguments?.getString("writingType")
+            val writingType = try {
+                WritingType.valueOf(typeString ?: WritingType.UPPERCASE.name)
+            } catch (e: IllegalArgumentException) {
+                WritingType.UPPERCASE
             }
+            ComparisonModeScreen(navController = navController, writingType = writingType)
         }
     }
 }

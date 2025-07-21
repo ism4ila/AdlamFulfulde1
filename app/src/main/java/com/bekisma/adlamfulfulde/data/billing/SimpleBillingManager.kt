@@ -26,7 +26,7 @@ class SimpleBillingManager(private val context: Context) {
     private val _purchaseState = MutableStateFlow(SimplePurchaseState())
     val purchaseState: StateFlow<SimplePurchaseState> = _purchaseState.asStateFlow()
     
-    private val _isPremiumUser = MutableStateFlow(false)
+    private val _isPremiumUser = MutableStateFlow(true)
     val isPremiumUser: StateFlow<Boolean> = _isPremiumUser.asStateFlow()
     
     private val mockProducts = listOf(
@@ -100,16 +100,7 @@ class SimpleBillingManager(private val context: Context) {
     }
     
     fun isFeatureAvailable(feature: String): Boolean {
-        return if (_isPremiumUser.value) {
-            true
-        } else {
-            // Define which features are available for free users
-            when (feature) {
-                "alphabet" -> true
-                "basic_writing" -> true
-                else -> false
-            }
-        }
+        return true
     }
     
     fun getSubscriptionStatus(productId: String): String {

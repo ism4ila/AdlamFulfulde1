@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.* // Importe toutes les icônes filled
+import kotlin.math.sqrt
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bekisma.adlamfulfulde.R
@@ -42,6 +44,17 @@ enum class WritingType {
     UPPERCASE,
     LOWERCASE,
     NUMBERS
+}
+
+enum class WritingMode {
+    SEPARATE,  // Mode actuel - lettres séparées
+    CURSIVE    // Mode nouveau - lettres liées (joined)
+}
+
+enum class GuidanceMode {
+    NO_GUIDANCE,     // Pas de guide
+    VISUAL_ONLY,     // Guide visuel seulement
+    FINGER_TRACING   // Guide avec suivi du doigt
 }
 
 object AdlamCharacters {
@@ -551,6 +564,10 @@ fun WritingPracticeScreen(
     val currentPath = remember { mutableStateOf(Path()) }
     var showBrushSettingsDialog by remember { mutableStateOf(false) }
     var showStrokeGuide by remember { mutableStateOf(true) } // Guide affiché par défaut?
+    var writingMode by remember { mutableStateOf(WritingMode.SEPARATE) } // Mode d'écriture
+    var guidanceMode by remember { mutableStateOf(GuidanceMode.VISUAL_ONLY) } // Mode de guidage
+    var fingerPosition by remember { mutableStateOf(Offset.Zero) } // Position du doigt
+    var isTracing by remember { mutableStateOf(false) } // En cours de traçage
     // États pour l'évaluation
     var evaluationScore by remember { mutableFloatStateOf(-1f) } // -1f = non évalué
     val snackbarHostState = remember { SnackbarHostState() }
@@ -580,6 +597,30 @@ fun WritingPracticeScreen(
                     }
                 },
                 actions = {
+                    // Bouton pour le mode de guidage du doigt
+                    IconButton(onClick = { 
+                        guidanceMode = when (guidanceMode) {
+                            GuidanceMode.NO_GUIDANCE -> GuidanceMode.VISUAL_ONLY
+                            GuidanceMode.VISUAL_ONLY -> GuidanceMode.FINGER_TRACING
+                            GuidanceMode.FINGER_TRACING -> GuidanceMode.NO_GUIDANCE
+                        }
+                    }) {
+                        Icon(
+                            imageVector = when (guidanceMode) {
+                                GuidanceMode.NO_GUIDANCE -> Icons.Filled.TouchApp
+                                GuidanceMode.VISUAL_ONLY -> Icons.Filled.Visibility
+                                GuidanceMode.FINGER_TRACING -> Icons.Filled.PanTool
+                            },
+                            contentDescription = "Mode de guidage"
+                        )
+                    }
+                    // Bouton pour basculer le mode d'écriture
+                    IconButton(onClick = { writingMode = if (writingMode == WritingMode.SEPARATE) WritingMode.CURSIVE else WritingMode.SEPARATE }) {
+                        Icon(
+                            imageVector = if (writingMode == WritingMode.CURSIVE) Icons.Filled.Link else Icons.Filled.LinkOff,
+                            contentDescription = if (writingMode == WritingMode.CURSIVE) "Mode lettres séparées" else "Mode écriture cursive"
+                        )
+                    }
                     // Bouton pour afficher/masquer le guide (si défini pour le caractère)
                     val currentCharacter = characters.getOrNull(currentIndex)
                     if (currentCharacter != null && adlamCharacterGuides.containsKey(currentCharacter)) {
@@ -661,8 +702,10 @@ fun WritingPracticeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
+                    // Support RTL pour l'écriture Adlam
+                    // Support RTL via CompositionLocal si nécessaire
                     // Récupère la taille disponible pour le Canvas
-                    .onSizeChanged { canvasSize = Size(it.width.toFloat(), it.height.toFloat()) }
+                    .onSizeChanged { size -> canvasSize = Size(size.width.toFloat(), size.height.toFloat()) }
             ) {
                 // Caractère en arrière-plan
                 val currentCharacter = characters.getOrNull(currentIndex)
@@ -679,8 +722,19 @@ fun WritingPracticeScreen(
                 // Canvas pour le guide (si activé et défini)
                 if (showStrokeGuide && currentCharacter != null && adlamCharacterGuides.containsKey(currentCharacter) && canvasSize != Size.Zero) {
                     Canvas(modifier = Modifier.fillMaxSize()) {
-                        drawStrokeGuide(currentCharacter) // Appel fonction améliorée
-                        drawAnimatedGuide(currentCharacter, animationProgress.value)
+                        when (guidanceMode) {
+                            GuidanceMode.VISUAL_ONLY -> {
+                                drawStrokeGuide(currentCharacter)
+                                drawAnimatedGuide(currentCharacter, animationProgress.value)
+                            }
+                            GuidanceMode.FINGER_TRACING -> {
+                                drawFingerGuidance(currentCharacter, fingerPosition, isTracing)
+                                drawAnimatedGuide(currentCharacter, animationProgress.value)
+                            }
+                            GuidanceMode.NO_GUIDANCE -> {
+                                // Pas de guide visuel
+                            }
+                        }
                     }
                 }
 
@@ -693,15 +747,26 @@ fun WritingPracticeScreen(
                                 onDragStart = { offset ->
                                     evaluationScore = -1f // Réinitialise le score
                                     currentPath.value = Path().apply { moveTo(offset.x, offset.y) }
+                                    fingerPosition = offset
+                                    isTracing = true
                                 },
                                 onDrag = { change, _ ->
+                                    fingerPosition = change.position
                                     // Utilise la méthode de création d'un nouveau Path pour assurer la mise à jour
                                     currentPath.value = Path().apply {
                                         addPath(currentPath.value)
                                         lineTo(change.position.x, change.position.y)
                                     }
+                                    
+                                    // Vérification du suivi du chemin pour le mode finger tracing
+                                    if (guidanceMode == GuidanceMode.FINGER_TRACING) {
+                                        checkFingerPathAccuracy(change.position, currentCharacter, canvasSize)
+                                    }
                                 },
                                 onDragEnd = {
+                                    isTracing = false
+                                    fingerPosition = Offset.Zero
+                                    
                                     val finalPath = currentPath.value
                                     if (!finalPath.isEmpty) { // Seulement si quelque chose a été dessiné
                                         val guideData = currentCharacter?.let { adlamCharacterGuides[it] }
@@ -710,7 +775,7 @@ fun WritingPracticeScreen(
                                                 userPath = finalPath,
                                                 targetCheckpoints = guideData.checkpoints,
                                                 canvasSize = canvasSize,
-                                                toleranceRadius = 35f
+                                                toleranceRadius = if (guidanceMode == GuidanceMode.FINGER_TRACING) 25f else 35f
                                             )
                                             evaluationScore = score
                                             missedCheckpoints = missed
@@ -724,8 +789,17 @@ fun WritingPracticeScreen(
 
                                             scope.launch {
                                                 val percentage = (score * 100).toInt()
+                                                val message = if (guidanceMode == GuidanceMode.FINGER_TRACING) {
+                                                    when {
+                                                        score >= 0.9f -> "Excellent suivi ! $percentage%"
+                                                        score >= 0.7f -> "Bon suivi du doigt : $percentage%"
+                                                        else -> "Suivez mieux le guide : $percentage%"
+                                                    }
+                                                } else {
+                                                    "Précision : $percentage%"
+                                                }
                                                 snackbarHostState.showSnackbar(
-                                                    message = "Précision : $percentage%",
+                                                    message = message,
                                                     withDismissAction = true
                                                 )
                                             }
@@ -900,6 +974,94 @@ fun DrawScope.drawAnimatedGuide(letter: String, progress: Float) {
             )
         }
     }
+}
+
+// Fonction pour dessiner le guidage du doigt
+fun DrawScope.drawFingerGuidance(letter: String, fingerPos: Offset, isTracing: Boolean) {
+    val guideData = adlamCharacterGuides[letter]
+    val canvasWidth = size.width
+    val canvasHeight = size.height
+
+    if (guideData != null && canvasWidth > 0 && canvasHeight > 0) {
+        val transformationMatrix = Matrix().apply { scale(canvasWidth, canvasHeight) }
+
+        // Dessiner le chemin guide en version atténuée
+        guideData.segments.forEach { segment ->
+            val transformedPath = Path()
+            transformedPath.addPath(segment.path)
+            transformedPath.transform(transformationMatrix)
+
+            drawPath(
+                path = transformedPath,
+                color = GuideStyles.GuideColor.copy(alpha = 0.3f),
+                style = Stroke(width = GuideStyles.GuideStrokeWidth + 10f, cap = StrokeCap.Round)
+            )
+        }
+
+        // Dessiner l'indicateur de position du doigt
+        if (isTracing && fingerPos != Offset.Zero) {
+            drawCircle(
+                color = Color.Blue.copy(alpha = 0.6f),
+                radius = 25f,
+                center = fingerPos,
+                style = Stroke(width = 3f)
+            )
+            
+            drawCircle(
+                color = Color.Blue.copy(alpha = 0.3f),
+                radius = 15f,
+                center = fingerPos
+            )
+        }
+
+        // Dessiner les points de guidage sur le chemin
+        val absoluteCheckpoints = guideData.checkpoints.map { transformationMatrix.map(it) }
+        absoluteCheckpoints.forEachIndexed { index, checkpoint ->
+            val distance = if (fingerPos != Offset.Zero) {
+                kotlin.math.sqrt(
+                    (fingerPos.x - checkpoint.x) * (fingerPos.x - checkpoint.x) + 
+                    (fingerPos.y - checkpoint.y) * (fingerPos.y - checkpoint.y)
+                )
+            } else Float.MAX_VALUE
+            
+            val isNear = distance < 50f
+            val color = if (isNear && isTracing) Color.Green else Color.Gray
+            val radius = if (isNear && isTracing) 12f else 8f
+            
+            drawCircle(
+                color = color.copy(alpha = 0.7f),
+                radius = radius,
+                center = checkpoint
+            )
+            
+            // Numéroter les points pour indiquer l'ordre
+            drawCircle(
+                color = Color.White,
+                radius = radius - 2f,
+                center = checkpoint
+            )
+        }
+    }
+}
+
+// Vérification de la précision du suivi du doigt
+fun checkFingerPathAccuracy(fingerPos: Offset, currentCharacter: String?, canvasSize: Size) {
+    if (currentCharacter == null || canvasSize == Size.Zero) return
+    
+    val guideData = adlamCharacterGuides[currentCharacter] ?: return
+    val transformationMatrix = Matrix().apply { scale(canvasSize.width, canvasSize.height) }
+    val absoluteCheckpoints = guideData.checkpoints.map { transformationMatrix.map(it) }
+    
+    // Vérifier si le doigt suit correctement le chemin
+    val nearestCheckpoint = absoluteCheckpoints.minByOrNull { checkpoint ->
+        kotlin.math.sqrt(
+            (fingerPos.x - checkpoint.x) * (fingerPos.x - checkpoint.x) + 
+            (fingerPos.y - checkpoint.y) * (fingerPos.y - checkpoint.y)
+        )
+    }
+    
+    // Ici on pourrait ajouter un feedback haptique ou sonore
+    // pour guider l'utilisateur
 }
 
 // Fonction d'évaluation par checkpoints (NOUVELLE)

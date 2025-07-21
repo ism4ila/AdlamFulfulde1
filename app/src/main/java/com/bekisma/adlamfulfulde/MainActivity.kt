@@ -23,12 +23,10 @@ class MainActivity : ComponentActivity() {
 
         proManager = ProManager(this)
 
-        if (BuildConfig.ENABLE_ADS) {
-            MobileAds.initialize(this) {
-                if (interstitialAdManager == null) {
-                    interstitialAdManager = ImprovedInterstitialAdManager(this, getString(R.string.ad_mob_interstitial_id))
-                    interstitialAdManager?.preloadAd()
-                }
+        MobileAds.initialize(this) {
+            if (interstitialAdManager == null) {
+                interstitialAdManager = ImprovedInterstitialAdManager(this, getString(R.string.ad_mob_interstitial_id))
+                interstitialAdManager?.preloadAd()
             }
         }
 

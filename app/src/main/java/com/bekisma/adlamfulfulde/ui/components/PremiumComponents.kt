@@ -31,9 +31,9 @@ fun PremiumBadge(
     size: BadgeSize = BadgeSize.MEDIUM
 ) {
     val badgeColors = listOf(
-        Color(0xFFFFD700),
-        Color(0xFFFF8C00),
-        Color(0xFFFFD700)
+        Color(0xFF4CAF50),
+        Color(0xFF2E7D32),
+        Color(0xFF4CAF50)
     )
     
     val iconSize = when (size) {
@@ -56,14 +56,14 @@ fun PremiumBadge(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_crown),
-                contentDescription = "Premium",
+                imageVector = Icons.Default.Star,
+                contentDescription = "Free",
                 modifier = Modifier.size(iconSize),
                 tint = Color.White
             )
             if (size != BadgeSize.SMALL) {
                 Text(
-                    text = "PRO",
+                    text = "FREE",
                     color = Color.White,
                     fontSize = when (size) {
                         BadgeSize.SMALL -> 10.sp
@@ -84,76 +84,8 @@ fun PremiumFeatureLock(
     onUpgradeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                        shape = RoundedCornerShape(40.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = "Locked",
-                    modifier = Modifier.size(40.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Text(
-                text = featureName,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-            
-            Spacer(modifier = Modifier.height(20.dp))
-            
-            Button(
-                onClick = onUpgradeClick,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Upgrade,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Upgrade to Premium",
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
+    // Since everything is free now, this component won't show any locks
+    // It can be used as a regular feature card or simply not displayed
 }
 
 @Composable
@@ -161,7 +93,7 @@ fun PremiumFeatureCard(
     title: String,
     description: String,
     icon: ImageVector,
-    isAvailable: Boolean,
+    isAvailable: Boolean = true,
     onAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -172,7 +104,7 @@ fun PremiumFeatureCard(
                 if (isAvailable) {
                     Modifier.border(
                         width = 2.dp,
-                        color = Color(0xFFFFD700),
+                        color = Color(0xFF4CAF50),
                         shape = RoundedCornerShape(12.dp)
                     )
                 } else {
@@ -215,7 +147,12 @@ fun PremiumFeatureCard(
                         Text(
                             text = title,
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            color = if (isAvailable) {
+                                MaterialTheme.colorScheme.onSurface
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            }
                         )
                     }
                     
@@ -238,18 +175,17 @@ fun PremiumFeatureCard(
             Button(
                 onClick = onAction,
                 modifier = Modifier.fillMaxWidth(),
-                enabled = isAvailable,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (isAvailable) {
                         MaterialTheme.colorScheme.primary
                     } else {
-                        MaterialTheme.colorScheme.surfaceVariant
+                        MaterialTheme.colorScheme.secondary
                     }
                 )
             ) {
                 Text(
-                    text = if (isAvailable) "Use Feature" else "Upgrade to Access",
-                    fontWeight = FontWeight.Medium
+                    text = "Use Feature",
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -259,7 +195,7 @@ fun PremiumFeatureCard(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PremiumStatusIndicator(
-    isPremium: Boolean,
+    isPremium: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     AnimatedContent(
@@ -269,54 +205,28 @@ fun PremiumStatusIndicator(
             fadeIn() with fadeOut()
         }
     ) { premium ->
-        if (premium) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier
-                    .background(
-                        color = Color(0xFFFFD700).copy(alpha = 0.2f),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_crown),
-                    contentDescription = "Premium",
-                    modifier = Modifier.size(16.dp),
-                    tint = Color(0xFFFFD700)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = RoundedCornerShape(8.dp)
                 )
-                Text(
-                    text = "Premium",
-                    color = Color(0xFFFFD700),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        } else {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = "Free",
-                    modifier = Modifier.size(16.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "Free",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = "Free",
+                modifier = Modifier.size(16.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = "Free",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
@@ -329,81 +239,7 @@ fun PremiumUpgradePrompt(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(20.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    
-                    Spacer(modifier = Modifier.height(12.dp))
-                    
-                    benefits.forEach { benefit ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(vertical = 4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Star,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp),
-                                tint = Color(0xFFFFD700)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = benefit,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                        }
-                    }
-                }
-                
-                IconButton(onClick = onDismiss) {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "Dismiss",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Button(
-                onClick = onUpgradeClick,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                PremiumBadge(size = BadgeSize.SMALL)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Upgrade Now",
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
+    // Since everything is free now, this component won't show upgrade prompts
 }
 
 @Composable
@@ -412,67 +248,7 @@ fun PremiumContentPlaceholder(
     onUpgradeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                    )
-                )
-            )
-            .padding(24.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_crown),
-                contentDescription = null,
-                modifier = Modifier.size(48.dp),
-                tint = Color(0xFFFFD700)
-            )
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Text(
-                text = "Premium $contentType",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Text(
-                text = "Unlock $contentType with Premium",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            OutlinedButton(
-                onClick = onUpgradeClick,
-                border = BorderStroke(1.dp, Color(0xFFFFD700))
-            ) {
-                Text(
-                    text = "Upgrade",
-                    color = Color(0xFFFFD700),
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
-}
-
-enum class BadgeSize {
-    SMALL, MEDIUM, LARGE
+    // Since everything is free now, this component won't show content placeholders
 }
 
 @Composable
@@ -487,21 +263,23 @@ fun PremiumFeatureList(
         features.forEach { feature ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(vertical = 4.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
                     modifier = Modifier.size(20.dp),
-                    tint = Color(0xFFFFD700)
+                    tint = Color(0xFF4CAF50)
                 )
-                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = feature,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
     }
+}
+
+enum class BadgeSize {
+    SMALL, MEDIUM, LARGE
 }

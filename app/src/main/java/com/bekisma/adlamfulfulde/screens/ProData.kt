@@ -1,25 +1,26 @@
 package com.bekisma.adlamfulfulde.screens
 
-import com.bekisma.adlamfulfulde.R
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 
 data class ProFeature(
     val id: String,
-    val titleRes: Int,
-    val descriptionRes: Int,
-    val iconRes: Int,
-    val isAvailable: Boolean = true
+    @StringRes val titleRes: Int,
+    @StringRes val descriptionRes: Int,
+    @DrawableRes val iconRes: Int
 )
 
 enum class SubscriptionPlan(
     val id: String,
-    val nameRes: Int,
+    @StringRes val titleRes: Int,
+    @StringRes val descriptionRes: Int,
     val price: String,
     val billingPeriod: String,
-    val savings: String? = null
+    val savePercentage: Int = 0
 ) {
-    MONTHLY("monthly", R.string.monthly_plan, "$4.99", "month"),
-    YEARLY("yearly", R.string.yearly_plan, "$39.99", "year", "33%"),
-    LIFETIME("lifetime", R.string.lifetime_plan, "$99.99", "one-time", "83%")
+    MONTHLY("monthly", 0, 0, "$4.99", "Monthly", 0),
+    YEARLY("yearly", 0, 0, "$39.99", "Yearly", 17),
+    LIFETIME("lifetime", 0, 0, "$99.99", "Lifetime", 0)
 }
 
 data class ProStatus(

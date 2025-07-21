@@ -17,6 +17,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -113,14 +116,13 @@ fun NumbersScreen(navController: NavController) {
     var displayMode by remember { mutableStateOf(DisplayMode.ADLAM) }
     var currentNumberIndex by remember { mutableStateOf(0) }
     var isPlaying by remember { mutableStateOf(false) }
-    var autoPlaySpeed by remember { mutableStateOf(1.5f) }
     var showInfoDialog by remember { mutableStateOf(false) }
 
     // Quiz state
     var quizState by remember { mutableStateOf<QuizState?>(null) }
     var showQuizResultDialog by remember { mutableStateOf(false) }
 
-    // Charger les données (maintenant avec fulfuldeAdlam rempli)
+    // Charger les données
     val numberItems = getNumberItems()
 
     // MediaPlayer cleanup
@@ -148,72 +150,74 @@ fun NumbersScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            NumbersTopAppBar(
+            CleanNumbersTopAppBar(
                 navController = navController,
                 currentMode = currentMode,
                 onToggleMode = {
                     currentMode = if (currentMode == ScreenMode.LEARNING) ScreenMode.QUIZ else ScreenMode.LEARNING
                 },
-                isPlaying = isPlaying,
-                onPlayPauseClick = {
-                    if (!isPlaying) hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                    isPlaying = !isPlaying
-                },
-                displayMode = displayMode,
-                onDisplayModeChanged = { displayMode = it },
-                autoPlaySpeed = autoPlaySpeed,
-                onSpeedChanged = { autoPlaySpeed = it },
-                onInfoClick = { showInfoDialog = true },
-                isPlayPauseEnabled = currentMode == ScreenMode.LEARNING,
-                isSpeedControlEnabled = currentMode == ScreenMode.LEARNING,
-                isDisplayModeEnabled = currentMode == ScreenMode.LEARNING
+                onInfoClick = { showInfoDialog = true }
             )
         },
         content = { innerPadding ->
-            when (currentMode) {
-                ScreenMode.LEARNING -> LearningContent(
-                    numberItems = numberItems,
-                    currentNumberIndex = currentNumberIndex,
-                    isPlaying = isPlaying,
-                    displayMode = displayMode,
-                    innerPadding = innerPadding,
-                    onItemClick = { index ->
-                        if (isPlaying) isPlaying = false
-                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                        currentNumberIndex = index
-                        playSound(context, numberItems[index].soundId, mediaPlayer)
-                    }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                // Mode tabs
+                ModeSelector(
+                    currentMode = currentMode,
+                    onModeChanged = { currentMode = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
                 )
-                ScreenMode.QUIZ -> quizState?.let { state ->
-                    QuizContent(
-                        quizState = state,
-                        innerPadding = innerPadding,
-                        onAnswerSelected = { selectedOption ->
-                            val currentQuestion = state.questions[state.currentQuestionIndex]
-                            val isCorrect = selectedOption == currentQuestion.correctAnswer
-                            val nextIndex = state.currentQuestionIndex + 1
-
-                            quizState = state.copy(
-                                score = if (isCorrect) state.score + 1 else state.score,
-                                currentQuestionIndex = nextIndex,
-                                lastAnswerWasCorrect = isCorrect,
-                                showFeedback = true
-                            )
-                            // Optional: Play correct/incorrect sound
-                            if (nextIndex >= state.questions.size) {
-                                showQuizResultDialog = true
-                            }
+                
+                when (currentMode) {
+                    ScreenMode.LEARNING -> CleanLearningContent(
+                        numberItems = numberItems,
+                        currentNumberIndex = currentNumberIndex,
+                        isPlaying = isPlaying,
+                        displayMode = displayMode,
+                        onItemClick = { index ->
+                            if (isPlaying) isPlaying = false
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                            currentNumberIndex = index
+                            playSound(context, numberItems[index].soundId, mediaPlayer)
                         },
-                        onNextQuestion = {
-                            if (quizState != null && quizState!!.currentQuestionIndex < quizState!!.questions.size) {
-                                quizState = quizState?.copy(showFeedback = false)
-                            }
-                        }
+                        onPlayPauseClick = { isPlaying = !isPlaying },
+                        onDisplayModeChanged = { displayMode = it }
                     )
-                } ?: Box( // Loading indicator
-                    modifier = Modifier.fillMaxSize().padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) { CircularProgressIndicator() }
+                    ScreenMode.QUIZ -> quizState?.let { state ->
+                        CleanQuizContent(
+                            quizState = state,
+                            onAnswerSelected = { selectedOption ->
+                                val currentQuestion = state.questions[state.currentQuestionIndex]
+                                val isCorrect = selectedOption == currentQuestion.correctAnswer
+                                val nextIndex = state.currentQuestionIndex + 1
+
+                                quizState = state.copy(
+                                    score = if (isCorrect) state.score + 1 else state.score,
+                                    currentQuestionIndex = nextIndex,
+                                    lastAnswerWasCorrect = isCorrect,
+                                    showFeedback = true
+                                )
+                                if (nextIndex >= state.questions.size) {
+                                    showQuizResultDialog = true
+                                }
+                            },
+                            onNextQuestion = {
+                                if (quizState != null && quizState!!.currentQuestionIndex < quizState!!.questions.size) {
+                                    quizState = quizState?.copy(showFeedback = false)
+                                }
+                            }
+                        )
+                    } ?: Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) { CircularProgressIndicator() }
+                }
             }
         }
     )
@@ -226,7 +230,7 @@ fun NumbersScreen(navController: NavController) {
             numberItems = numberItems,
             mediaPlayer = mediaPlayer,
             context = context,
-            autoPlaySpeed = autoPlaySpeed,
+            autoPlaySpeed = 1.5f,
             updateIndex = { currentNumberIndex = it },
             playSoundFn = { item -> playSound(context, item.soundId, mediaPlayer) }
         )
@@ -286,36 +290,47 @@ private fun getNumberItems(): List<NumberItem> {
 // --- Learning Mode Content ---
 
 @Composable
-fun LearningContent(
+fun CleanLearningContent(
     numberItems: List<NumberItem>,
     currentNumberIndex: Int,
     isPlaying: Boolean,
     displayMode: DisplayMode,
-    innerPadding: PaddingValues,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Int) -> Unit,
+    onPlayPauseClick: () -> Unit,
+    onDisplayModeChanged: (DisplayMode) -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(innerPadding)
             .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 56.dp), // Assume banner height
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = 56.dp)
         ) {
-            AnimatedCurrentNumber(
+            // Current number display
+            CleanCurrentNumberDisplay(
                 currentItem = numberItems.getOrElse(currentNumberIndex) { numberItems.first() },
                 displayMode = displayMode,
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
-                    .height(120.dp)
             )
+            
+            // Controls
+            LearningControls(
+                displayMode = displayMode,
+                isPlaying = isPlaying,
+                onDisplayModeChanged = onDisplayModeChanged,
+                onPlayPauseClick = onPlayPauseClick,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            
             Spacer(modifier = Modifier.height(16.dp))
-            NumbersGrid(
+            
+            // Numbers grid
+            CleanNumbersGrid(
                 numberItems = numberItems,
                 currentNumberIndex = currentNumberIndex,
                 isPlaying = isPlaying,
@@ -323,6 +338,7 @@ fun LearningContent(
                 onItemClick = onItemClick
             )
         }
+        
         BannerAdView(
             modifier = Modifier
                 .fillMaxWidth()
@@ -400,38 +416,40 @@ fun generateQuiz(items: List<NumberItem>, numberOfQuestions: Int = 10): QuizStat
 
 
 @Composable
-fun QuizContent(
+fun CleanQuizContent(
     quizState: QuizState,
-    innerPadding: PaddingValues,
     onAnswerSelected: (String) -> Unit,
     onNextQuestion: () -> Unit
 ) {
-    // Gérer le cas où il n'y a pas de questions
     if (quizState.questions.isEmpty()) {
         Box(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                "Impossible de générer le quiz pour le moment.",
-                style = MaterialTheme.typography.headlineSmall,
-                textAlign = TextAlign.Center
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    Icons.Default.Error,
+                    contentDescription = null,
+                    modifier = Modifier.size(48.dp),
+                    tint = MaterialTheme.colorScheme.error
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    "Impossible de générer le quiz pour le moment.",
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
         return
     }
 
-    // Si le quiz est terminé (index >= taille)
     if (quizState.currentQuestionIndex >= quizState.questions.size) {
         Box(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                "Quiz terminé ! Affichage des résultats...",
-                style = MaterialTheme.typography.headlineSmall,
-                textAlign = TextAlign.Center
-            )
+            CircularProgressIndicator()
         }
         return
     }
@@ -442,82 +460,127 @@ fun QuizContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(innerPadding)
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top)
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Progress and Score
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Question ${quizState.currentQuestionIndex + 1}/${quizState.questions.size}",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = "Score: ${quizState.score}",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Question Text (Assurez-vous que la police Adlam est appliquée si nécessaire via le thème)
-        Text(
-            text = currentQuestion.questionText,
-            style = MaterialTheme.typography.headlineSmall,
-            textAlign = TextAlign.Center,
+        // Progress indicator
+        QuizProgressIndicator(
+            currentQuestion = quizState.currentQuestionIndex + 1,
+            totalQuestions = quizState.questions.size,
+            score = quizState.score,
             modifier = Modifier.fillMaxWidth()
-            // fontFamily = adlamFontFamily // Appliquer explicitement si besoin
         )
+        
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Question card
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            ),
+            shape = RoundedCornerShape(20.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Question ${quizState.currentQuestionIndex + 1}",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = currentQuestion.questionText,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+        }
+        
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Answer Options
+        // Answer options
         currentQuestion.options.forEach { option ->
             val isCorrectAnswer = option == currentQuestion.correctAnswer
             val isSelected = option == selectedOption
-            val buttonColors = ButtonDefaults.buttonColors(
-                containerColor = when {
-                    quizState.showFeedback && isCorrectAnswer -> Color.Green.copy(alpha = 0.7f)
-                    quizState.showFeedback && isSelected && !isCorrectAnswer -> Color.Red.copy(alpha = 0.7f)
-                    else -> MaterialTheme.colorScheme.surfaceVariant
+            
+            QuizAnswerCard(
+                text = option,
+                isSelected = isSelected,
+                isCorrect = isCorrectAnswer,
+                showFeedback = quizState.showFeedback,
+                onClick = { 
+                    if (!quizState.showFeedback) { 
+                        selectedOption = option
+                        onAnswerSelected(option) 
+                    }
                 },
-                contentColor = when {
-                    quizState.showFeedback && (isCorrectAnswer || (isSelected && !isCorrectAnswer)) -> MaterialTheme.colorScheme.onPrimary
-                    else -> MaterialTheme.colorScheme.onSurfaceVariant
-                }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
             )
-            Button(
-                onClick = { if (!quizState.showFeedback) { selectedOption = option; onAnswerSelected(option) } },
-                modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = buttonColors,
-                enabled = !quizState.showFeedback || isSelected || isCorrectAnswer
-            ) {
-                // Assurez-vous que la police Adlam est appliquée si nécessaire via le thème
-                Text(
-                    text = option, fontSize = 18.sp, textAlign = TextAlign.Center
-                    // fontFamily = adlamFontFamily // Appliquer explicitement si besoin
-                )
-            }
         }
+        
         Spacer(modifier = Modifier.weight(1f))
 
-        // Feedback Text and Next Button
+        // Feedback and next button
         AnimatedVisibility(visible = quizState.showFeedback) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                val feedbackText = if (quizState.lastAnswerWasCorrect == true) "Correct !" else "Incorrect."
-                val feedbackColor = if (quizState.lastAnswerWasCorrect == true) Color(0xFF008000) else MaterialTheme.colorScheme.error
-                Text(
-                    text = feedbackText, color = feedbackColor, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold
-                )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val isCorrect = quizState.lastAnswerWasCorrect == true
+                
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isCorrect) 
+                            Color(0xFF4CAF50).copy(alpha = 0.1f) 
+                        else 
+                            MaterialTheme.colorScheme.errorContainer
+                    ),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            if (isCorrect) Icons.Default.CheckCircle else Icons.Default.Cancel,
+                            contentDescription = null,
+                            tint = if (isCorrect) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = if (isCorrect) "Correct !" else "Incorrect",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = if (isCorrect) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+                
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = onNextQuestion) {
-                    Text(if (quizState.currentQuestionIndex < quizState.questions.size - 1) "Question Suivante" else "Voir Résultats")
+                
+                Button(
+                    onClick = onNextQuestion,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        if (quizState.currentQuestionIndex < quizState.questions.size - 1) 
+                            "Question Suivante" 
+                        else 
+                            "Voir Résultats"
+                    )
                 }
             }
         }
+        
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -548,48 +611,43 @@ fun QuizResultDialog(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NumbersTopAppBar(
+fun CleanNumbersTopAppBar(
     navController: NavController,
     currentMode: ScreenMode,
     onToggleMode: () -> Unit,
-    isPlaying: Boolean,
-    onPlayPauseClick: () -> Unit,
-    displayMode: DisplayMode,
-    onDisplayModeChanged: (DisplayMode) -> Unit,
-    autoPlaySpeed: Float,
-    onSpeedChanged: (Float) -> Unit,
-    onInfoClick: () -> Unit,
-    isPlayPauseEnabled: Boolean,
-    isSpeedControlEnabled: Boolean,
-    isDisplayModeEnabled: Boolean
+    onInfoClick: () -> Unit
 ) {
-    val displayModeOptions = DisplayMode.values()
-    var showSpeedDialog by remember { mutableStateOf(false) }
-
     TopAppBar(
-        title = { Text(stringResource(R.string.numbers_in_adlam), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.onPrimaryContainer) },
-        navigationIcon = { IconButton(onClick = { navController.navigateUp() }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back), tint = MaterialTheme.colorScheme.onPrimaryContainer) } },
-        actions = {
-            IconButton(onClick = onToggleMode) {
-                Icon(painter = painterResource(id = if (currentMode == ScreenMode.LEARNING) R.drawable.quiz else R.drawable.writing), contentDescription = if (currentMode == ScreenMode.LEARNING) "Passer au Mode Quiz" else "Passer au Mode Apprentissage", tint = MaterialTheme.colorScheme.onPrimaryContainer)
-            }
-            AnimatedVisibility(visible = currentMode == ScreenMode.LEARNING) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    SpeedControlButton(autoPlaySpeed, { showSpeedDialog = true }, isSpeedControlEnabled)
-                    Spacer(Modifier.width(4.dp))
-                    ToggleButton(displayModeOptions, displayMode, onDisplayModeChanged, { mode -> when (mode) { DisplayMode.ADLAM -> "𞥐𞥑"; DisplayMode.LATIN -> "01"; DisplayMode.FULFULDE -> "Ff" } }, enabled = isDisplayModeEnabled)
-                    Spacer(Modifier.width(4.dp))
-                    PlayPauseButton(isPlaying, onPlayPauseClick, isPlayPauseEnabled)
-                }
-            }
-            IconButton(onClick = onInfoClick) { Icon(Icons.Default.Info, contentDescription = stringResource(R.string.info), tint = MaterialTheme.colorScheme.onPrimaryContainer) }
+        title = { 
+            Text(
+                text = stringResource(R.string.numbers_in_adlam),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer, titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer, actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer, navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer)
+        navigationIcon = { 
+            IconButton(onClick = { navController.navigateUp() }) { 
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack, 
+                    contentDescription = stringResource(R.string.back),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = onInfoClick) { 
+                Icon(
+                    Icons.Default.Info, 
+                    contentDescription = stringResource(R.string.info),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     )
-
-    if (showSpeedDialog) {
-        SpeedSelectionDialog(autoPlaySpeed, { onSpeedChanged(it); showSpeedDialog = false }, { showSpeedDialog = false })
-    }
 }
 
 @Composable
@@ -669,11 +727,70 @@ fun InfoDialog(onDismiss: () -> Unit) {
     )
 }
 
-// --- Learning Mode UI Components ---
+// --- New Clean UI Components ---
+
+@Composable
+fun ModeSelector(
+    currentMode: ScreenMode,
+    onModeChanged: (ScreenMode) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+        ) {
+            ScreenMode.values().forEach { mode ->
+                val isSelected = mode == currentMode
+                
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { onModeChanged(mode) },
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isSelected) 
+                            MaterialTheme.colorScheme.primary 
+                        else 
+                            Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        text = when (mode) {
+                            ScreenMode.LEARNING -> "Apprentissage"
+                            ScreenMode.QUIZ -> "Quiz"
+                        },
+                        modifier = Modifier
+                            .padding(12.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                        color = if (isSelected) 
+                            MaterialTheme.colorScheme.onPrimary 
+                        else 
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AnimatedCurrentNumber(currentItem: NumberItem, displayMode: DisplayMode, modifier: Modifier = Modifier) {
+fun CleanCurrentNumberDisplay(
+    currentItem: NumberItem,
+    displayMode: DisplayMode,
+    modifier: Modifier = Modifier
+) {
     val currentText = when (displayMode) {
         DisplayMode.ADLAM -> currentItem.adlamDigit
         DisplayMode.LATIN -> currentItem.latinDigit
@@ -682,25 +799,157 @@ fun AnimatedCurrentNumber(currentItem: NumberItem, displayMode: DisplayMode, mod
     val secondaryText = when (displayMode) {
         DisplayMode.ADLAM -> currentItem.fulfuldeLatin
         DisplayMode.LATIN -> currentItem.fulfuldeLatin
-        DisplayMode.FULFULDE -> currentItem.adlamDigit // Show Adlam digit as secondary in Fulfulde mode
+        DisplayMode.FULFULDE -> currentItem.adlamDigit
     }
-    val showSecondaryText = secondaryText.isNotBlank()
-    val fontSize = when {
-        displayMode == DisplayMode.FULFULDE && currentText.length > 10 -> 36.sp
-        displayMode == DisplayMode.FULFULDE -> 42.sp
-        (displayMode == DisplayMode.ADLAM || displayMode == DisplayMode.LATIN) && currentText.length > 3 -> 60.sp
-        else -> 72.sp
-    }
-
-    Box(modifier = modifier.shadow(4.dp, RoundedCornerShape(16.dp)).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.surfaceVariant).padding(16.dp), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.fillMaxHeight()) {
-            AnimatedContent(targetState = currentText, transitionSpec = { (slideInVertically { h -> h } + fadeIn()) togetherWith (slideOutVertically { h -> -h } + fadeOut()) using SizeTransform(clip = false) }) { text ->
-                Text(text, fontSize = fontSize, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center, maxLines = 2, softWrap = true) // fontFamily = ...
+    
+    Card(
+        modifier = modifier.height(160.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            AnimatedContent(
+                targetState = currentText,
+                transitionSpec = {
+                    (slideInVertically { h -> h } + fadeIn()) togetherWith 
+                    (slideOutVertically { h -> -h } + fadeOut()) using 
+                    SizeTransform(clip = false)
+                }
+            ) { text ->
+                Text(
+                    text = text,
+                    fontSize = when {
+                        displayMode == DisplayMode.FULFULDE && text.length > 10 -> 32.sp
+                        displayMode == DisplayMode.FULFULDE -> 40.sp
+                        text.length > 3 -> 56.sp
+                        else -> 64.sp
+                    },
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2
+                )
             }
-            AnimatedVisibility(visible = showSecondaryText) {
-                Column {
-                    Spacer(Modifier.height(8.dp))
-                    Text(secondaryText, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f), style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center) // fontFamily = ...
+            
+            if (secondaryText.isNotBlank() && displayMode != DisplayMode.FULFULDE) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = secondaryText,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun LearningControls(
+    displayMode: DisplayMode,
+    isPlaying: Boolean,
+    onDisplayModeChanged: (DisplayMode) -> Unit,
+    onPlayPauseClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Display mode selector
+        CleanDisplayModeSelector(
+            displayMode = displayMode,
+            onDisplayModeChanged = onDisplayModeChanged,
+            modifier = Modifier.weight(1f)
+        )
+        
+        Spacer(modifier = Modifier.width(16.dp))
+        
+        // Play/Pause button
+        FloatingActionButton(
+            onClick = onPlayPauseClick,
+            containerColor = if (isPlaying) 
+                MaterialTheme.colorScheme.secondary 
+            else 
+                MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(56.dp)
+        ) {
+            Icon(
+                painter = painterResource(
+                    id = if (isPlaying) R.drawable.pause else R.drawable.play
+                ),
+                contentDescription = if (isPlaying) "Pause" else "Play",
+                tint = if (isPlaying) 
+                    MaterialTheme.colorScheme.onSecondary 
+                else 
+                    MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun CleanDisplayModeSelector(
+    displayMode: DisplayMode,
+    onDisplayModeChanged: (DisplayMode) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+        ) {
+            DisplayMode.values().forEach { mode ->
+                val isSelected = mode == displayMode
+                
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { onDisplayModeChanged(mode) },
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isSelected) 
+                            MaterialTheme.colorScheme.primary 
+                        else 
+                            Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        text = when (mode) {
+                            DisplayMode.ADLAM -> "𞥐𞥑"
+                            DisplayMode.LATIN -> "01"
+                            DisplayMode.FULFULDE -> "Ff"
+                        },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                        color = if (isSelected) 
+                            MaterialTheme.colorScheme.onPrimary 
+                        else 
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
         }
@@ -708,38 +957,227 @@ fun AnimatedCurrentNumber(currentItem: NumberItem, displayMode: DisplayMode, mod
 }
 
 @Composable
-fun NumbersGrid(numberItems: List<NumberItem>, currentNumberIndex: Int, isPlaying: Boolean, displayMode: DisplayMode, onItemClick: (Int) -> Unit) {
-    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 100.dp), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+fun CleanNumbersGrid(
+    numberItems: List<NumberItem>,
+    currentNumberIndex: Int,
+    isPlaying: Boolean,
+    displayMode: DisplayMode,
+    onItemClick: (Int) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 120.dp),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
         items(numberItems.size) { index ->
-            NumberCard(numberItems[index], (index == currentNumberIndex), isPlaying && (index == currentNumberIndex), displayMode) { onItemClick(index) }
+            CleanNumberCard(
+                item = numberItems[index],
+                isCurrent = index == currentNumberIndex,
+                isAutoPlaying = isPlaying && (index == currentNumberIndex),
+                displayMode = displayMode,
+                onClick = { onItemClick(index) }
+            )
         }
     }
 }
 
 @Composable
-fun NumberCard(item: NumberItem, isCurrent: Boolean, isAutoPlaying: Boolean, displayMode: DisplayMode, onClick: () -> Unit) {
-    val animatedScale by animateFloatAsState(if (isCurrent) 1.05f else 1f, spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessLow))
-    val animatedElevation by animateDpAsState(if (isCurrent) 6.dp else 2.dp, tween(300))
-    val pulseAlpha = animatePulseEffect(isAutoPlaying)
-    val backgroundColor = when { isAutoPlaying -> MaterialTheme.colorScheme.primary.copy(alpha = pulseAlpha); isCurrent -> MaterialTheme.colorScheme.primaryContainer; else -> MaterialTheme.colorScheme.surfaceVariant }
-    val textColor = when { isAutoPlaying -> MaterialTheme.colorScheme.onPrimary; isCurrent -> MaterialTheme.colorScheme.onPrimaryContainer; else -> MaterialTheme.colorScheme.onSurfaceVariant }
-    val border = if (isCurrent && !isAutoPlaying) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null
+fun CleanNumberCard(
+    item: NumberItem,
+    isCurrent: Boolean,
+    isAutoPlaying: Boolean,
+    displayMode: DisplayMode,
+    onClick: () -> Unit
+) {
+    val animatedScale by animateFloatAsState(
+        targetValue = if (isCurrent) 1.02f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+    )
+    
+    val pulseAlpha = if (isAutoPlaying) animatePulseEffect(true) else 1f
+    
+    val backgroundColor = when {
+        isAutoPlaying -> MaterialTheme.colorScheme.primary.copy(alpha = pulseAlpha)
+        isCurrent -> MaterialTheme.colorScheme.primaryContainer
+        else -> MaterialTheme.colorScheme.surface
+    }
+    
+    val textColor = when {
+        isAutoPlaying -> MaterialTheme.colorScheme.onPrimary
+        isCurrent -> MaterialTheme.colorScheme.onPrimaryContainer
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+    
+    val borderStroke = if (isCurrent && !isAutoPlaying) 
+        BorderStroke(2.dp, MaterialTheme.colorScheme.primary) 
+    else null
 
-    Card(modifier = Modifier.aspectRatio(1f).scale(animatedScale).shadow(animatedElevation, RoundedCornerShape(16.dp), clip = false).clip(RoundedCornerShape(16.dp)).clickable(onClick = onClick), colors = CardDefaults.cardColors(containerColor = backgroundColor), shape = RoundedCornerShape(16.dp), border = border) {
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize().padding(8.dp)) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                val cardText = when (displayMode) { DisplayMode.ADLAM -> item.adlamDigit; DisplayMode.LATIN -> item.latinDigit; DisplayMode.FULFULDE -> item.fulfuldeAdlam }
-                val hintText = when (displayMode) { DisplayMode.ADLAM -> item.latinDigit; DisplayMode.LATIN -> item.adlamDigit; DisplayMode.FULFULDE -> item.adlamDigit }
-                val showHint = hintText.isNotBlank()
-                val fontSize = when { displayMode == DisplayMode.FULFULDE && cardText.length > 8 -> 16.sp; displayMode == DisplayMode.FULFULDE -> 20.sp; (displayMode == DisplayMode.ADLAM || displayMode == DisplayMode.LATIN) && cardText.length > 2 -> 30.sp; else -> 36.sp }
+    Card(
+        modifier = Modifier
+            .aspectRatio(1f)
+            .scale(animatedScale)
+            .clickable { onClick() },
+        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        shape = RoundedCornerShape(16.dp),
+        border = borderStroke,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (isCurrent) 4.dp else 1.dp
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            val cardText = when (displayMode) {
+                DisplayMode.ADLAM -> item.adlamDigit
+                DisplayMode.LATIN -> item.latinDigit
+                DisplayMode.FULFULDE -> item.fulfuldeAdlam
+            }
+            
+            val hintText = when (displayMode) {
+                DisplayMode.ADLAM -> item.latinDigit
+                DisplayMode.LATIN -> item.adlamDigit
+                DisplayMode.FULFULDE -> item.latinDigit
+            }
+            
+            Text(
+                text = cardText,
+                fontSize = when {
+                    displayMode == DisplayMode.FULFULDE && cardText.length > 8 -> 18.sp
+                    displayMode == DisplayMode.FULFULDE -> 22.sp
+                    cardText.length > 2 -> 32.sp
+                    else -> 40.sp
+                },
+                fontWeight = FontWeight.Bold,
+                color = textColor,
+                textAlign = TextAlign.Center,
+                maxLines = 2
+            )
+            
+            if (hintText.isNotBlank() && displayMode != DisplayMode.FULFULDE) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = hintText,
+                    fontSize = 12.sp,
+                    color = textColor.copy(alpha = 0.7f),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+}
 
-                Text(cardText, fontSize = fontSize, fontWeight = FontWeight.Bold, color = textColor, textAlign = TextAlign.Center, maxLines = 2, softWrap = true) // fontFamily = ...
-                AnimatedVisibility(visible = showHint) {
-                    Column {
-                        Spacer(Modifier.height(4.dp))
-                        Text(hintText, fontSize = 12.sp, color = textColor.copy(alpha = 0.7f), textAlign = TextAlign.Center) // fontFamily = ...
-                    }
-                }
+@Composable
+fun QuizProgressIndicator(
+    currentQuestion: Int,
+    totalQuestions: Int,
+    score: Int,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Question $currentQuestion/$totalQuestions",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = "Score: $score",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            LinearProgressIndicator(
+                progress = { currentQuestion.toFloat() / totalQuestions.toFloat() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .clip(RoundedCornerShape(4.dp)),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.primaryContainer
+            )
+        }
+    }
+}
+
+@Composable
+fun QuizAnswerCard(
+    text: String,
+    isSelected: Boolean,
+    isCorrect: Boolean,
+    showFeedback: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val backgroundColor = when {
+        showFeedback && isCorrect -> Color(0xFF4CAF50).copy(alpha = 0.2f)
+        showFeedback && isSelected && !isCorrect -> MaterialTheme.colorScheme.errorContainer
+        isSelected -> MaterialTheme.colorScheme.primaryContainer
+        else -> MaterialTheme.colorScheme.surface
+    }
+    
+    val borderColor = when {
+        showFeedback && isCorrect -> Color(0xFF4CAF50)
+        showFeedback && isSelected && !isCorrect -> MaterialTheme.colorScheme.error
+        isSelected -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+    }
+    
+    val textColor = when {
+        showFeedback && isCorrect -> Color(0xFF4CAF50)
+        showFeedback && isSelected && !isCorrect -> MaterialTheme.colorScheme.error
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+
+    Card(
+        modifier = modifier
+            .clickable(enabled = !showFeedback) { onClick() },
+        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(2.dp, borderColor)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyLarge,
+                color = textColor,
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                modifier = Modifier.weight(1f)
+            )
+            
+            if (showFeedback && (isCorrect || isSelected)) {
+                Icon(
+                    if (isCorrect) Icons.Default.CheckCircle else Icons.Default.Cancel,
+                    contentDescription = null,
+                    tint = if (isCorrect) Color(0xFF4CAF50) else MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
     }
@@ -749,7 +1187,15 @@ fun NumberCard(item: NumberItem, isCurrent: Boolean, isAutoPlaying: Boolean, dis
 fun animatePulseEffect(isActive: Boolean): Float {
     if (!isActive) return 1f
     val infiniteTransition = rememberInfiniteTransition(label = "pulse")
-    val pulseAlpha by infiniteTransition.animateFloat(0.7f, 1.0f, infiniteRepeatable(tween(700, easing = LinearEasing), RepeatMode.Reverse), label = "pulse alpha")
+    val pulseAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.7f,
+        targetValue = 1.0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(700, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulse alpha"
+    )
     return pulseAlpha
 }
 
@@ -840,7 +1286,7 @@ fun PreviewNumbersScreenQuiz() {
         val previewQuizState = generateQuiz(sampleItems, 4)
         Scaffold( topBar = { /* Mock TopAppBar if needed */ } ) { padding ->
             if (previewQuizState.questions.isNotEmpty()) {
-                QuizContent(previewQuizState.copy(showFeedback = false), padding, {}, {})
+                CleanQuizContent(previewQuizState.copy(showFeedback = false), {}, {})
             } else {
                 Box(Modifier.fillMaxSize().padding(padding), Alignment.Center){ Text("Could not generate quiz preview.")}
             }

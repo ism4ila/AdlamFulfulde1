@@ -7,12 +7,17 @@ import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,7 +36,7 @@ import com.bekisma.adlamfulfulde.R
 import com.bekisma.adlamfulfulde.data.ReadingPassage
 import com.bekisma.adlamfulfulde.data.WordTiming
 import com.bekisma.adlamfulfulde.data.getReadingPassages
-import com.bekisma.adlamfulfulde.screens.MediaPlayerSingleton // Assurez-vous qu'il est accessible
+
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
@@ -39,86 +44,73 @@ import kotlinx.coroutines.isActive
 @Composable
 fun ReadingPassageListScreen(navController: NavController) {
     val passages = remember { getReadingPassages() }
+    var selectedDifficulty by remember { mutableStateOf<String?>(null) }
+    var searchQuery by remember { mutableStateOf("") }
+    
+    val filteredPassages = remember(passages, selectedDifficulty, searchQuery) {
+        passages.filter { passage ->
+            val matchesDifficulty = selectedDifficulty == null || passage.difficulty == selectedDifficulty
+            val matchesSearch = searchQuery.isEmpty() || 
+                passage.title.contains(searchQuery, ignoreCase = true)
+            matchesDifficulty && matchesSearch
+        }
+    }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.reading_passages_title)) }, // Nouvelle string
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+            CleanReadingTopBar(
+                onBackClick = { navController.navigateUp() }
             )
         }
     ) { paddingValues ->
         if (passages.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
-                Text(stringResource(R.string.reading_passages_empty)) // Nouvelle string
-            }
+            EmptyReadingState(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            )
             return@Scaffold
         }
 
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .fillMaxSize()
         ) {
-            items(passages, key = { it.id }) { passage ->
-                PassageListItem(passage = passage) {
-                    navController.navigate("reading_player/${passage.id}")
+            // Search and filters
+            SearchAndFilters(
+                searchQuery = searchQuery,
+                onSearchQueryChange = { searchQuery = it },
+                selectedDifficulty = selectedDifficulty,
+                onDifficultySelected = { selectedDifficulty = if (selectedDifficulty == it) null else it },
+                modifier = Modifier.padding(16.dp)
+            )
+            
+            // Passages grid
+            if (filteredPassages.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Aucun passage trouvé",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
                 }
+            } else {
+                ModernPassageGrid(
+                    passages = filteredPassages,
+                    onPassageClick = { passage ->
+                        navController.navigate("reading_player/${passage.id}")
+                    },
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PassageListItem(passage: ReadingPassage, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = passage.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = stringResource(R.string.difficulty_label, passage.difficulty), // Nouvelle string
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
-                )
-            }
-            Icon(
-                Icons.Filled.ChevronRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,6 +124,8 @@ fun ReadingPlayerScreen(navController: NavController, passageId: Int?) {
     var currentPositionMs by remember { mutableLongStateOf(0L) }
     var totalDurationMs by remember { mutableLongStateOf(0L) }
     var currentHighlightedWordIndex by remember { mutableIntStateOf(-1) }
+    var playbackSpeed by remember { mutableFloatStateOf(1.0f) }
+    var showTranslation by remember { mutableStateOf(false) }
 
     fun prepareAndPlay() {
         if (passage == null) return
@@ -220,14 +214,25 @@ fun ReadingPlayerScreen(navController: NavController, passageId: Int?) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(passage?.title ?: stringResource(R.string.reading_player_title)) }, // Nouvelle string
-                navigationIcon = {
-                    IconButton(onClick = {
-                        stopPlayback()
-                        navController.navigateUp()
-                    }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+            ModernPlayerTopBar(
+                title = passage?.title ?: "Lecture",
+                onBackClick = {
+                    stopPlayback()
+                    navController.navigateUp()
+                },
+                showTranslation = showTranslation,
+                onToggleTranslation = { showTranslation = !showTranslation },
+                playbackSpeed = playbackSpeed,
+                onSpeedChanged = { newSpeed ->
+                    playbackSpeed = newSpeed
+                    if (mediaPlayer.isPlaying) {
+                        try {
+                            val params = mediaPlayer.playbackParams
+                            params.speed = newSpeed
+                            mediaPlayer.playbackParams = params
+                        } catch (e: Exception) {
+                            Log.e("ReadingPlayer", "Error setting playback speed: ${e.message}")
+                        }
                     }
                 }
             )
@@ -240,92 +245,23 @@ fun ReadingPlayerScreen(navController: NavController, passageId: Int?) {
             return@Scaffold
         }
 
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Affichage du Texte Adlam
-            Card(
-                modifier = Modifier
-                    .weight(1f) // Prend l'espace disponible
-                    .fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(2.dp)
-            ) {
-                val scrollState = rememberScrollState()
-                val annotatedText = remember(passage.adlamText, currentHighlightedWordIndex, passage.wordTimings) {
-                    if (passage.wordTimings.isNullOrEmpty() || currentHighlightedWordIndex < 0) {
-                        AnnotatedString(passage.adlamText)
-                    } else {
-                        // Logique de création de l'AnnotatedString pour le surlignage
-                        // Ceci est une implémentation simpliste. Une vraie solution
-                        // nécessiterait de parser le texte en mots et de les styler.
-                        // Pour l'instant, nous ne surlignons pas pour simplifier.
-                        // Vous pouvez ajouter cette logique plus tard si les `wordTimings` sont fournis.
+        ModernReadingPlayerContent(
+            passage = passage,
+            showTranslation = showTranslation,
+            currentHighlightedWordIndex = currentHighlightedWordIndex,
+            isPlaying = isPlaying,
+            currentPositionMs = currentPositionMs,
+            totalDurationMs = totalDurationMs,
+            onSeek = { seekTo(it) },
+            onPlayPause = {
+                if (isPlaying) pausePlayback() 
+                else if (currentPositionMs > 0 && currentPositionMs < totalDurationMs) resumePlayback() 
+                else prepareAndPlay()
+            },
+            onStop = { stopPlayback() },
+            onReplay = { stopPlayback(); prepareAndPlay() },
+            modifier = Modifier.padding(paddingValues)
+        )
 
-                        // Exemple de base de surlignage (si vous avez les timings et les mots séparés)
-                        // Si vous avez une liste de mots simple du passage :
-                        // val words = passage.adlamText.split(" ") // Simplification
-                        // buildAnnotatedString {
-                        //    words.forEachIndexed { index, word ->
-                        //        if (index == currentHighlightedWordIndex) { // Supposons que wordTimings correspond à l'index des mots
-                        //            pushStyle(SpanStyle(background = MaterialTheme.colorScheme.tertiaryContainer))
-                        //            append("$word ")
-                        //            pop()
-                        //        } else {
-                        //            append("$word ")
-                        //        }
-                        //    }
-                        //}
-                        AnnotatedString(passage.adlamText) // Version sans surlignage pour l'instant
-                    }
-                }
-                Text(
-                    text = annotatedText,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxSize() // Remplir la carte
-                        .verticalScroll(scrollState),
-                    fontSize = 20.sp, // Ajustez la taille de la police
-                    lineHeight = 30.sp // Ajustez l'interligne pour une meilleure lisibilité
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Contrôles Audio
-            if (totalDurationMs > 0) {
-                Slider(
-                    value = currentPositionMs.toFloat(),
-                    onValueChange = { newPosition -> seekTo(newPosition.toLong()) },
-                    valueRange = 0f..totalDurationMs.toFloat(),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = { stopPlayback(); prepareAndPlay() }, modifier = Modifier.size(56.dp)) {
-                    Icon(Icons.Filled.Replay, contentDescription = stringResource(R.string.replay_sound), modifier = Modifier.size(32.dp)) // Nouvelle string
-                }
-                IconButton(onClick = {
-                    if (isPlaying) pausePlayback() else if (currentPositionMs > 0 && currentPositionMs < totalDurationMs) resumePlayback() else prepareAndPlay()
-                }, modifier = Modifier.size(72.dp)) {
-                    Icon(
-                        imageVector = if (isPlaying) Icons.Filled.PauseCircle else Icons.Filled.PlayCircle,
-                        contentDescription = if (isPlaying) stringResource(R.string.pause) else stringResource(R.string.play),
-                        modifier = Modifier.size(48.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-                IconButton(onClick = { stopPlayback() }, modifier = Modifier.size(56.dp)) {
-                    Icon(Icons.Filled.StopCircle, contentDescription = stringResource(R.string.stop), modifier = Modifier.size(32.dp)) // Nouvelle string
-                }
-            }
-        }
     }
 }

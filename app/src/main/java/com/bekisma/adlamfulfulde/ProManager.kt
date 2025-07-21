@@ -15,64 +15,31 @@ class ProManager(private val context: Context) {
     private val _proStatus = MutableStateFlow(loadProStatus())
     val proStatus: StateFlow<ProStatus> = _proStatus.asStateFlow()
     
-        val isProUser: StateFlow<Boolean> = MutableStateFlow(false)
+    val isProUser: StateFlow<Boolean> = MutableStateFlow(true)
 
     private fun loadProStatus(): ProStatus {
-        val isPro = prefs.getBoolean("is_pro", false)
-        val planId = prefs.getString("subscription_plan", null)
-        val expirationDate = prefs.getLong("expiration_date", 0L)
-        val isTrialActive = prefs.getBoolean("is_trial_active", false)
-        val trialDaysRemaining = prefs.getInt("trial_days_remaining", 7)
-
         return ProStatus(
-            isPro = isPro,
-            subscriptionPlan = planId?.let { id -> SubscriptionPlan.values().find { it.id == id } },
-            expirationDate = if (expirationDate > 0) expirationDate else null,
-            isTrialActive = isTrialActive,
-            trialDaysRemaining = trialDaysRemaining
+            isPro = true,
+            subscriptionPlan = SubscriptionPlan.LIFETIME,
+            expirationDate = null,
+            isTrialActive = false,
+            trialDaysRemaining = 0
         )
     }
 
     fun activateTrial() {
-        prefs.edit()
-            .putBoolean("is_trial_active", true)
-            .putInt("trial_days_remaining", 7)
-            .putLong("expiration_date", System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000))
-            .apply()
-
-        _proStatus.value = _proStatus.value.copy(
-            isTrialActive = true,
-            trialDaysRemaining = 7
-        )
+        // No-op since everything is free
     }
 
     fun activateSubscription(plan: SubscriptionPlan) {
-        val expirationTime = when (plan) {
-            SubscriptionPlan.MONTHLY -> System.currentTimeMillis() + (30L * 24 * 60 * 60 * 1000)
-            SubscriptionPlan.YEARLY -> System.currentTimeMillis() + (365L * 24 * 60 * 60 * 1000)
-            SubscriptionPlan.LIFETIME -> Long.MAX_VALUE
-        }
-
-        prefs.edit()
-            .putBoolean("is_pro", true)
-            .putString("subscription_plan", plan.id)
-            .putLong("expiration_date", expirationTime)
-            .putBoolean("is_trial_active", false)
-            .apply()
-
-        _proStatus.value = ProStatus(
-            isPro = true,
-            subscriptionPlan = plan,
-            expirationDate = if (plan != SubscriptionPlan.LIFETIME) expirationTime else null
-        )
+        // No-op since everything is free
     }
 
-        fun checkSubscriptionStatus(): Boolean {
-        return false
+    fun checkSubscriptionStatus(): Boolean {
+        return true
     }
 
     fun getProFeatures(): List<ProFeature> {
-        // NOTE: Les ressources R.drawable.ic_* et R.string.* doivent exister dans votre projet.
         return listOf(
             ProFeature(
                 id = "unlimited_lessons",

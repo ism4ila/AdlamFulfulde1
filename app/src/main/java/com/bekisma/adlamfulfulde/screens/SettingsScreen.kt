@@ -42,7 +42,6 @@ import com.bekisma.adlamfulfulde.ThemeMode // Import ThemeMode from its actual p
 import com.bekisma.adlamfulfulde.ColorTheme // Import ColorTheme from its actual package
 // --- End ADD Imports ---
 
-import com.bekisma.adlamfulfulde.ads.BannerAdView
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,16 +82,6 @@ fun SettingsScreen(
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(scaffoldState)
             )
         },
-        bottomBar = {
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.surface,
-                tonalElevation = 8.dp,
-                shadowElevation = 8.dp
-            ) {
-                BannerAdView()
-            }
-        }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier

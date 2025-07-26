@@ -1,11 +1,7 @@
 package com.bekisma.adlamfulfulde.screens.alphabet
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -15,8 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,10 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bekisma.adlamfulfulde.R
 import com.bekisma.adlamfulfulde.data.alphabet.AdlamLetter
-import com.bekisma.adlamfulfulde.data.alphabet.LetterCategory
-import com.bekisma.adlamfulfulde.data.alphabet.LetterDifficulty
 import com.bekisma.adlamfulfulde.utils.AudioPlayer
-import com.bekisma.adlamfulfulde.utils.getDifficultyColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,9 +33,6 @@ fun DetailAlphabetScreen(
     val allLetters = AdlamLetter.values().toList()
     val currentIndex = allLetters.indexOfFirst { it.unicode == letter }
     
-    var isFavorite by remember { mutableStateOf(false) }
-    var showPracticeMode by remember { mutableStateOf(false) }
-    var showDescription by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -57,21 +45,6 @@ fun DetailAlphabetScreen(
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
-                actions = {
-                    IconButton(onClick = { isFavorite = !isFavorite }) {
-                        Icon(
-                            if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Add to favorites",
-                            tint = if (isFavorite) Color.Red else MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                    IconButton(onClick = { showPracticeMode = !showPracticeMode }) {
-                        Icon(
-                            if (showPracticeMode) Icons.Default.VisibilityOff else Icons.Default.Edit,
-                            contentDescription = "Practice mode"
-                        )
-                    }
-                }
             )
         }
     ) { paddingValues ->
@@ -109,10 +82,7 @@ fun DetailAlphabetScreen(
                 Spacer(modifier = Modifier.height(24.dp))
                 
                 // Letter Display Section
-                LetterDisplaySection(
-                    letter = adlamLetter,
-                    showPracticeMode = showPracticeMode
-                )
+                LetterDisplaySection(letter = adlamLetter)
                 
                 Spacer(modifier = Modifier.height(24.dp))
                 
@@ -121,8 +91,8 @@ fun DetailAlphabetScreen(
                 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Play Sound Button
-                OutlinedButton(
+                // Play Sound Button - Large and child-friendly
+                Button(
                     onClick = {
                         val soundResId = context.resources.getIdentifier(
                             adlamLetter.soundFileName,
@@ -135,27 +105,29 @@ fun DetailAlphabetScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    )
+                        .height(80.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ),
+                    shape = RoundedCornerShape(20.dp)
                 ) {
-                    Icon(Icons.Default.PlayArrow, contentDescription = stringResource(R.string.play_sound))
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Icon(
+                        Icons.Default.PlayArrow, 
+                        contentDescription = stringResource(R.string.play_sound),
+                        modifier = Modifier.size(32.dp)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
                     Text(
                         stringResource(R.string.play_sound),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
                     )
                 }
                 
                 Spacer(modifier = Modifier.height(24.dp))
                 
                 // Description Section
-                DescriptionSection(
-                    letter = adlamLetter,
-                    showDescription = showDescription,
-                    onToggleDescription = { showDescription = !showDescription }
-                )
+                DescriptionSection(letter = adlamLetter)
                 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -227,14 +199,9 @@ fun NavigationSection(
 }
 
 @Composable
-fun LetterDisplaySection(
-    letter: AdlamLetter,
-    showPracticeMode: Boolean
-) {
+fun LetterDisplaySection(letter: AdlamLetter) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .animateContentSize(),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
@@ -244,47 +211,13 @@ fun LetterDisplaySection(
             modifier = Modifier.padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (showPracticeMode) {
-                // Practice mode with tracing guides
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Practice Tracing",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${letter.unicode} ${letter.lowercaseUnicode}",
-                            fontSize = 120.sp,
-                            fontWeight = FontWeight.Light,
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                            modifier = Modifier
-                                .border(
-                                    2.dp,
-                                    MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                                    RoundedCornerShape(8.dp)
-                                )
-                                .padding(16.dp)
-                        )
-                    }
-                }
-            } else {
-                // Normal display mode
-                Text(
-                    text = "${letter.unicode} ${letter.lowercaseUnicode}",
-                    fontSize = 120.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+            // Simple, large letter display for children
+            Text(
+                text = "${letter.unicode} ${letter.lowercaseUnicode}",
+                fontSize = 140.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
         }
     }
 }
@@ -298,72 +231,35 @@ fun LetterInfoSection(letter: AdlamLetter) {
         )
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Letter name and phonetic
+            // Letter name - simplified for children
             Text(
                 text = stringResource(id = letter.displayNameRes),
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center
             )
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            // Phonetic sound - larger and more prominent
             Text(
                 text = letter.phoneticSound,
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                fontWeight = FontWeight.Medium
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
             )
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Letter properties
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                PropertyChip(
-                    label = when (letter.category) {
-                        LetterCategory.VOWEL -> "Vowel"
-                        LetterCategory.CONSONANT -> "Consonant" 
-                        LetterCategory.SEMI_VOWEL -> "Semi-vowel"
-                    },
-                    color = when (letter.category) {
-                        LetterCategory.VOWEL -> Color(0xFFD32F2F)
-                        LetterCategory.CONSONANT -> Color(0xFF7B1FA2)
-                        LetterCategory.SEMI_VOWEL -> Color(0xFF388E3C)
-                    }
-                )
-                PropertyChip(
-                    label = letter.difficulty.name.lowercase().replaceFirstChar { it.uppercase() },
-                    color = getDifficultyColor(letter.difficulty)
-                )
-            }
         }
     }
 }
 
-@Composable
-fun PropertyChip(label: String, color: Color) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = color.copy(alpha = 0.1f)
-        )
-    ) {
-        Text(
-            text = label,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            style = MaterialTheme.typography.labelMedium,
-            color = color,
-            fontWeight = FontWeight.SemiBold
-        )
-    }
-}
 
 @Composable
-fun DescriptionSection(
-    letter: AdlamLetter,
-    showDescription: Boolean,
-    onToggleDescription: () -> Unit
-) {
+fun DescriptionSection(letter: AdlamLetter) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -371,39 +267,23 @@ fun DescriptionSection(
         )
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .animateContentSize()
+            modifier = Modifier.padding(20.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Letter Description",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
-                )
-                IconButton(onClick = onToggleDescription) {
-                    Icon(
-                        if (showDescription) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                        contentDescription = if (showDescription) "Hide description" else "Show description"
-                    )
-                }
-            }
+            Text(
+                text = "About this letter",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
             
-            if (showDescription) {
-                Divider()
-                Text(
-                    text = stringResource(id = letter.descriptionRes),
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            Text(
+                text = stringResource(id = letter.descriptionRes),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                lineHeight = 24.sp
+            )
         }
     }
 }
@@ -413,63 +293,38 @@ fun ExampleWordSection(letter: AdlamLetter) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
         )
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Default.MenuBook,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = when (letter.category) {
-                        LetterCategory.VOWEL -> Color(0xFFD32F2F)
-                        LetterCategory.CONSONANT -> Color(0xFF7B1FA2)
-                        LetterCategory.SEMI_VOWEL -> Color(0xFF388E3C)
-                    }
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(R.string.example_sentence_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = when (letter.category) {
-                        LetterCategory.VOWEL -> Color(0xFFD32F2F)
-                        LetterCategory.CONSONANT -> Color(0xFF7B1FA2)
-                        LetterCategory.SEMI_VOWEL -> Color(0xFF388E3C)
-                    }
-                )
-            }
+            Text(
+                text = "Example Word",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
             
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                )
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = letter.exampleWordRes),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = stringResource(id = letter.exampleWordTranslationRes),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
-                    )
-                }
-            }
+            Text(
+                text = stringResource(id = letter.exampleWordRes),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Text(
+                text = stringResource(id = letter.exampleWordTranslationRes),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

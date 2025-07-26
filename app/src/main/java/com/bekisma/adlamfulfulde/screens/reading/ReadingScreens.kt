@@ -245,23 +245,27 @@ fun ReadingPlayerScreen(navController: NavController, passageId: Int?) {
             return@Scaffold
         }
 
-        ModernReadingPlayerContent(
-            passage = passage,
-            showTranslation = showTranslation,
-            currentHighlightedWordIndex = currentHighlightedWordIndex,
-            isPlaying = isPlaying,
-            currentPositionMs = currentPositionMs,
-            totalDurationMs = totalDurationMs,
-            onSeek = { seekTo(it) },
-            onPlayPause = {
-                if (isPlaying) pausePlayback() 
-                else if (currentPositionMs > 0 && currentPositionMs < totalDurationMs) resumePlayback() 
-                else prepareAndPlay()
-            },
-            onStop = { stopPlayback() },
-            onReplay = { stopPlayback(); prepareAndPlay() },
+        Column(
             modifier = Modifier.padding(paddingValues)
-        )
+        ) {
+            ModernReadingPlayerContent(
+                passage = passage,
+                showTranslation = showTranslation,
+                currentHighlightedWordIndex = currentHighlightedWordIndex,
+                isPlaying = isPlaying,
+                currentPositionMs = currentPositionMs,
+                totalDurationMs = totalDurationMs,
+                onSeek = { seekTo(it) },
+                onPlayPause = {
+                    if (isPlaying) pausePlayback() 
+                    else if (currentPositionMs > 0 && currentPositionMs < totalDurationMs) resumePlayback() 
+                    else prepareAndPlay()
+                },
+                onStop = { stopPlayback() },
+                onReplay = { stopPlayback(); prepareAndPlay() },
+                modifier = Modifier.weight(1f)
+            )
+        }
 
     }
 }

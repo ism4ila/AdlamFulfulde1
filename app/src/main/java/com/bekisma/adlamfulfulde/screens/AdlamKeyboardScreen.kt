@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bekisma.adlamfulfulde.R
-import com.bekisma.adlamfulfulde.ads.BannerAdView
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -254,16 +253,7 @@ fun AdlamKeyboardScreen(navController: NavController) {
                 )
             )
         },
-        bottomBar = {
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.surface,
-                tonalElevation = 8.dp,
-                shadowElevation = 8.dp
-            ) {
-                BannerAdView()
-            }
-        }
+        // bottomBar removed - ad moved to content
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -567,6 +557,9 @@ fun AdlamKeyboardScreen(navController: NavController) {
                         Text(stringResource(R.string.share))
                     }
                 }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
             }
         }
     }

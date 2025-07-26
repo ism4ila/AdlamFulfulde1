@@ -36,8 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bekisma.adlamfulfulde.R
-import com.bekisma.adlamfulfulde.ads.BannerAdView
 import kotlinx.coroutines.delay
+import androidx.activity.ComponentActivity
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -250,8 +250,6 @@ fun QuizScreen(navController: NavController) {
                     )
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
-                BannerAdView()
             }
         }
     )
@@ -584,7 +582,9 @@ fun QuizCompletedScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedButton(
-                onClick = { navController.navigateUp() },
+                onClick = {
+                    navController.navigateUp()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

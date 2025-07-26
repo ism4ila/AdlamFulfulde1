@@ -6,12 +6,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Create // Icône pour Majuscules
-import androidx.compose.material.icons.filled.Edit // Icône pour Minuscules
-import androidx.compose.material.icons.filled.Book // Icône pour Mots culturels
-import androidx.compose.material.icons.filled.Compare // Icône pour Mode comparaison
-import androidx.compose.material.icons.outlined.Numbers // Icône pour Chiffres
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.Compare
+import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,10 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bekisma.adlamfulfulde.R
-import com.bekisma.adlamfulfulde.ads.BannerAdView
-// Assurez-vous que l'enum WritingType est accessible ici
-// (il est défini dans WritingPracticeScreen.kt maintenant)
-// import com.bekisma.adlamfulfulde.screens.WritingType // Décommentez si nécessaire
+import androidx.compose.foundation.BorderStroke
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +54,7 @@ private fun WritingTopAppBar(navController: NavController) {
         navigationIcon = {
             IconButton(onClick = { navController.navigateUp() }) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.back)
                 )
             }
@@ -79,24 +76,17 @@ private fun WritingScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 60.dp) // Espace pour la bannière publicitaire en bas
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             AlphabetCard()
+            Spacer(modifier = Modifier.height(24.dp))
             WritingActions(navController)
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        BannerAdView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .height(50.dp)
-        )
     }
 }
 
@@ -108,13 +98,13 @@ private fun AlphabetCard() {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
                 text = stringResource(R.string.the_alphabet),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
@@ -125,7 +115,7 @@ private fun AlphabetCard() {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = stringResource(R.string.th_adl_alp).trimIndent(),
+                text = stringResource(R.string.adlam_alphabet_description).trimIndent(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -140,31 +130,49 @@ private fun WritingActions(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // Row 1
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            WritingActionButton(
+                modifier = Modifier.weight(1f),
+                navController = navController,
+                route = "writingPractice/${WritingType.UPPERCASE.name}",
+                text = stringResource(R.string.upper_case),
+                icon = Icons.Default.Create
+            )
+            WritingActionButton(
+                modifier = Modifier.weight(1f),
+                navController = navController,
+                route = "writingPractice/${WritingType.LOWERCASE.name}",
+                text = stringResource(R.string.lower_case),
+                icon = Icons.Default.Edit
+            )
+        }
+        // Row 2
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            WritingActionButton(
+                modifier = Modifier.weight(1f),
+                navController = navController,
+                route = "writingPractice/${WritingType.NUMBERS.name}",
+                text = stringResource(R.string.numbers),
+                icon = Icons.Outlined.Numbers
+            )
+            WritingActionButton(
+                modifier = Modifier.weight(1f),
+                navController = navController,
+                route = "culturalWords",
+                text = "Mots culturels",
+                icon = Icons.Default.Book
+            )
+        }
+        // Row 3 - Full Width
         WritingActionButton(
-            navController = navController,
-            route = "writingPractice/${WritingType.UPPERCASE.name}", // Utilise l'enum de l'autre fichier
-            text = stringResource(R.string.upper_case),
-            icon = Icons.Default.Create
-        )
-        WritingActionButton(
-            navController = navController,
-            route = "writingPractice/${WritingType.LOWERCASE.name}",
-            text = stringResource(R.string.lower_case),
-            icon = Icons.Default.Edit
-        )
-        WritingActionButton(
-            navController = navController,
-            route = "writingPractice/${WritingType.NUMBERS.name}",
-            text = stringResource(R.string.numbers),
-            icon = Icons.Outlined.Numbers
-        )
-        WritingActionButton(
-            navController = navController,
-            route = "culturalWords",
-            text = "Mots culturels",
-            icon = Icons.Default.Book
-        )
-        WritingActionButton(
+            modifier = Modifier.fillMaxWidth(),
             navController = navController,
             route = "comparisonMode/${WritingType.UPPERCASE.name}",
             text = "Mode comparaison",
@@ -175,28 +183,38 @@ private fun WritingActions(navController: NavController) {
 
 @Composable
 private fun WritingActionButton(
+    modifier: Modifier = Modifier,
     navController: NavController,
     route: String,
     text: String,
     icon: ImageVector
 ) {
-    Button(
+    OutlinedButton(
         onClick = { navController.navigate(route) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        )
+        modifier = modifier.height(IntrinsicSize.Min),
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+            contentColor = MaterialTheme.colorScheme.primary
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Column(
+            modifier = Modifier.padding(vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Icon(imageVector = icon, contentDescription = null)
-            Text(text = text, style = MaterialTheme.typography.titleMedium)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -210,3 +228,4 @@ fun WritingScreenPreview() {
     WritingScreen(navController)
     // }
 }
+

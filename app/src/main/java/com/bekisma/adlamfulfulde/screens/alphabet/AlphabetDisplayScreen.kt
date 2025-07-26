@@ -41,21 +41,13 @@ fun AlphabetDisplayScreen(
     val allLetters = AdlamLetter.values().toList()
     
     var searchQuery by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf<LetterCategory?>(null) }
-    var selectedDifficulty by remember { mutableStateOf<LetterDifficulty?>(null) }
-    var showFilters by remember { mutableStateOf(false) }
     
-    val filteredLetters = remember(searchQuery, selectedCategory, selectedDifficulty) {
+    val filteredLetters = remember(searchQuery) {
         allLetters.filter { letter ->
-            val matchesSearch = searchQuery.isEmpty() || 
+            searchQuery.isEmpty() || 
                 context.getString(letter.displayNameRes).contains(searchQuery, ignoreCase = true) ||
                 letter.latinName.contains(searchQuery, ignoreCase = true) ||
                 letter.phoneticSound.contains(searchQuery, ignoreCase = true)
-                
-            val matchesCategory = selectedCategory == null || letter.category == selectedCategory
-            val matchesDifficulty = selectedDifficulty == null || letter.difficulty == selectedDifficulty
-            
-            matchesSearch && matchesCategory && matchesDifficulty
         }
     }
 
@@ -70,16 +62,6 @@ fun AlphabetDisplayScreen(
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
-                actions = {
-                    IconButton(onClick = { showFilters = !showFilters }) {
-                        Icon(
-                            if (showFilters) Icons.Default.FilterList else Icons.Default.FilterAlt,
-                            contentDescription = "Toggle filters",
-                            tint = if (selectedCategory != null || selectedDifficulty != null) 
-                                MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                }
             )
         }
     ) { paddingValues ->
@@ -89,39 +71,17 @@ fun AlphabetDisplayScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            SearchBar(
-                searchQuery = searchQuery,
-                onSearchQueryChange = { searchQuery = it },
-                modifier = Modifier.fillMaxWidth()
-            )
             
-            Spacer(modifier = Modifier.height(12.dp))
             
-            if (showFilters) {
-                FilterSection(
-                    selectedCategory = selectedCategory,
-                    selectedDifficulty = selectedDifficulty,
-                    onCategorySelected = { selectedCategory = if (selectedCategory == it) null else it },
-                    onDifficultySelected = { selectedDifficulty = if (selectedDifficulty == it) null else it }
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-            }
-            
-            Text(
-                text = "${filteredLetters.size} letters found",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
             
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 160.dp),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(filteredLetters) { letter ->
+                items(allLetters) { letter ->
                     LetterGridCard(
                         letter = letter,
                         onPlaySound = {
@@ -143,6 +103,7 @@ fun AlphabetDisplayScreen(
                     )
                 }
             }
+            
         }
     }
 }
@@ -206,11 +167,13 @@ fun FilterSection(
                                 LetterCategory.VOWEL -> Color(0xFFFFEBEE)
                                 LetterCategory.CONSONANT -> Color(0xFFF3E5F5)
                                 LetterCategory.SEMI_VOWEL -> Color(0xFFE8F5E8)
+                                LetterCategory.COMBINED -> Color(0xFFFFF3E0)
                             },
                             selectedLabelColor = when (category) {
                                 LetterCategory.VOWEL -> Color(0xFFD32F2F)
                                 LetterCategory.CONSONANT -> Color(0xFF7B1FA2)
                                 LetterCategory.SEMI_VOWEL -> Color(0xFF388E3C)
+                                LetterCategory.COMBINED -> Color(0xFFFF9800)
                             }
                         )
                     )
@@ -255,106 +218,67 @@ fun LetterGridCard(
             .fillMaxWidth()
             .aspectRatio(1f)
             .clickable { onCardClick(letter.unicode) },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = when (letter.category) {
+                LetterCategory.VOWEL -> Color(0xFFFFE0E6)
+                LetterCategory.CONSONANT -> Color(0xFFE8F4FD)
+                LetterCategory.SEMI_VOWEL -> Color(0xFFE8F8E8)
+                LetterCategory.COMBINED -> Color(0xFFFFF3E0)
+            }
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            // Difficulty indicator and category
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(8.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(getDifficultyColor(letter.difficulty))
-                )
-                
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = when (letter.category) {
-                            LetterCategory.VOWEL -> Color(0xFFFFEBEE)
-                            LetterCategory.CONSONANT -> Color(0xFFF3E5F5)
-                            LetterCategory.SEMI_VOWEL -> Color(0xFFE8F5E8)
-                        }
-                    ),
-                    modifier = Modifier.padding(0.dp)
-                ) {
-                    Text(
-                        text = when (letter.category) {
-                            LetterCategory.VOWEL -> "V"
-                            LetterCategory.CONSONANT -> "C"
-                            LetterCategory.SEMI_VOWEL -> "S"
-                        },
-                        style = MaterialTheme.typography.labelSmall,
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                        color = when (letter.category) {
-                            LetterCategory.VOWEL -> Color(0xFFD32F2F)
-                            LetterCategory.CONSONANT -> Color(0xFF7B1FA2)
-                            LetterCategory.SEMI_VOWEL -> Color(0xFF388E3C)
-                        }
-                    )
-                }
-            }
+            // Adlam Character (Large and prominent)
+            Text(
+                text = letter.unicode,
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Bold,
+                color = when (letter.category) {
+                    LetterCategory.VOWEL -> Color(0xFFE91E63)
+                    LetterCategory.CONSONANT -> Color(0xFF2196F3)
+                    LetterCategory.SEMI_VOWEL -> Color(0xFF4CAF50)
+                    LetterCategory.COMBINED -> Color(0xFFFF9800)
+                },
+                textAlign = TextAlign.Center
+            )
             
-            // Adlam Letters (Uppercase and Lowercase)
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = letter.unicode,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = letter.lowercaseUnicode,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
-                    textAlign = TextAlign.Center
-                )
-            }
+            // Letter name (Simple and clear)
+            Text(
+                text = stringResource(id = letter.displayNameRes),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                maxLines = 1
+            )
             
-            // Letter name and play button
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(id = letter.displayNameRes),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+            // Large play button for children
+            FilledTonalIconButton(
+                onClick = onPlaySound,
+                modifier = Modifier.size(48.dp),
+                colors = IconButtonDefaults.filledTonalIconButtonColors(
+                    containerColor = when (letter.category) {
+                        LetterCategory.VOWEL -> Color(0xFFE91E63)
+                        LetterCategory.CONSONANT -> Color(0xFF2196F3)
+                        LetterCategory.SEMI_VOWEL -> Color(0xFF4CAF50)
+                        LetterCategory.COMBINED -> Color(0xFFFF9800)
+                    }
                 )
-                
-                Spacer(modifier = Modifier.height(4.dp))
-                
-                IconButton(
-                    onClick = onPlaySound,
-                    modifier = Modifier.size(32.dp)
-                ) {
-                    Icon(
-                        Icons.Default.PlayArrow,
-                        contentDescription = stringResource(R.string.play_sound),
-                        modifier = Modifier.size(20.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
+            ) {
+                Icon(
+                    Icons.Default.PlayArrow,
+                    contentDescription = stringResource(R.string.play_sound),
+                    modifier = Modifier.size(28.dp),
+                    tint = Color.White
+                )
             }
         }
     }
@@ -401,6 +325,7 @@ fun LetterDisplayCard(
                             LetterCategory.VOWEL -> Color(0xFFFFEBEE)
                             LetterCategory.CONSONANT -> Color(0xFFF3E5F5)
                             LetterCategory.SEMI_VOWEL -> Color(0xFFE8F5E8)
+                            LetterCategory.COMBINED -> Color(0xFFFFF3E0)
                         }
                     ),
                     modifier = Modifier.padding(0.dp)
@@ -410,6 +335,7 @@ fun LetterDisplayCard(
                             LetterCategory.VOWEL -> "Vowel"
                             LetterCategory.CONSONANT -> "Consonant"
                             LetterCategory.SEMI_VOWEL -> "Semi-vowel"
+                            LetterCategory.COMBINED -> "Combined"
                         },
                         style = MaterialTheme.typography.labelSmall,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -417,6 +343,7 @@ fun LetterDisplayCard(
                             LetterCategory.VOWEL -> Color(0xFFD32F2F)
                             LetterCategory.CONSONANT -> Color(0xFF7B1FA2)
                             LetterCategory.SEMI_VOWEL -> Color(0xFF388E3C)
+                            LetterCategory.COMBINED -> Color(0xFFFF9800)
                         }
                     )
                 }
@@ -479,6 +406,7 @@ fun LetterDisplayCard(
                         LetterCategory.VOWEL -> Color(0xFFD32F2F)
                         LetterCategory.CONSONANT -> Color(0xFF7B1FA2)
                         LetterCategory.SEMI_VOWEL -> Color(0xFF388E3C)
+                        LetterCategory.COMBINED -> Color(0xFFFF9800)
                     }
                 )
                 Spacer(modifier = Modifier.width(6.dp))
@@ -489,6 +417,7 @@ fun LetterDisplayCard(
                         LetterCategory.VOWEL -> Color(0xFFD32F2F)
                         LetterCategory.CONSONANT -> Color(0xFF7B1FA2)
                         LetterCategory.SEMI_VOWEL -> Color(0xFF388E3C)
+                        LetterCategory.COMBINED -> Color(0xFFFF9800)
                     },
                     fontWeight = FontWeight.SemiBold
                 )

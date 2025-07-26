@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bekisma.adlamfulfulde.R
-import com.bekisma.adlamfulfulde.ads.BannerAdView
 import kotlinx.coroutines.launch
 import kotlin.math.pow
 
@@ -695,8 +694,6 @@ fun WritingPracticeScreen(
                 .fillMaxSize()
                 .padding(paddingValues) // Applique le padding du Scaffold
         ) {
-            BannerAdView(modifier = Modifier.fillMaxWidth()) // Bannière publicitaire
-            Spacer(modifier = Modifier.height(8.dp))
 
             Box(
                 modifier = Modifier

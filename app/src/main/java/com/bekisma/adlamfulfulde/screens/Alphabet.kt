@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bekisma.adlamfulfulde.R
-import com.bekisma.adlamfulfulde.ads.BannerAdView // Assuming this is correctly implemented elsewhere
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -194,14 +193,6 @@ fun AlphabetScreen(navController: NavController) {
                     )
                 }
 
-                // Spacer and Ad section at the bottom
-                // Use consistent spacing around the ad
-                Spacer(modifier = Modifier.height(GRID_SPACING))
-                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                Spacer(modifier = Modifier.height(GRID_SPACING))
-                // Assuming BannerAdView is a composable that displays an ad banner
-                BannerAdView()
-                Spacer(modifier = Modifier.height(GRID_SPACING))
             }
         }
     )

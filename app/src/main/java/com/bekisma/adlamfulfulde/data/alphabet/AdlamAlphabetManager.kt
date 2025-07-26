@@ -37,21 +37,21 @@ class AdlamAlphabetManager(private val context: Context) {
             AdlamLetter.FA,        // 𞤊 [f] - Fricative
             AdlamLetter.I,         // 𞤋 [i] - Voyelle haute
             AdlamLetter.O,         // 𞤌 [o] - Voyelle ronde
-            AdlamLetter.U,         // 𞤍 [u] - Voyelle fermée
+            AdlamLetter.U_IMPLOSIVE, // 𞤍 [ɗ] - Implosive
             AdlamLetter.YHE,       // 𞤎 [y] - Semi-voyelle
             AdlamLetter.WAW,       // 𞤏 [w] - Labio-vélaire
             AdlamLetter.NUN,       // 𞤐 [n] - Nasale
             AdlamLetter.KAF,       // 𞤑 [k] - Occlusive
             AdlamLetter.YAA,       // 𞤒 [ya] - Complexe
-            AdlamLetter.HE,        // 𞤓 [h] - Aspirée
-            AdlamLetter.WAW_LAABI, // 𞤔 [w] - Variante
-            AdlamLetter.ARRE,      // 𞤕 [r] - Roulé fort
-            AdlamLetter.CHE,       // 𞤖 [ch] - Affriquée
-            AdlamLetter.JE,        // 𞤗 [j] - Sonore
-            AdlamLetter.TEE,       // 𞤘 [t] - Occlusive sourde
-            AdlamLetter.NYE,       // 𞤙 [ny] - Palatale
-            AdlamLetter.GBE,       // 𞤚 [gb] - Labio-vélaire
-            AdlamLetter.KPOKPO     // 𞤛 [kp] - Complexe
+            AdlamLetter.U,         // 𞤓 [u] - Voyelle
+            AdlamLetter.JE,        // 𞤔 [j] - Consonne
+            AdlamLetter.CHE,       // 𞤕 [c] - Consonne
+            AdlamLetter.HE,        // 𞤖 [h] - Aspirée
+            AdlamLetter.GBE,       // 𞤗 [ɠ] - Implosive
+            AdlamLetter.GAA,       // 𞤘 [g] - Consonne
+            AdlamLetter.NYE,       // 𞤙 [ñ] - Palatale
+            AdlamLetter.TEE,       // 𞤚 [t] - Occlusive
+            AdlamLetter.NGA        // 𞤛 [ŋ] - Nasale vélaire
         )
     }
     

@@ -97,7 +97,7 @@ fun SyllablesScreen(navController: NavController) {
                 shape = RoundedCornerShape(50)
             ) {
                 Text(
-                    text = stringResource(R.string.wrinting),
+                    text = stringResource(R.string.writing_internal),
                     style = MaterialTheme.typography.labelLarge,
                     fontSize = 30.sp
 

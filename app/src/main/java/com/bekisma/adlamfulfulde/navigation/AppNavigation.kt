@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.bekisma.adlamfulfulde.screens.alphabet.DetailAlphabetScreen
-import com.bekisma.adlamfulfulde.screens.MainScreen
+import com.bekisma.adlamfulfulde.screens.SimpleMainScreen
 import com.bekisma.adlamfulfulde.screens.AboutScreen
 import com.bekisma.adlamfulfulde.screens.NumbersScreen
 import com.bekisma.adlamfulfulde.screens.QuizScreen
@@ -83,7 +83,6 @@ private val menuItems = listOf(
     // Modules de pratique
     MenuItem(R.drawable.writing, R.string.learn_to_write, R.string.improve_your_writing_skills, "writing"),
     MenuItem(R.drawable.quiz, R.string.quiz, R.string.test_your_knowledge, "quiz"),
-    MenuItem(R.drawable.abc_24, R.string.vocabulary_module_title, R.string.vocabulary_module_subtitle, "vocabulary_list"),
 
     // Modules d'outils
     MenuItem(R.drawable.numbered_24, R.string.reading_module_title, R.string.reading_module_subtitle, "reading_passage_list"),
@@ -96,8 +95,8 @@ private object ModuleIndices {
     const val BASICS_START = 0
     const val BASICS_END = 2
     const val PRACTICE_START = 2
-    const val PRACTICE_END = 5
-    const val TOOLS_START = 5
+    const val PRACTICE_END = 4
+    const val TOOLS_START = 4
 }
 
 /**
@@ -153,7 +152,7 @@ fun AppNavigation(
                     )
                 }
             ) {
-                MainScreen(
+                SimpleMainScreen(
                     drawerState = drawerState,
                     onNavigation = { item -> onNavigation(item) }
                 )

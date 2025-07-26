@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew:*)",
+      "Bash(rm:*)",
+      "Bash(.gradlew build)",
+      "Bash(find:*)",
+      "WebFetch(domain:unlocked.microsoft.com)",
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(.gradlew assembleDebug)",
+      "Bash(gradlew.bat assembleDebug:*)",
+      "Bash(mv:*)",
+      "Bash(cp:*)",
+      "WebFetch(domain:www.omniglot.com)",
+      "WebFetch(domain:en.wikipedia.org)",
+      "WebFetch(domain:loc.gov)",
+      "WebFetch(domain:r12a.github.io)",
+      "WebFetch(domain:symbl.cc)",
+      "WebFetch(domain:unicode.org)"
+    ],
+    "deny": []
+  }
+}

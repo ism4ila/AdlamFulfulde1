@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.navigation.NavController
 import com.bekisma.adlamfulfulde.R
-import com.bekisma.adlamfulfulde.ads.BannerAdView
 import com.bekisma.adlamfulfulde.data.cultural.FulaniWord
 import com.bekisma.adlamfulfulde.data.cultural.ExpandedFulaniWords
 import com.bekisma.adlamfulfulde.data.cultural.WordCategory
@@ -124,8 +123,6 @@ fun CulturalWordsScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            BannerAdView(modifier = Modifier.fillMaxWidth())
-            
             // Sélecteur de catégorie
             LazyRow(
                 modifier = Modifier

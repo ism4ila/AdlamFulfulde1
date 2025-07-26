@@ -184,17 +184,141 @@ fun AboutScreen(navController: NavController) {
 
             item {
                 Spacer(modifier = Modifier.height(AppSpacing.large))
-                Text(
-                    text = stringResource(R.string.developed_by), // Add a "Developed by" string
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = AppSpacing.medium)
-                )
-                Text(
-                    text = stringResource(R.string.developer_name), // Add developer name string
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+                
+                // Developer section
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = AppSpacing.small),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(AppSpacing.medium),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.developed_by),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(bottom = AppSpacing.small)
+                        )
+                        Text(
+                            text = stringResource(R.string.developer_name),
+                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(bottom = AppSpacing.small)
+                        )
+                        
+                        // Contact section
+                        Divider(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.3f),
+                            modifier = Modifier.padding(vertical = AppSpacing.small)
+                        )
+                        
+                        Text(
+                            text = "Contact",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.padding(bottom = AppSpacing.extraSmall)
+                        )
+                        
+                        // Email contact
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                        data = Uri.parse("mailto:ism4company@gmail.com")
+                                        putExtra(Intent.EXTRA_SUBJECT, "Adlam Fulfulde App - Contact")
+                                    }
+                                    try {
+                                        context.startActivity(intent)
+                                    } catch (e: Exception) {
+                                        // Handle error silently or show toast
+                                    }
+                                }
+                                .padding(AppSpacing.small)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = android.R.drawable.ic_dialog_email),
+                                contentDescription = "Email",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(AppSpacing.small))
+                            Text(
+                                text = "ism4company@gmail.com",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                                textDecoration = TextDecoration.Underline
+                            )
+                        }
+                        
+                        // App information
+                        Spacer(modifier = Modifier.height(AppSpacing.medium))
+                        Text(
+                            text = "Version: 1.0.0",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        )
+                        Text(
+                            text = "© 2024 ISM4 Company",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+            }
+            
+            item {
+                Spacer(modifier = Modifier.height(AppSpacing.medium))
+                
+                // App description section
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = AppSpacing.small),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(AppSpacing.medium)
+                    ) {
+                        Text(
+                            text = "À propos de l'application",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(bottom = AppSpacing.small)
+                        )
+                        Text(
+                            text = "Adlam Fulfulde est une application éducative conçue pour enseigner l'écriture Adlam et la langue Fulfulde. L'application offre des outils d'apprentissage interactifs incluant l'alphabet, les chiffres, la lecture guidée, l'écriture pratique et des quiz pour améliorer vos compétences linguistiques.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Justify
+                        )
+                    }
+                }
+            }
+            
+            item {
+                Spacer(modifier = Modifier.height(AppSpacing.medium))
+                
+                // Banner ad at the bottom
             }
         }
     }

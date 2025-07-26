@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bekisma.adlamfulfulde.R
-import com.bekisma.adlamfulfulde.ads.BannerAdView
 import java.io.OutputStream
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,9 +122,6 @@ fun WritingNumberScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Display banner ad at the top of the content
-            BannerAdView()
-            Spacer(modifier = Modifier.height(16.dp))
 
             Box(
                 modifier = Modifier

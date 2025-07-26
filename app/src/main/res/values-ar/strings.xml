@@ -1,187 +1,437 @@
 <resources>
-    <!-- اسم التطبيق -->
     <string name="app_name">أدلام</string>
+    <string name="menu">القائمة</string>
 
-    <!-- القائمة -->
-    <string name="menu">قائمة</string>
-
-    <!-- عناوين الشاشات -->
+    <!-- Screen titles -->
     <string name="welcome_screen">شاشة الترحيب</string>
     <string name="exercise_sessions">جلسات التمرين</string>
     <string name="exercise_session_detail">تفاصيل جلسة التمرين</string>
     <string name="sleep_sessions">جلسات النوم</string>
     <string name="sleep_session_detail">تفاصيل جلسة النوم</string>
-    <string name="differential_changes">التغييرات التفاضلية</string>
+    <string name="differential_changes">التغييرات</string>
     <string name="privacy_policy">سياسة الخصوصية</string>
     <string name="input_readings">تسجيل الوزن</string>
 
-    <!-- وحدات التعلم -->
+
     <string name="alphabet">الأبجدية</string>
-    <string name="alphabet_learning">تعلم الأبجدية</string>
+    <string name="writing">الكتابة</string>
     <string name="Exercises">تمارين</string>
-    <string name="numbers">الأرقام</string>
+    <string name="alphabet_learning">الأبجدية</string>
+    <string name="numbers">أعداد</string>
     <string name="quiz">اختبار</string>
-    <string name="the_syllables">المقاطع الصوتية</string>
+    <string name="the_syllables">المقاطع</string>
     <string name="learn_to_write">تعلم الكتابة</string>
     <string name="vocabulary">المفردات</string>
     <string name="start">ابدأ</string>
-    <string name="when_a_vowel_is_combined">
-        عندما يتم دمج حرف متحرك مع حرف ساكن،
-        نحصل على مقطع صوتي أو "سيغاندي" بلغة البُلاري.
-        لنبدأ بتعلم كيفية إنشاء المقاطع الصوتية.
-        بعد ذلك، أكمل الحروف الناقصة لإنشاء المقاطع الصوتية.
-        ثم تتبع الحروف مرة أخرى للتمرين.
-    </string>
-    <string name="th_adl_alp">
-        تتكون الأبجدية أدلام من 28 حرفاً.
-        هناك خمس حروف متحركة تُسمى "ماس" و
-        23 حرف ساكن تُسمى "يهيا".
-        تلعب نفس الدور في الإنجليزية كما هو الحال في البُلاري.
-    </string>
-    <string name="the_syllables_complete">إكمال المقاطع الصوتية</string>
-    <string name="complete_and_learn_all_adlam_syllables">أكمل وتعلم جميع المقاطع الصوتية لأدلام</string>
-    <string name="writing">الكتابة</string>
-    <string name="reading">القراءة</string>
-    <string name="current_consonant">الحرف الساكن الحالي</string>
-    <string name="previous">السابق</string>
+    <string name="when_a_vowel_is_combined">"عندما يتم دمج حرف متحرك مع حرف ساكن،
+                نحصل على مقطع لفظي أو "سيغاندي" في لغة البولار.
+                لنبدأ بتعلم كيفية تكوين المقاطع.
+                بعد ذلك، أكمل الحروف المفقودة
+                لتكوين المقاطع.
+                ثم تتبع الحروف مرة أخرى
+                للتدريب.
+            "</string>
+    <string name="th_adl_alp">تتكون أبجدية أدلام من 28 حرفًا.
+هناك خمسة أحرف متحركة تسمى ماسي و
+23 حرفًا ساكنًا تسمى يهي.
+تلعب نفس الدور في اللغة الإنجليزية كما في
+في بولار.</string>
+    <string name="the_syllables_complete">المقاطع
+أكمل وتعلم جميع مقاطع أدلام</string>
+    <string name="complete_and_learn_all_adlam_syllables">
+أكمل وتعلم جميع مقاطع أدلام</string>
+    <string name="wrinting" translatable="false">Wrinting</string>
+    <string name="reading">قراءة</string>
+    <string name="current_consonant">حرف ساكن</string>
+    <string name="previous">سابق</string>
     <string name="next">التالي</string>
-    <string name="back">رجوع</string>
-    <string name="consonne">الحرف الساكن: %1$s</string>
+    <string name="back">عودة</string>
+    <string name="consonne">حرف ساكن: %1$s</string>
     <string name="the_alphabet">الأبجدية</string>
     <string name="trace_and_learn_all_adlam_letters">تتبع وتعلم جميع حروف أدلام</string>
     <string name="lower_case">أحرف صغيرة</string>
     <string name="upper_case">أحرف كبيرة</string>
-    <string name="setting">الإعدادات</string>
+    <string name="setting">إعداد</string>
     <string name="learn_alphabet">تعلم الأبجدية</string>
-
-    <!-- تعليمات الاختبار -->
     <string name="quiz_instructions_title">تعليمات الاختبار</string>
-    <string name="quiz_instructions_text">سوف تسمع صوتًا يمثل حرفًا من حروف أدلام. حدد الحرف المقابل من الخيارات المتاحة.</string>
-    <string name="quiz_title">اختبار - التعرف على الحرف</string>
-    <string name="quiz_completed">الاختبار مكتمل!</string>
+    <string name="quiz_instructions_text">سوف تسمع صوتًا يمثل حرفًا من حروف أدلام. حدد الحرف المقابل من الخيارات المتوفرة.</string>
+    <string name="quiz_title">اختبار - تعرف على الحرف</string>
+    <string name="quiz_completed">اكتمل الاختبار!</string>
     <string name="final_score">النتيجة النهائية: %1$d/%2$d</string>
     <string name="replay">إعادة</string>
-    <string name="return_to_home">العودة إلى الرئيسية</string>
+    <string name="return_to_home">العودة إلى الصفحة الرئيسية</string>
     <string name="score">النتيجة: %1$d</string>
-    <string name="question">السؤال: %1$d</string>
+    <string name="question">سؤال: %1$d</string>
     <string name="play_sound">تشغيل الصوت</string>
     <string name="correct">صحيح!</string>
-    <string name="incorrect">خاطئ!</string>
+    <string name="incorrect">غير صحيح!</string>
+    <string name="backfffff" translatable="false">عودة</string>
 
-    <!-- متنوعة -->
     <string name="letter_details">تفاصيل الحرف</string>
     <string name="examples">أمثلة</string>
-    <string name="numbers_in_adlam">الأرقام في أدلام</string>
+    <string name="numbers_in_adlam">أرقام في أدلام</string>
     <string name="pause">إيقاف مؤقت</string>
     <string name="play">تشغيل</string>
     <string name="stop">إيقاف</string>
     <string name="settings">الإعدادات</string>
     <string name="adlam_letter">حرف أدلام</string>
-
-    <!-- إعدادات الفرشاة -->
     <string name="brush_settings_title">إعدادات الفرشاة</string>
-    <string name="brush_size">حجم الفرشاة: %1$d px</string>
+    <string name="brush_size">حجم الفرشاة: %1$d بكسل</string>
     <string name="brush_color">لون الفرشاة</string>
     <string name="ok">موافق</string>
     <string name="cancel">إلغاء</string>
     <string name="info">معلومات</string>
-
-    <!-- قواعد القراءة -->
     <string name="reading_rules_title">قواعد القراءة</string>
-    <string name="reading_rules_text">
-        <![CDATA[
-        قواعد القراءة لأدلام:
 
-        1. يُكتب نظام أدلام من اليمين إلى اليسار.
-        2. تتكون الأبجدية من 28 حرفًا: 23 ساكنًا و5 متحركة.
-        3. الهياكل المقطعية الأساسية هي CV وCVC.
-        4. تُشير العلامات الطويلة إلى الحروف المتحركة الطويلة.
-        5. تتضمن علامات الترقيم أشكال البداية والنهاية لعلامات الاستفهام والتعجب.
-        6. تُستخدم الواصلات لفواصل الكلمات؛ الأقواس والأقواس المزدوجة للتجميع.
-        ]]>
-    </string>
-
-    <!-- التراجع، إعادة، وأفعال أخرى -->
-    <string name="undo">تراجع</string>
-    <string name="redo">إعادة</string>
-    <string name="save">حفظ</string>
-    <string name="share">مشاركة</string>
-    <string name="confirm">تأكيد</string>
-    <string name="clear">مسح</string>
-    <string name="brush_alpha">شفافية الفرشاة</string>
-
-
-    <!-- عناوين وعلامات متنوعة -->
-    <string name="about">حول</string>
-    <string name="adlam_by_microsoft">أدلام بواسطة مايكروسوفت</string>
-    <string name="android_developers_guide">دليل مطوري أندرويد</string>
     <string name="select_difficulty">اختر الصعوبة</string>
     <string name="beginner">مبتدئ</string>
     <string name="intermediate">متوسط</string>
     <string name="advanced">متقدم</string>
     <string name="best_score">أفضل نتيجة</string>
     <string name="remaining_time">الوقت المتبقي</string>
+    <string name="reading_rules_text">
+        <![CDATA[
+        قواعد قراءة أدلام:
+
+        1. تتم كتابة نص أدلام من اليمين إلى اليسار.
+        2. تتكون الأبجدية من 28 حرفًا: 23 حرفًا ساكنًا و 5 أحرف متحركة.
+        3. هياكل المقاطع الأولية هي CV و CVC.
+        4. تتم الإشارة إلى الأحرف المتحركة الطويلة باستخدام علامات التشكيل.
+        5. تتضمن علامات الترقيم الأشكال الأولية والنهائية لعلامات الاستفهام والتعجب.
+        6. تستخدم الواصلات لفواصل الكلمات ؛ الأقواس والأقواس المزدوجة للتجميع.
+        ]]>
+    </string>
+    <string name="undo">تراجع</string>
+    <string name="redo">إعادة</string>
+    <string name="save">حفظ</string>
+    <string name="confirm">تأكيد</string>
+
+
+    <string name="privacy_policys">سياسة الخصوصية</string>
+    <string name="about">حول</string>
+    <string name="adlam_by_microsoft">أدلام بواسطة مايكروسوفت</string>
+    <string name="android_developers_guide">دليل مطوري أندرويد</string>
     <string name="contributors">المساهمون</string>
     <string name="show_adlam">إظهار أدلام</string>
     <string name="show_latin">إظهار اللاتينية</string>
     <string name="hide_guide">إخفاء الدليل</string>
     <string name="show_guide">إظهار الدليل</string>
-    <string name="writing_uppercase">كتابة الأحرف الكبيرة</string>
-    <string name="show_hint">إظهار التلميح</string>
+    <string name="writing_uppercase">الكتابة بأحرف كبيرة</string>
+    <string name="show_hint">إظهار تلميح</string>
     <string name="play_again">العب مرة أخرى</string>
-    <string name="share_app">شارك التطبيق</string>
+    <string name="share_app">مشاركة التطبيق</string>
 
-    <string name="theme">السمة</string>
-    <string name="theme_selection">اختيار السمة</string>
+    <string name="theme">المظهر</string>
+    <string name="theme_selection">اختيار المظهر</string>
     <string name="theme_default">افتراضي</string>
     <string name="theme_blue">أزرق</string>
     <string name="theme_green">أخضر</string>
     <string name="theme_purple">أرجواني</string>
     <string name="theme_orange">برتقالي</string>
-    <string name="references">References</string>
-    <string name="question_number">Question number</string>
-    <string name="discover_the_adlam_alphabet">اكتشف الأبجدية أدلام</string>
-    <string name="practice_adlam_numbers">تمرن على أرقام أدلام</string>
-    <string name="improve_your_writing_skills">حسّن مهاراتك في الكتابة</string>
+    <string name="facebook_app_id" translatable="false">1212212121212</string>
+    <string name="references">المراجع</string>
+    <string name="question_number">رقم السؤال</string>
+    <string name="discover_the_adlam_alphabet">اكتشف أبجدية أدلام</string>
+    <string name="practice_adlam_numbers">تدرب على أرقام أدلام</string>
+    <string name="improve_your_writing_skills">تحسين مهاراتك في الكتابة</string>
     <string name="test_your_knowledge">اختبر معلوماتك</string>
-    <string name="hint">Hint</string>
-    <string name="more_options">More options</string>
-    <string name="selected">Selected</string>
-    <string name="developed_by">Developed By</string>
-    <string name="external_link_icon_description">External link description</string>
-    <string name="play_example">Play example</string>
-    <string name="writing_lowercase">Writing Lowercase</string>
-    <string name="writing_numbers">Writing numbers</string>
+    <string name="hint">تلميح</string>
+
+    <!-- Ajoutez ces chaînes à votre fichier strings.xml existant -->
+    <string name="appearance">المظهر</string>
+    <string name="theme_mode">وضع المظهر</string>
+    <string name="system_default">افتراضي للنظام</string>
+    <string name="light">فاتح</string>
+    <string name="dark">داكن</string>
+    <string name="color_theme">مظهر اللون</string>
+    <string name="default_theme">افتراضي</string>
+    <string name="green">أخضر</string>
+    <string name="blue">أزرق</string>
+    <string name="purple">أرجواني</string>
+    <string name="orange">برتقالي</string>
+    <string name="about_app">حول التطبيق</string>
+    <string name="select_theme">اختر مظهرًا</string>
+    <string name="select_color_theme">اختر مظهرًا ملونًا</string>
+    <string name="close">إغلاق</string>
+
+    <string name="learn_adlam_script_ease">تعلم نص أدلام بسهولة</string>
+    <string name="learn_adlam_script_ease_short">تعلم نص أدلام</string>
+    <string name="start_adlam_journey_title">ابدأ رحلتك في أدلام</string>
+    <string name="start_adlam_journey_description">أتقن نص أدلام من خلال الدروس التفاعلية والممارسة</string>
+    <string name="get_started">ابدأ</string>
+    <string name="learning_modules">وحدات التعلم</string>
+    <string name="app_logo_description">شعار التطبيق</string>
+    <string name="featured_image_desc">صورة المحتوى المميز</string>
+    <string name="menu_icon_desc">أيقونة القائمة</string>
+
+    <string name="privacy_policy_url">https://adlamfulfulde-8a54a.web.app/privacy/privacy.html</string>
+    <string name="share_app_text">تحقق من هذا التطبيق المذهل لتعلم أدلام فلفولدي: https://play.google.com/store/apps/details?id=%1s</string>
+    <string name="version">الإصدار %1s</string>
+    <string name="rate_app">تقييم هذا التطبيق</string>
+    <string name="more_options">المزيد من الخيارات</string>
+    <string name="selected">محدد</string>
+
+    <string name="adlam_info_desc">معلومات حول أبجدية أدلام</string>
+    <string name="search">بحث</string>
+    <string name="search_placeholder">ابحث عن حرف ...</string>
+    <string name="quiz_desc">ابدأ اختبارًا</string>
+    <string name="category_all">الكل</string>
+    <string name="category_vowels">أحرف متحركة</string>
+    <string name="category_consonants">أحرف ساكنة</string>
+    <string name="category_combined">مدمج</string>
+    <string name="no_result_found_for">لم يتم العثور على أحرف لـ "%1s"</string>
+    <string name="clear_search">مسح البحث</string>
+    <string name="no_result_icon_desc">أيقونة لم يتم العثور على نتائج</string>
+
+    <string name="contributor_aysha_sow">عائشة سو</string>
+    <string name="contributor_aboubacar_ballo">أبو بكر بالو</string>
+    <string name="contributor_ismaila_hamadou">إسماعيلا حمدو</string>
+    <string name="link_icon_description">أيقونة الارتباط</string>
+    <string name="developed_by">تم تطويره بواسطة</string>
+    <string name="developer_name">إسماعيل</string>
+    <string name="external_link_icon_description">وصف الارتباط الخارجي</string>
+    <string name="app_version">2.0</string>
+    <string name="no_results_vowels">لم يتم العثور على أحرف متحركة في هذه الفئة.</string>
+    <string name="no_results_consonants">لم يتم العثور على أحرف ساكنة في هذه الفئة.</string>
+    <string name="no_results_combined">لم يتم العثور على أحرف مدمجة في هذه الفئة.</string>
+    <string name="no_results_all">لم يتم العثور على أحرف. قد تكون هناك مشكلة في تحميل الأبجدية.</string>
+    <string name="empty_title_generic">لا يوجد شيء هنا بعد</string>
+    <string name="empty_title_category">فئة %s فارغة</string>
+    <string name="try_other_category_suggestion">حاول تحديد فئة مختلفة من علامات التبويب أعلاه.</string>
+    <string name="play_example">تشغيل مثال</string>
+    <string name="writing_lowercase">الكتابة بأحرف صغيرة</string>
+    <string name="writing_numbers">كتابة الأرقام</string>
 
     <string name="vocabulary_title">المفردات</string>
     <string name="vocabulary_module_title">المفردات</string>
     <string name="vocabulary_module_subtitle">تعلم كلمات أدلام الشائعة</string>
-    <string name="vocabulary_empty">قائمة المفردات فارغة حالياً.</string>
+    <string name="vocabulary_empty">قائمة المفردات فارغة حاليًا.</string>
     <string name="vocabulary_detail_title">تفاصيل الكلمة</string>
-    <string name="vocabulary_item_not_found">الكلمة غير موجودة.</string>
+    <string name="vocabulary_item_not_found">لم يتم العثور على الكلمة.</string>
     <string name="play_word_sound_desc">تشغيل صوت الكلمة</string>
-    <string name="playing_sound">جارٍ التشغيل...</string>
+    <string name="playing_sound">جارٍ التشغيل ...</string>
     <string name="play_sound_short">تشغيل</string>
-    <string name="example_sentence_title">جملة مثال:</string>
-    <string name="no_audio_available">No audio available</string>
-    <string name="go_back">Go back</string>
-    <string name="remove_from_favorites">remove_from_favorites</string>
-    <string name="add_to_favorites">add_to_favorites</string>
-    <string name="no_search_results">no_search_results</string>
-    <string name="category_other">category_other</string>
-    <string name="scroll_to_top">scroll_to_top</string>
-    <string name="close_search">close_search</string>
-    <string name="search_vocabulary">search_vocabulary</string>
-    <string name="replay_sound">replay_sound</string>
-    <string name="difficulty_label">difficulty_label</string>
-    <string name="reading_passages_empty">reading_passages_empty</string>
-    <string name="reading_passages_title">reading_passages_title</string>
-    <string name="reading_player_title">reading_player_title</string>
-    <string name="reading_passage_not_found">reading_passage_not_found</string>
+    <string name="example_sentence_title">مثال على جملة:</string>
+    <string name="no_audio_available">لا يوجد صوت متاح</string>
+    <string name="go_back">عد</string>
+    <string name="remove_from_favorites">إزالة_من_المفضلة</string>
+    <string name="add_to_favorites">إضافة_إلى_المفضلة</string>
+    <string name="no_search_results">لا_نتائج_بحث</string>
+    <string name="category_other">فئة_أخرى</string>
+    <string name="scroll_to_top">التمرير_إلى_الأعلى</string>
+    <string name="close_search">إغلاق_البحث</string>
+    <string name="search_vocabulary">بحث_في_المفردات</string>
+    <string name="replay_sound">إعادة_تشغيل_الصوت</string>
+    <string name="difficulty_label">تسمية_الصعوبة</string>
+    <string name="reading_passages_empty">مقاطع_القراءة_فارغة</string>
+    <string name="reading_passages_title">عنوان_مقاطع_القراءة</string>
+    <string name="reading_player_title">عنوان_مشغل_القراءة</string>
+    <string name="reading_passage_not_found">لم_يتم_العثور_على_مقطع_القراءة</string>
 
     <string name="reading_module_title">القراءة الموجهة</string>
-    <string name="reading_module_subtitle">اقرأ نصوصاً بلغة الأدلَم</string>
+    <string name="reading_module_subtitle">اقرأ النصوص بأدلام</string>
+    <string name="adlam_keyboard">لوحة مفاتيح أدلام</string>
+    <string name="adlam_keyboard_subtitle">اكتب بنص أدلام</string>
+    <string name="delete">حذف</string>
 
-    <string name="privacy_policys">سياسة الخصوصية</string>
-    <string name="appearance">مظهر</string>
+    <string name="clear">مسح</string>
+    <string name="space">مسافة</string>
+    <string name="enter">إدخال</string>
+    <string name="copy">نسخ</string>
+
+    <string name="share">مشاركة</string>
+    <string name="brush_alpha">شفافية الفرشاة</string>
+
+    <string name="resume_learning">استئناف التعلم</string>
+    <string name="the_basics">الأساسيات</string>
+    <string name="practice">ممارسة</string>
+    <string name="tools">أدوات</string>
+    <string name="resume_learning_title">استئناف: %1$s</string>
+    <string name="resume_learning_subtitle">آخر نشاط: %1$s</string>
+    <string name="monthly_plan">شهريًا</string>
+    <string name="yearly_plan">سنويًا</string>
+    <string name="lifetime_plan">مدى الحياة</string>
+
+    <string name="unlimited_lessons">دروس غير محدودة</string>
+    <string name="unlimited_lessons_desc">الوصول إلى جميع وحدات التعلم دون قيود.</string>
+    <string name="offline_mode">وضع عدم الاتصال</string>
+    <string name="offline_mode_desc">قم بتنزيل الدروس وتعلم في أي مكان وفي أي وقت.</string>
+    <string name="advanced_quiz">اختبارات متقدمة</string>
+    <string name="advanced_quiz_desc">تحدَّ نفسك باختبارات أكثر تعقيدًا وتنوعًا.</string>
+    <string name="progress_analytics">تحليلات التقدم</string>
+    <string name="progress_analytics_desc">تتبع رحلة التعلم الخاصة بك بإحصاءات مفصلة.</string>
+    <string name="custom_themes">مظاهر مخصصة</string>
+    <string name="custom_themes_desc">قم بتخصيص تطبيقك بمظاهر حصرية.</string>
+    <string name="ad_free">تجربة خالية من الإعلانات</string>
+    <string name="ad_free_desc">استمتع بتعلم متواصل دون إعلانات.</string>
+    <string name="priority_support">دعم ذو أولوية</string>
+    <string name="priority_support_desc">احصل على مساعدة أسرع من فريق الدعم لدينا.</string>
+    <string name="export_progress">تصدير التقدم</string>
+    <string name="export_progress_desc">احفظ وشارك بيانات التعلم الخاصة بك.</string>
+
+    <string name="adlam_transcription">نسخ أدلام اللاتيني</string>
+    <string name="adlam_transcription_subtitle">نسخ أدلام إلى نص لاتيني</string>
+
+    <!-- Alphabet Learning Quiz -->
+    <string name="alphabet_quiz_title">اختبار الأبجدية</string>
+    <string name="alphabet_quiz_subtitle">تعلم كل حرف خطوة بخطوة</string>
+    <string name="visual_recognition_phase">مرحلة التعرف البصري</string>
+    <string name="audio_recognition_phase">مرحلة التعرف الصوتي</string>
+    <string name="question_prompt">ما اسم هذا الحرف؟</string>
+    <string name="audio_question_prompt">استمع إلى الصوت واختر الحرف المقابل</string>
+    <string name="mastery_required">أتقن هذا الحرف للمتابعة</string>
+    <string name="letter_mastered">تم إتقان الحرف!</string>
+    <string name="phase_mastered">تم إتقان المرحلة!</string>
+    <string name="next_letter">الحرف التالي</string>
+    <string name="next_phase">المرحلة التالية</string>
+    <string name="play_audio">تشغيل الصوت</string>
+    <string name="audio_played">تم تشغيل الصوت</string>
+    <string name="alphabet_complete">اكتملت الأبجدية!</string>
+    <string name="congratulations_reader">تهانينا! يمكنك الآن قراءة أدلام!</string>
+
+    <!-- Adlam Letters -->
+    <string name="letter_alif">ألف</string>
+    <string name="letter_alif_desc">الحرف الأول من أدلام ، يمثل الصوت [a]</string>
+    <string name="letter_daali">دالي</string>
+    <string name="letter_daali_desc">يمثل الصوت [d]</string>
+    <string name="letter_laam">لام</string>
+    <string name="letter_laam_desc">يمثل الصوت [l]</string>
+    <string name="letter_miim">ميم</string>
+    <string name="letter_miim_desc">يمثل الصوت [m]</string>
+    <string name="letter_baa">با</string>
+    <string name="letter_baa_desc">يمثل الصوت [b]</string>
+    <string name="letter_sinnyiiyhe">سينييهي</string>
+    <string name="letter_sinnyiiyhe_desc">يمثل الصوت [s]</string>
+    <string name="letter_pulaar">بولار</string>
+    <string name="letter_pulaar_desc">خاص بلغة البولار ، يمثل [p]</string>
+    <string name="letter_bhe">بهي</string>
+    <string name="letter_bhe_desc">صوت مستنشق [bh]</string>
+    <string name="letter_raa">را</string>
+    <string name="letter_raa_desc">يمثل [r] الملفوفة</string>
+    <string name="letter_e">إي</string>
+    <string name="letter_e_desc">حرف متحرك يمثل الصوت [e]</string>
+    <string name="letter_fa">فا</string>
+    <string name="letter_fa_desc">يمثل الصوت [f]</string>
+    <string name="letter_i">آي</string>
+    <string name="letter_i_desc">حرف متحرك عالٍ يمثل الصوت [i]</string>
+    <string name="letter_o">أو</string>
+    <string name="letter_o_desc">حرف متحرك مستدير يمثل الصوت [o]</string>
+    <string name="letter_u">يو</string>
+    <string name="letter_u_desc">حرف متحرك مغلق يمثل الصوت [u]</string>
+    <string name="letter_yhe">يهي</string>
+    <string name="letter_yhe_desc">شبه حرف متحرك يمثل الصوت [y]</string>
+    <string name="letter_waw">واو</string>
+    <string name="letter_waw_desc">صوت شفهي حلقي [w]</string>
+    <string name="letter_nun">نون</string>
+    <string name="letter_nun_desc">صوت أنفي [n]</string>
+    <string name="letter_kaf">كاف</string>
+    <string name="letter_kaf_desc">صوت انفجاري [k]</string>
+    <string name="letter_yaa">يا</string>
+    <string name="letter_yaa_desc">صوت معقد [ya]</string>
+    <string name="letter_he">هي</string>
+    <string name="letter_he_desc">صوت مستنشق [h]</string>
+    <string name="letter_waw_laabi">واو لابي</string>
+    <string name="letter_waw_laabi_desc">متغير من واو [w]</string>
+    <string name="letter_arre">آري</string>
+    <string name="letter_arre_desc">قوي ملفوف [r]</string>
+    <string name="letter_che">تشي</string>
+    <string name="letter_che_desc">صوت مركب [ch]</string>
+    <string name="letter_je">جي</string>
+    <string name="letter_je_desc">صوت مجهور [j]</string>
+    <string name="letter_tee">تي</string>
+    <string name="letter_tee_desc">صامت انفجاري [t]</string>
+    <string name="letter_nye">نيي</string>
+    <string name="letter_nye_desc">صوت حنكي [ny]</string>
+    <string name="letter_gbe">غبي</string>
+    <string name="letter_gbe_desc">صوت شفهي حلقي [gb]</string>
+    <string name="letter_kpokpo">كبوكبو</string>
+    <string name="letter_kpokpo_desc">صوت معقد [kp]</string>
+
+    <!-- Welcome Messages -->
+    <string name="welcome_to_adlam">مرحبًا بك في أدلام</string>
+    <string name="start_learning_journey">ابدأ رحلة التعلم الخاصة بك</string>
+    <string name="start_learning">ابدأ التعلم</string>
+    <!-- Example Words for Adlam Letters -->
+    <string name="example_word_alif">𞤀𞤣𞤤𞤢𞤥</string>
+    <string name="example_word_translation_alif">أدلام</string>
+    <string name="example_word_e">𞤉𞤲𞤣𞤢𞤥</string>
+    <string name="example_word_translation_e">هنا</string>
+    <string name="example_word_i">𞤋𞤲𞤣𞤭</string>
+    <string name="example_word_translation_i">هذا</string>
+    <string name="example_word_o">𞤌𞤲𞤣𞤢𞤥</string>
+    <string name="example_word_translation_o">هناك</string>
+    <string name="example_word_u">𞤓𞤲𞤣𞤢𞤥</string>
+    <string name="example_word_translation_u">ذلك</string>
+    <string name="example_word_daali">𞤁𞤢𞤥𞤢</string>
+    <string name="example_word_translation_daali">دم</string>
+    <string name="example_word_laam">𞤂𞤢𞤥𞤢</string>
+    <string name="example_word_translation_laam">لسان</string>
+    <string name="example_word_miim">𞤃𞤢𞤥𞤢</string>
+    <string name="example_word_translation_miim">أم</string>
+    <string name="example_word_baa">𞤄𞤢𞤥𞤢</string>
+    <string name="example_word_translation_baa">أب</string>
+    <string name="example_word_sinnyiiyhe">𞤅𞤢𞤥𞤢</string>
+    <string name="example_word_translation_sinnyiiyhe">اسم</string>
+    <string name="example_word_pulaar">𞤆𞤵𞤤𞤢𞤢𞤪</string>
+    <string name="example_word_translation_pulaar">فولاني</string>
+    <string name="example_word_bhe">𞤇𞤢𞤥𞤢</string>
+    <string name="example_word_translation_bhe">ماعز</string>
+    <string name="example_word_raa">𞤈𞤢𞤥𞤢</string>
+    <string name="example_word_translation_raa">نهر</string>
+    <string name="example_word_fa">𞤊𞤢𞤥𞤢</string>
+    <string name="example_word_translation_fa">للذهاب</string>
+    <string name="example_word_yhe">𞤎𞤢𞤥𞤢</string>
+    <string name="example_word_translation_yhe">للمجيء</string>
+    <string name="example_word_waw">𞤏𞤢𞤥𞤢</string>
+    <string name="example_word_translation_waw">للقول</string>
+    <string name="example_word_nun">𞤐𞤢𞤥𞤢</string>
+    <string name="example_word_translation_nun">للأكل</string>
+    <string name="example_word_kaf">𞤑𞤢𞤥𞤢</string>
+    <string name="example_word_translation_kaf">للشرب</string>
+    <string name="example_word_yaa">𞤒𞤢𞤥𞤢</string>
+    <string name="example_word_translation_yaa">للرؤية</string>
+    <string name="example_word_he">𞤓𞤢𞤥𞤢</string>
+    <string name="example_word_translation_he">للسماع</string>
+    <string name="example_word_waw_laabi">𞤔𞤢𞤥𞤢</string>
+    <string name="example_word_translation_waw_laabi">للمشي</string>
+    <string name="example_word_arre">𞤕𞤢𞤥𞤢</string>
+    <string name="example_word_translation_arre">للركض</string>
+    <string name="example_word_che">𞤖𞤢𞤥𞤢</string>
+    <string name="example_word_translation_che">للتحدث</string>
+    <string name="example_word_je">𞤗𞤢𞤥𞤢</string>
+    <string name="example_word_translation_je">للنوم</string>
+    <string name="example_word_tee">𞤘𞤢𞤥𞤢</string>
+    <string name="example_word_translation_tee">للوقوف</string>
+    <string name="example_word_nye">𞤙𞤢𞤥𞤢</string>
+    <string name="example_word_translation_nye">للجلوس</string>
+    <string name="example_word_gbe">𞤚𞤢𞤥𞤢</string>
+    <string name="example_word_translation_gbe">للرقص</string>
+    <string name="example_word_kpokpo">𞤛𞤢𞤥𞤢</string>
+    <string name="example_word_translation_kpokpo">للقفز</string>
+
+    <!-- Nasal Consonant Combinations -->
+    <string name="letter_nd_combination">ند</string>
+    <string name="letter_nd_combination_desc">تركيب حرف أنفي [nd]</string>
+    <string name="example_word_nd_combination">𞤐𞤁𞤢𞤤𞤢</string>
+    <string name="example_word_translation_nd_combination">للربط</string>
+
+    <string name="letter_mb_combination">مب</string>
+    <string name="letter_mb_combination_desc">تركيب حرف أنفي [mb]</string>
+    <string name="example_word_mb_combination">𞤐𞤄𞤢𞤤𞤢</string>
+    <string name="example_word_translation_mb_combination">للعناق</string>
+
+    <string name="letter_nj_combination">نج</string>
+    <string name="letter_nj_combination_desc">تركيب حرف أنفي [nj]</string>
+    <string name="example_word_nj_combination">𞤐𞤔𞤢𞤤𞤢</string>
+    <string name="example_word_translation_nj_combination">للجمع</string>
+
+    <string name="letter_ng_combination">نغ</string>
+    <string name="letter_ng_combination_desc">تركيب حرف أنفي [ŋg]</string>
+    <string name="example_word_ng_combination">𞤐𞤘𞤢𞤤𞤢</string>
+    <string name="example_word_translation_ng_combination">للرنين</string>
+
+    <string name="alphabet_detail">تفاصيل الأبجدية</string>
+    <string name="letter_not_found">لم يتم العثور على الحرف</string>
+    <string name="writing_internal">الكتابة الداخلية</string>
+    <string name="adlam_alphabet_description">أبجدية أدلام هي نص يستخدم لكتابة لغة الفولاني.</string>
 </resources>

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -14,8 +13,8 @@ android {
         applicationId = "com.bekisma.adlamfulfulde"
         minSdk = 24
         targetSdk = 35
-        versionCode = 42
-        versionName = "3.5"
+        versionCode = 44
+        versionName = "3.6.1"
 
         testInstrumentationRunner = "com.bekisma.adlamfulfulde.CustomTestRunner"
         vectorDrawables {
@@ -27,9 +26,9 @@ android {
         create("free") {
             dimension = "version"
             applicationId = "com.bekisma.adlamfulfulde"
-            versionCode = 42
-            versionName = "3.5"
-            buildConfigField("boolean", "ENABLE_ADS", "true")
+            versionCode = 44
+            versionName = "3.6.1"
+            buildConfigField("boolean", "ENABLE_ADS", "false")
             buildConfigField("boolean", "IS_PRO_VERSION", "false")
         }
     }
@@ -78,11 +77,15 @@ android {
             excludes += "META-INF/NOTICE.txt"
         }
     }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
-    implementation(libs.audience.network.sdk)  // Correction: suppression des espaces
-    implementation(libs.facebook)  // Correction: suppression des espaces
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -92,7 +95,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation("com.google.accompanist:accompanist-pager:0.34.0")
-    implementation(libs.play.services.ads)
     implementation(libs.datastore.preferences)  // Correction: suppression des espaces
     implementation(libs.androidx.navigation.compose.v277)
     implementation(libs.androidx.datastore.core.android)
@@ -115,7 +117,7 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("com.google.truth:truth:1.1.4")
     testImplementation("io.mockk:mockk:1.13.7")
-    testImplementation("org.robolectric:robolectric:4.10.3")
+    testImplementation("org.robolectric:robolectric:4.12.1")
 
     // Android instrumentation testing
     androidTestImplementation(libs.androidx.junit)

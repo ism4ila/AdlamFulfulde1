@@ -20,7 +20,7 @@ enum class AdlamLetter(
     val difficulty: LetterDifficulty = LetterDifficulty.EASY,
     val category: LetterCategory = LetterCategory.CONSONANT
 ) {
-    // Voyelles de base (plus faciles à apprendre)
+    // Ordre alphabétique Adlam correct
     ALIF(
         unicode = "𞤀",
         lowercaseUnicode = "𞤢",
@@ -35,63 +35,6 @@ enum class AdlamLetter(
         category = LetterCategory.VOWEL
     ),
 
-    E(
-        unicode = "𞤉",
-        lowercaseUnicode = "𞤫",
-        latinName = "E",
-        phoneticSound = "[e]",
-        displayNameRes = R.string.letter_e,
-        descriptionRes = R.string.letter_e_desc,
-        soundFileName = "adlam10_1",
-        exampleWordRes = R.string.example_word_e,
-        exampleWordTranslationRes = R.string.example_word_translation_e,
-        difficulty = LetterDifficulty.EASY,
-        category = LetterCategory.VOWEL
-    ),
-
-    I(
-        unicode = "𞤋",
-        lowercaseUnicode = "𞤭",
-        latinName = "I",
-        phoneticSound = "[i]",
-        displayNameRes = R.string.letter_i,
-        descriptionRes = R.string.letter_i_desc,
-        soundFileName = "adlam12_1",
-        exampleWordRes = R.string.example_word_i,
-        exampleWordTranslationRes = R.string.example_word_translation_i,
-        difficulty = LetterDifficulty.EASY,
-        category = LetterCategory.VOWEL
-    ),
-
-    O(
-        unicode = "𞤌",
-        lowercaseUnicode = "𞤮",
-        latinName = "O",
-        phoneticSound = "[o]",
-        displayNameRes = R.string.letter_o,
-        descriptionRes = R.string.letter_o_desc,
-        soundFileName = "adlam13_1",
-        exampleWordRes = R.string.example_word_o,
-        exampleWordTranslationRes = R.string.example_word_translation_o,
-        difficulty = LetterDifficulty.EASY,
-        category = LetterCategory.VOWEL
-    ),
-
-    U(
-        unicode = "𞤍",
-        lowercaseUnicode = "𞤰",
-        latinName = "U",
-        phoneticSound = "[u]",
-        displayNameRes = R.string.letter_u,
-        descriptionRes = R.string.letter_u_desc,
-        soundFileName = "adlam14_1",
-        exampleWordRes = R.string.example_word_u,
-        exampleWordTranslationRes = R.string.example_word_translation_u,
-        difficulty = LetterDifficulty.EASY,
-        category = LetterCategory.VOWEL
-    ),
-
-    // Consonnes simples
     DAALI(
         unicode = "𞤁",
         lowercaseUnicode = "𞤡",
@@ -108,7 +51,7 @@ enum class AdlamLetter(
 
     LAAM(
         unicode = "𞤂",
-        lowercaseUnicode = "𞤢",
+        lowercaseUnicode = "𞤤",
         latinName = "Laam",
         phoneticSound = "[l]",
         displayNameRes = R.string.letter_laam,
@@ -180,7 +123,7 @@ enum class AdlamLetter(
         unicode = "𞤇",
         lowercaseUnicode = "𞤨",
         latinName = "Bhe",
-        phoneticSound = "[bh]",
+        phoneticSound = "[ɓ]",
         displayNameRes = R.string.letter_bhe,
         descriptionRes = R.string.letter_bhe_desc,
         soundFileName = "adlam8_1",
@@ -204,6 +147,20 @@ enum class AdlamLetter(
         category = LetterCategory.CONSONANT
     ),
 
+    E(
+        unicode = "𞤉",
+        lowercaseUnicode = "𞤫",
+        latinName = "E",
+        phoneticSound = "[e]",
+        displayNameRes = R.string.letter_e,
+        descriptionRes = R.string.letter_e_desc,
+        soundFileName = "adlam10_1",
+        exampleWordRes = R.string.example_word_e,
+        exampleWordTranslationRes = R.string.example_word_translation_e,
+        difficulty = LetterDifficulty.EASY,
+        category = LetterCategory.VOWEL
+    ),
+
     FA(
         unicode = "𞤊",
         lowercaseUnicode = "𞤪",
@@ -218,23 +175,65 @@ enum class AdlamLetter(
         category = LetterCategory.CONSONANT
     ),
 
+    I(
+        unicode = "𞤋",
+        lowercaseUnicode = "𞤭",
+        latinName = "I",
+        phoneticSound = "[i]",
+        displayNameRes = R.string.letter_i,
+        descriptionRes = R.string.letter_i_desc,
+        soundFileName = "adlam12_1",
+        exampleWordRes = R.string.example_word_i,
+        exampleWordTranslationRes = R.string.example_word_translation_i,
+        difficulty = LetterDifficulty.EASY,
+        category = LetterCategory.VOWEL
+    ),
+
+    O(
+        unicode = "𞤌",
+        lowercaseUnicode = "𞤮",
+        latinName = "O",
+        phoneticSound = "[o]",
+        displayNameRes = R.string.letter_o,
+        descriptionRes = R.string.letter_o_desc,
+        soundFileName = "adlam13_1",
+        exampleWordRes = R.string.example_word_o,
+        exampleWordTranslationRes = R.string.example_word_translation_o,
+        difficulty = LetterDifficulty.EASY,
+        category = LetterCategory.VOWEL
+    ),
+
+    U_IMPLOSIVE(
+        unicode = "𞤍",
+        lowercaseUnicode = "𞤯",
+        latinName = "Daal",
+        phoneticSound = "[ɗ]",
+        displayNameRes = R.string.letter_u,
+        descriptionRes = R.string.letter_u_desc,
+        soundFileName = "adlam14_1",
+        exampleWordRes = R.string.example_word_u,
+        exampleWordTranslationRes = R.string.example_word_translation_u,
+        difficulty = LetterDifficulty.HARD,
+        category = LetterCategory.CONSONANT
+    ),
+
     YHE(
         unicode = "𞤎",
-        lowercaseUnicode = "𞤫",
+        lowercaseUnicode = "𞤰",
         latinName = "Yhe",
-        phoneticSound = "[y]",
+        phoneticSound = "[ƴ]",
         displayNameRes = R.string.letter_yhe,
         descriptionRes = R.string.letter_yhe_desc,
         soundFileName = "adlam15_1",
         exampleWordRes = R.string.example_word_yhe,
         exampleWordTranslationRes = R.string.example_word_translation_yhe,
-        difficulty = LetterDifficulty.MEDIUM,
-        category = LetterCategory.SEMI_VOWEL
+        difficulty = LetterDifficulty.HARD,
+        category = LetterCategory.CONSONANT
     ),
 
     WAW(
         unicode = "𞤏",
-        lowercaseUnicode = "𞤦",
+        lowercaseUnicode = "𞤱",
         latinName = "Waw",
         phoneticSound = "[w]",
         displayNameRes = R.string.letter_waw,
@@ -243,12 +242,12 @@ enum class AdlamLetter(
         exampleWordRes = R.string.example_word_waw,
         exampleWordTranslationRes = R.string.example_word_translation_waw,
         difficulty = LetterDifficulty.MEDIUM,
-        category = LetterCategory.SEMI_VOWEL
+        category = LetterCategory.CONSONANT
     ),
 
     NUN(
         unicode = "𞤐",
-        lowercaseUnicode = "𞤧",
+        lowercaseUnicode = "𞤲",
         latinName = "Nun",
         phoneticSound = "[n]",
         displayNameRes = R.string.letter_nun,
@@ -262,7 +261,7 @@ enum class AdlamLetter(
 
     KAF(
         unicode = "𞤑",
-        lowercaseUnicode = "𞤨",
+        lowercaseUnicode = "𞤳",
         latinName = "Kaf",
         phoneticSound = "[k]",
         displayNameRes = R.string.letter_kaf,
@@ -276,51 +275,51 @@ enum class AdlamLetter(
 
     YAA(
         unicode = "𞤒",
-        lowercaseUnicode = "𞤩",
+        lowercaseUnicode = "𞤴",
         latinName = "Yaa",
-        phoneticSound = "[ya]",
+        phoneticSound = "[y]",
         displayNameRes = R.string.letter_yaa,
         descriptionRes = R.string.letter_yaa_desc,
         soundFileName = "adlam19_1",
         exampleWordRes = R.string.example_word_yaa,
         exampleWordTranslationRes = R.string.example_word_translation_yaa,
-        difficulty = LetterDifficulty.HARD,
-        category = LetterCategory.SEMI_VOWEL
+        difficulty = LetterDifficulty.MEDIUM,
+        category = LetterCategory.CONSONANT
     ),
 
-    HE(
+    U(
         unicode = "𞤓",
-        lowercaseUnicode = "𞤪",
-        latinName = "He",
-        phoneticSound = "[h]",
+        lowercaseUnicode = "𞤵",
+        latinName = "U",
+        phoneticSound = "[u]",
         displayNameRes = R.string.letter_he,
         descriptionRes = R.string.letter_he_desc,
         soundFileName = "adlam20_1",
         exampleWordRes = R.string.example_word_he,
         exampleWordTranslationRes = R.string.example_word_translation_he,
-        difficulty = LetterDifficulty.MEDIUM,
-        category = LetterCategory.CONSONANT
+        difficulty = LetterDifficulty.EASY,
+        category = LetterCategory.VOWEL
     ),
 
-    WAW_LAABI(
+    JE(
         unicode = "𞤔",
-        lowercaseUnicode = "𞤫",
-        latinName = "Waw Laabi",
-        phoneticSound = "[w]",
+        lowercaseUnicode = "𞤶",
+        latinName = "Je",
+        phoneticSound = "[j]",
         displayNameRes = R.string.letter_waw_laabi,
         descriptionRes = R.string.letter_waw_laabi_desc,
         soundFileName = "adlam21_1",
         exampleWordRes = R.string.example_word_waw_laabi,
         exampleWordTranslationRes = R.string.example_word_translation_waw_laabi,
-        difficulty = LetterDifficulty.HARD,
-        category = LetterCategory.SEMI_VOWEL
+        difficulty = LetterDifficulty.MEDIUM,
+        category = LetterCategory.CONSONANT
     ),
 
-    ARRE(
+    CHE(
         unicode = "𞤕",
-        lowercaseUnicode = "𞤦",
-        latinName = "Arre",
-        phoneticSound = "[r]",
+        lowercaseUnicode = "𞤷",
+        latinName = "Che",
+        phoneticSound = "[c]",
         displayNameRes = R.string.letter_arre,
         descriptionRes = R.string.letter_arre_desc,
         soundFileName = "adlam22_1",
@@ -330,25 +329,25 @@ enum class AdlamLetter(
         category = LetterCategory.CONSONANT
     ),
 
-    CHE(
+    HE(
         unicode = "𞤖",
-        lowercaseUnicode = "𞤧",
-        latinName = "Che",
-        phoneticSound = "[ch]",
+        lowercaseUnicode = "𞤸",
+        latinName = "He",
+        phoneticSound = "[h]",
         displayNameRes = R.string.letter_che,
         descriptionRes = R.string.letter_che_desc,
         soundFileName = "adlam23_1",
         exampleWordRes = R.string.example_word_che,
         exampleWordTranslationRes = R.string.example_word_translation_che,
-        difficulty = LetterDifficulty.HARD,
+        difficulty = LetterDifficulty.MEDIUM,
         category = LetterCategory.CONSONANT
     ),
 
-    JE(
+    GBE(
         unicode = "𞤗",
-        lowercaseUnicode = "𞤨",
-        latinName = "Je",
-        phoneticSound = "[j]",
+        lowercaseUnicode = "𞤹",
+        latinName = "Gbe",
+        phoneticSound = "[ɠ]",
         displayNameRes = R.string.letter_je,
         descriptionRes = R.string.letter_je_desc,
         soundFileName = "adlam24_1",
@@ -358,25 +357,25 @@ enum class AdlamLetter(
         category = LetterCategory.CONSONANT
     ),
 
-    TEE(
+    GAA(
         unicode = "𞤘",
-        lowercaseUnicode = "𞤩",
-        latinName = "Tee",
-        phoneticSound = "[t]",
+        lowercaseUnicode = "𞤺",
+        latinName = "Gaa",
+        phoneticSound = "[g]",
         displayNameRes = R.string.letter_tee,
         descriptionRes = R.string.letter_tee_desc,
         soundFileName = "adlam25_1",
         exampleWordRes = R.string.example_word_tee,
         exampleWordTranslationRes = R.string.example_word_translation_tee,
-        difficulty = LetterDifficulty.HARD,
+        difficulty = LetterDifficulty.MEDIUM,
         category = LetterCategory.CONSONANT
     ),
 
     NYE(
         unicode = "𞤙",
-        lowercaseUnicode = "𞤪",
+        lowercaseUnicode = "𞤻",
         latinName = "Nye",
-        phoneticSound = "[ny]",
+        phoneticSound = "[ñ]",
         displayNameRes = R.string.letter_nye,
         descriptionRes = R.string.letter_nye_desc,
         soundFileName = "adlam26_1",
@@ -386,32 +385,89 @@ enum class AdlamLetter(
         category = LetterCategory.CONSONANT
     ),
 
-    GBE(
+    TEE(
         unicode = "𞤚",
-        lowercaseUnicode = "𞤫",
-        latinName = "Gbe",
-        phoneticSound = "[gb]",
+        lowercaseUnicode = "𞤼",
+        latinName = "Tee",
+        phoneticSound = "[t]",
         displayNameRes = R.string.letter_gbe,
         descriptionRes = R.string.letter_gbe_desc,
         soundFileName = "adlam27_1",
         exampleWordRes = R.string.example_word_gbe,
         exampleWordTranslationRes = R.string.example_word_translation_gbe,
-        difficulty = LetterDifficulty.VERY_HARD,
+        difficulty = LetterDifficulty.MEDIUM,
         category = LetterCategory.CONSONANT
     ),
 
-    KPOKPO(
+    NGA(
         unicode = "𞤛",
-        lowercaseUnicode = "𞤦",
-        latinName = "Kpokpo",
-        phoneticSound = "[kp]",
+        lowercaseUnicode = "𞤽",
+        latinName = "Nga",
+        phoneticSound = "[ŋ]",
         displayNameRes = R.string.letter_kpokpo,
         descriptionRes = R.string.letter_kpokpo_desc,
         soundFileName = "adlam28_1",
         exampleWordRes = R.string.example_word_kpokpo,
         exampleWordTranslationRes = R.string.example_word_translation_kpokpo,
-        difficulty = LetterDifficulty.VERY_HARD,
+        difficulty = LetterDifficulty.HARD,
         category = LetterCategory.CONSONANT
+    ),
+
+    // Consonnes nasales combinées
+    ND_COMBINATION(
+        unicode = "𞤐𞤁",
+        lowercaseUnicode = "𞤲𞤡",
+        latinName = "Nd",
+        phoneticSound = "[nd]",
+        displayNameRes = R.string.letter_nd_combination,
+        descriptionRes = R.string.letter_nd_combination_desc,
+        soundFileName = "adlam_nd_1",
+        exampleWordRes = R.string.example_word_nd_combination,
+        exampleWordTranslationRes = R.string.example_word_translation_nd_combination,
+        difficulty = LetterDifficulty.VERY_HARD,
+        category = LetterCategory.COMBINED
+    ),
+
+    MB_COMBINATION(
+        unicode = "𞤐𞤄",
+        lowercaseUnicode = "𞤲𞤥",
+        latinName = "Mb",
+        phoneticSound = "[mb]",
+        displayNameRes = R.string.letter_mb_combination,
+        descriptionRes = R.string.letter_mb_combination_desc,
+        soundFileName = "adlam_mb_1",
+        exampleWordRes = R.string.example_word_mb_combination,
+        exampleWordTranslationRes = R.string.example_word_translation_mb_combination,
+        difficulty = LetterDifficulty.VERY_HARD,
+        category = LetterCategory.COMBINED
+    ),
+
+    NJ_COMBINATION(
+        unicode = "𞤐𞤔",
+        lowercaseUnicode = "𞤲𞤶",
+        latinName = "Nj",
+        phoneticSound = "[nj]",
+        displayNameRes = R.string.letter_nj_combination,
+        descriptionRes = R.string.letter_nj_combination_desc,
+        soundFileName = "adlam_nj_1",
+        exampleWordRes = R.string.example_word_nj_combination,
+        exampleWordTranslationRes = R.string.example_word_translation_nj_combination,
+        difficulty = LetterDifficulty.VERY_HARD,
+        category = LetterCategory.COMBINED
+    ),
+
+    NG_COMBINATION(
+        unicode = "𞤐𞤘",
+        lowercaseUnicode = "𞤲𞤺",
+        latinName = "Ŋg",
+        phoneticSound = "[ŋg]",
+        displayNameRes = R.string.letter_ng_combination,
+        descriptionRes = R.string.letter_ng_combination_desc,
+        soundFileName = "adlam_ng_1",
+        exampleWordRes = R.string.example_word_ng_combination,
+        exampleWordTranslationRes = R.string.example_word_translation_ng_combination,
+        difficulty = LetterDifficulty.VERY_HARD,
+        category = LetterCategory.COMBINED
     );
     
     companion object {
@@ -443,5 +499,6 @@ enum class LetterDifficulty {
 enum class LetterCategory {
     VOWEL,      // Voyelles
     CONSONANT,  // Consonnes
-    SEMI_VOWEL  // Semi-voyelles
+    SEMI_VOWEL,  // Semi-voyelles
+    COMBINED    // Consonnes nasales combinées
 }

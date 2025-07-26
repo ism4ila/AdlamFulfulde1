@@ -23,13 +23,13 @@
     <string name="learn_to_write">Learn to write</string>
     <string name="vocabulary">Vocabulary</string>
     <string name="start">Start</string>
-    <string name="when_a_vowel_is_combined">"When a vowel is combined with a consonant, 
+    <string name="when_a_vowel_is_combined">"When a vowel is combined with a consonant,
                 we get a syllable or “Sigande,” in Pular.
-                Let’s start by learning how syllables 
-                are created. 
-                After that, complete the missing 
-                letters to create the syllables. 
-                Then trace the letters again 
+                Let’s start by learning how syllables
+                are created.
+                After that, complete the missing
+                letters to create the syllables.
+                Then trace the letters again
                 to practice.
             "</string>
     <string name="th_adl_alp">The Adlam alphabet consists of 28 letters.
@@ -106,13 +106,6 @@ COMPLETE and learn all adlam syllables</string>
     <string name="redo">Redo</string>
     <string name="save">Save</string>
     <string name="confirm">Confirm</string>
-    <string name="ad_mob_test_banner_id" translatable="false">ca-app-pub-7309731358576813/8916934438</string>
-
-    <string name="ad_mob_banner_id" translatable="false">ca-app-pub-9267930159061113/8237952518</string>
-    <string name="ad_mob_interstitial_id" translatable="false">ca-app-pub-9267930159061113/7760477778</string>
-
-<!--    <string name="ad_mob_banner_id">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="ad_mob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>-->
 
 
     <string name="privacy_policys">Privacy Policy</string>
@@ -296,7 +289,7 @@ COMPLETE and learn all adlam syllables</string>
     <string name="audio_played">Audio Played</string>
     <string name="alphabet_complete">Alphabet Complete!</string>
     <string name="congratulations_reader">Congratulations! You can now read Adlam!</string>
-    
+
     <!-- Adlam Letters -->
     <string name="letter_alif">Alif</string>
     <string name="letter_alif_desc">The first letter of Adlam, represents the sound [a]</string>
@@ -354,7 +347,7 @@ COMPLETE and learn all adlam syllables</string>
     <string name="letter_gbe_desc">Labio-velar sound [gb]</string>
     <string name="letter_kpokpo">Kpokpo</string>
     <string name="letter_kpokpo_desc">Complex sound [kp]</string>
-    
+
     <!-- Welcome Messages -->
     <string name="welcome_to_adlam">Welcome to Adlam</string>
     <string name="start_learning_journey">Start your learning journey</string>
@@ -416,6 +409,30 @@ COMPLETE and learn all adlam syllables</string>
     <string name="example_word_translation_gbe">to dance</string>
     <string name="example_word_kpokpo">𞤛𞤢𞤥𞤢</string>
     <string name="example_word_translation_kpokpo">to jump</string>
+
+    <!-- Nasal Consonant Combinations -->
+    <string name="letter_nd_combination">Nd</string>
+    <string name="letter_nd_combination_desc">Nasal consonant combination [nd]</string>
+    <string name="example_word_nd_combination">𞤐𞤁𞤢𞤤𞤢</string>
+    <string name="example_word_translation_nd_combination">to bind</string>
+
+    <string name="letter_mb_combination">Mb</string>
+    <string name="letter_mb_combination_desc">Nasal consonant combination [mb]</string>
+    <string name="example_word_mb_combination">𞤐𞤄𞤢𞤤𞤢</string>
+    <string name="example_word_translation_mb_combination">to embrace</string>
+
+    <string name="letter_nj_combination">Nj</string>
+    <string name="letter_nj_combination_desc">Nasal consonant combination [nj]</string>
+    <string name="example_word_nj_combination">𞤐𞤔𞤢𞤤𞤢</string>
+    <string name="example_word_translation_nj_combination">to gather</string>
+
+    <string name="letter_ng_combination">Ŋg</string>
+    <string name="letter_ng_combination_desc">Nasal consonant combination [ŋg]</string>
+    <string name="example_word_ng_combination">𞤐𞤘𞤢𞤤𞤢</string>
+    <string name="example_word_translation_ng_combination">to ring</string>
+
     <string name="alphabet_detail">Alphabet Detail</string>
     <string name="letter_not_found">Letter not found</string>
+    <string name="writing_internal">Writing Internal</string>
+    <string name="adlam_alphabet_description">The Adlam alphabet is a script used to write the Fulani language.</string>
 </resources>

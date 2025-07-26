@@ -1,0 +1,402 @@
+<resources>
+    <string name="app_name">Adlam</string>
+    <string name="menu">menu</string>
+
+    <!-- Screen titles -->
+    <string name="welcome_screen">Écran d\'accueil</string>
+    <string name="exercise_sessions">Séances d\'exercice</string>
+    <string name="exercise_session_detail">Détail de la séance d\'exercice</string>
+    <string name="sleep_sessions">Séances de sommeil</string>
+    <string name="sleep_session_detail">Détail de la séance de sommeil</string>
+    <string name="differential_changes">Changements</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
+    <string name="input_readings">Enregistrer le poids</string>
+
+    <string name="alphabet">Alphabet</string>
+    <string name="writing">Écriture</string>
+    <string name="Exercises">Exercices</string>
+    <string name="alphabet_learning">Alphabet</string>
+    <string name="numbers">Nombres</string>
+    <string name="quiz">Quiz</string>
+    <string name="the_syllables">Les syllabes</string>
+    <string name="learn_to_write">Apprendre à écrire</string>
+    <string name="vocabulary">Vocabulaire</string>
+    <string name="start">Commencer</string>
+    <string name="when_a_vowel_is_combined">"Quand une voyelle est combinée avec une consonne,
+                nous obtenons une syllabe ou \"Sigande\" en pular.
+                Commençons par apprendre comment les syllabes
+                sont créées.
+                Après cela, complétez les lettres manquantes
+                pour créer les syllabes.
+                Puis tracez les lettres encore une fois
+                pour vous entraîner.
+            "</string>
+    <string name="th_adl_alp">L\'alphabet Adlam consiste en 28 lettres.
+Il y a cinq voyelles appelées Mase et
+23 consonnes appelées Yhiye.
+Elles jouent le même rôle en anglais qu\'en
+pular.</string>
+    <string name="the_syllables_complete">LES SYLLABES
+COMPLÉTEZ et apprenez toutes les syllabes adlam</string>
+    <string name="complete_and_learn_all_adlam_syllables">
+COMPLÉTEZ et apprenez toutes les syllabes adlam</string>
+    <string name="wrinting" translatable="false">Wrinting</string>
+    <string name="reading">Lecture</string>
+    <string name="current_consonant">Consonne</string>
+    <string name="previous">Précédent</string>
+    <string name="next">Suivant</string>
+    <string name="back">Retour</string>
+    <string name="consonne">Consonne: %1$s</string>
+    <string name="the_alphabet">L\'ALPHABET</string>
+    <string name="trace_and_learn_all_adlam_letters">Tracez et apprenez toutes les lettres adlam</string>
+    <string name="lower_case">Minuscules</string>
+    <string name="upper_case">Majuscules</string>
+    <string name="setting">Paramètre</string>
+    <string name="learn_alphabet">Apprendre l\'alphabet</string>
+    <string name="quiz_instructions_title">Instructions du quiz</string>
+    <string name="quiz_instructions_text">Vous entendrez un son représentant une lettre Adlam. Sélectionnez la lettre correspondante parmi les options fournies.</string>
+    <string name="quiz_title">Quiz - Reconnaître la lettre</string>
+    <string name="quiz_completed">Quiz terminé !</string>
+    <string name="final_score">Score final : %1$d/%2$d</string>
+    <string name="replay">Rejouer</string>
+    <string name="return_to_home">Retour à l\'accueil</string>
+    <string name="score">Score : %1$d</string>
+    <string name="question">Question : %1$d</string>
+    <string name="play_sound">Jouer le son</string>
+    <string name="correct">Correct !</string>
+    <string name="incorrect">Incorrect !</string>
+    <string name="backfffff" translatable="false">Retour</string>
+
+    <string name="letter_details">Détails de la lettre</string>
+    <string name="examples">Exemples</string>
+    <string name="numbers_in_adlam">Nombres en Adlam</string>
+    <string name="pause">Pause</string>
+    <string name="play">Jouer</string>
+    <string name="stop">Arrêter</string>
+    <string name="settings">Paramètres</string>
+    <string name="adlam_letter">Lettre Adlam</string>
+    <string name="brush_settings_title">Paramètres du pinceau</string>
+    <string name="brush_size">Taille du pinceau : %1$d px</string>
+    <string name="brush_color">Couleur du pinceau</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Annuler</string>
+    <string name="info">Info</string>
+    <string name="reading_rules_title">Règles de lecture</string>
+
+    <string name="select_difficulty">Sélectionner la difficulté</string>
+    <string name="beginner">Débutant</string>
+    <string name="intermediate">Intermédiaire</string>
+    <string name="advanced">Avancé</string>
+    <string name="best_score">Meilleur score</string>
+    <string name="remaining_time">Temps restant</string>
+    <string name="reading_rules_text">
+        <![CDATA[
+        Règles de lecture ADLaM :
+
+        1. L\'écriture ADLaM se fait de droite à gauche.
+        2. L\'alphabet consiste en 28 lettres : 23 consonnes et 5 voyelles.
+        3. Les structures syllabiques primaires sont CV et CVC.
+        4. Les voyelles longues sont indiquées par des diacritiques.
+        5. La ponctuation inclut les formes initiales et finales des points d\'interrogation et d\'exclamation.
+        6. Les tirets sont utilisés pour les coupures de mots ; les parenthèses et doubles parenthèses pour le regroupement.
+        ]]>
+    </string>
+    <string name="undo">Annuler</string>
+    <string name="redo">Refaire</string>
+    <string name="save">Sauvegarder</string>
+    <string name="confirm">Confirmer</string>
+
+    <string name="privacy_policys">Politique de confidentialité</string>
+    <string name="about">À propos</string>
+    <string name="adlam_by_microsoft">Adlam par Microsoft</string>
+    <string name="android_developers_guide">Guide des développeurs Android</string>
+    <string name="contributors">Contributeurs</string>
+    <string name="show_adlam">Afficher Adlam</string>
+    <string name="show_latin">Afficher Latin</string>
+    <string name="hide_guide">Masquer le guide</string>
+    <string name="show_guide">Afficher le guide</string>
+    <string name="writing_uppercase">Écriture en majuscules</string>
+    <string name="show_hint">Afficher l\'indice</string>
+    <string name="play_again">Jouer encore</string>
+    <string name="share_app">Partager l\'app</string>
+
+    <string name="theme">Thème</string>
+    <string name="theme_selection">Sélection du thème</string>
+    <string name="theme_default">Par défaut</string>
+    <string name="theme_blue">Bleu</string>
+    <string name="theme_green">Vert</string>
+    <string name="theme_purple">Violet</string>
+    <string name="theme_orange">Orange</string>
+    <string name="references">Références</string>
+    <string name="question_number">Numéro de question</string>
+    <string name="discover_the_adlam_alphabet">Découvrir l\'alphabet Adlam</string>
+    <string name="practice_adlam_numbers">Pratiquer les nombres Adlam</string>
+    <string name="improve_your_writing_skills">Améliorer vos compétences d\'écriture</string>
+    <string name="test_your_knowledge">Tester vos connaissances</string>
+    <string name="hint">Indice</string>
+
+    <!-- Ajoutez ces chaînes à votre fichier strings.xml existant -->
+    <string name="appearance">Apparence</string>
+    <string name="theme_mode">Mode thème</string>
+    <string name="system_default">Par défaut du système</string>
+    <string name="light">Clair</string>
+    <string name="dark">Sombre</string>
+    <string name="color_theme">Thème de couleur</string>
+    <string name="default_theme">Par défaut</string>
+    <string name="green">Vert</string>
+    <string name="blue">Bleu</string>
+    <string name="purple">Violet</string>
+    <string name="orange">Orange</string>
+    <string name="about_app">À propos de l\'application</string>
+    <string name="select_theme">Sélectionner un thème</string>
+    <string name="select_color_theme">Sélectionner un thème de couleur</string>
+    <string name="close">Fermer</string>
+
+    <string name="learn_adlam_script_ease">Apprendre l\'écriture Adlam facilement</string>
+    <string name="learn_adlam_script_ease_short">Apprendre l\'écriture Adlam</string>
+    <string name="start_adlam_journey_title">Commencer votre voyage Adlam</string>
+    <string name="start_adlam_journey_description">Maîtriser l\'écriture Adlam avec des leçons interactives et de la pratique</string>
+    <string name="get_started">Commencer</string>
+    <string name="learning_modules">Modules d\'apprentissage</string>
+    <string name="app_logo_description">Logo de l\'app</string>
+    <string name="featured_image_desc">Image de contenu en vedette</string>
+    <string name="menu_icon_desc">Icône du menu</string>
+
+    <string name="share_app_text">Découvrez cette incroyable application d\'apprentissage Adlam Fulfulde : https://play.google.com/store/apps/details?id=%1s</string>
+    <string name="version">Version %1s</string>
+    <string name="rate_app">Évaluer cette app</string>
+    <string name="more_options">Plus d\'options</string>
+    <string name="selected">Sélectionné</string>
+
+    <string name="adlam_info_desc">Informations sur l\'alphabet Adlam</string>
+    <string name="search">Rechercher</string>
+    <string name="search_placeholder">Rechercher une lettre...</string>
+    <string name="quiz_desc">Commencer un quiz</string>
+    <string name="category_all">Tout</string>
+    <string name="category_vowels">Voyelles</string>
+    <string name="category_consonants">Consonnes</string>
+    <string name="category_combined">Combiné</string>
+    <string name="no_result_found_for">Aucune lettre trouvée pour \"%1s\"</string>
+    <string name="clear_search">Effacer la recherche</string>
+    <string name="no_result_icon_desc">Icône aucun résultat trouvé</string>
+
+    <string name="contributor_aysha_sow">AYSHA SOW</string>
+    <string name="contributor_aboubacar_ballo">ABOUBAKAR BALLO</string>
+    <string name="contributor_ismaila_hamadou">ISMAILA HAMADOU</string>
+    <string name="link_icon_description">Icône de lien</string>
+    <string name="developed_by">Développé par</string>
+    <string name="developer_name">ISMAIL</string>
+    <string name="external_link_icon_description">Description du lien externe</string>
+    <string name="app_version">2.0</string>
+    <string name="no_results_vowels">Aucune voyelle trouvée dans cette catégorie.</string>
+    <string name="no_results_consonants">Aucune consonne trouvée dans cette catégorie.</string>
+    <string name="no_results_combined">Aucune lettre combinée trouvée dans cette catégorie.</string>
+    <string name="no_results_all">Aucune lettre trouvée. Il pourrait y avoir un problème de chargement de l\'alphabet.</string>
+    <string name="empty_title_generic">Rien ici pour le moment</string>
+    <string name="empty_title_category">La catégorie %s est vide</string>
+    <string name="try_other_category_suggestion">Essayez de sélectionner une catégorie différente dans les onglets ci-dessus.</string>
+    <string name="play_example">Jouer l\'exemple</string>
+    <string name="writing_lowercase">Écriture en minuscules</string>
+    <string name="writing_numbers">Écriture des nombres</string>
+
+    <string name="vocabulary_title">Vocabulaire</string>
+    <string name="vocabulary_module_title">Vocabulaire</string>
+    <string name="vocabulary_module_subtitle">Apprendre les mots Adlam courants</string>
+    <string name="vocabulary_empty">La liste de vocabulaire est actuellement vide.</string>
+    <string name="vocabulary_detail_title">Détail du mot</string>
+    <string name="vocabulary_item_not_found">Mot non trouvé.</string>
+    <string name="play_word_sound_desc">Jouer le son du mot</string>
+    <string name="playing_sound">En cours de lecture...</string>
+    <string name="play_sound_short">Jouer</string>
+    <string name="example_sentence_title">Phrase d\'exemple :</string>
+    <string name="no_audio_available">Aucun audio disponible</string>
+    <string name="go_back">Retourner</string>
+
+    <string name="reading_module_title">Lecture guidée</string>
+    <string name="reading_module_subtitle">Lire des textes en Adlam</string>
+    <string name="adlam_keyboard">Clavier Adlam</string>
+    <string name="adlam_keyboard_subtitle">Taper en écriture Adlam</string>
+    <string name="delete">Supprimer</string>
+
+    <string name="clear">Effacer</string>
+    <string name="space">Espace</string>
+    <string name="enter">Entrée</string>
+    <string name="copy">Copier</string>
+
+    <string name="share">Partager</string>
+    <string name="brush_alpha">Alpha du pinceau</string>
+
+    <string name="resume_learning">Reprendre l\'apprentissage</string>
+    <string name="the_basics">Les bases</string>
+    <string name="practice">Pratique</string>
+    <string name="tools">Outils</string>
+    <string name="resume_learning_title">Reprendre : %1$s</string>
+    <string name="resume_learning_subtitle">Dernière activité : %1$s</string>
+
+    <string name="adlam_transcription">Transcription Adlam Latin</string>
+    <string name="adlam_transcription_subtitle">Transcrire Adlam vers l\'écriture latine</string>
+
+    <!-- Alphabet Learning Quiz -->
+    <string name="alphabet_quiz_title">Quiz de l\'alphabet</string>
+    <string name="alphabet_quiz_subtitle">Apprendre chaque lettre étape par étape</string>
+    <string name="visual_recognition_phase">Phase de reconnaissance visuelle</string>
+    <string name="audio_recognition_phase">Phase de reconnaissance auditive</string>
+    <string name="question_prompt">Quel est le nom de cette lettre ?</string>
+    <string name="audio_question_prompt">Écoutez le son et choisissez la lettre correspondante</string>
+    <string name="mastery_required">Maîtrisez cette lettre pour continuer</string>
+    <string name="letter_mastered">Lettre maîtrisée !</string>
+    <string name="phase_mastered">Phase maîtrisée !</string>
+    <string name="next_letter">Lettre suivante</string>
+    <string name="next_phase">Phase suivante</string>
+    <string name="play_audio">Jouer l\'audio</string>
+    <string name="audio_played">Audio joué</string>
+    <string name="alphabet_complete">Alphabet terminé !</string>
+    <string name="congratulations_reader">Félicitations ! Vous pouvez maintenant lire l\'Adlam !</string>
+
+    <!-- Adlam Letters -->
+    <string name="letter_alif">Alif</string>
+    <string name="letter_alif_desc">La première lettre d\'Adlam, représente le son [a]</string>
+    <string name="letter_daali">Daali</string>
+    <string name="letter_daali_desc">Représente le son [d]</string>
+    <string name="letter_laam">Laam</string>
+    <string name="letter_laam_desc">Représente le son [l]</string>
+    <string name="letter_miim">Miim</string>
+    <string name="letter_miim_desc">Représente le son [m]</string>
+    <string name="letter_baa">Baa</string>
+    <string name="letter_baa_desc">Représente le son [b]</string>
+    <string name="letter_sinnyiiyhe">Sinnyiiyhe</string>
+    <string name="letter_sinnyiiyhe_desc">Représente le son [s]</string>
+    <string name="letter_pulaar">Pulaar</string>
+    <string name="letter_pulaar_desc">Spécifique à la langue Pulaar, représente [p]</string>
+    <string name="letter_bhe">Bhe</string>
+    <string name="letter_bhe_desc">Son aspiré [bh]</string>
+    <string name="letter_raa">Raa</string>
+    <string name="letter_raa_desc">Représente le [r] roulé</string>
+    <string name="letter_e">E</string>
+    <string name="letter_e_desc">Voyelle représentant le son [e]</string>
+    <string name="letter_fa">Fa</string>
+    <string name="letter_fa_desc">Représente le son [f]</string>
+    <string name="letter_i">I</string>
+    <string name="letter_i_desc">Voyelle haute représentant le son [i]</string>
+    <string name="letter_o">O</string>
+    <string name="letter_o_desc">Voyelle arrondie représentant le son [o]</string>
+    <string name="letter_u">U</string>
+    <string name="letter_u_desc">Voyelle fermée représentant le son [u]</string>
+    <string name="letter_yhe">Yhe</string>
+    <string name="letter_yhe_desc">Semi-voyelle représentant le son [y]</string>
+    <string name="letter_waw">Waw</string>
+    <string name="letter_waw_desc">Son labio-vélaire [w]</string>
+    <string name="letter_nun">Nun</string>
+    <string name="letter_nun_desc">Son nasal [n]</string>
+    <string name="letter_kaf">Kaf</string>
+    <string name="letter_kaf_desc">Son occlusif [k]</string>
+    <string name="letter_yaa">Yaa</string>
+    <string name="letter_yaa_desc">Son complexe [ya]</string>
+    <string name="letter_he">He</string>
+    <string name="letter_he_desc">Son aspiré [h]</string>
+    <string name="letter_waw_laabi">Waw Laabi</string>
+    <string name="letter_waw_laabi_desc">Variante de Waw [w]</string>
+    <string name="letter_arre">Arre</string>
+    <string name="letter_arre_desc">Fort roulé [r]</string>
+    <string name="letter_che">Che</string>
+    <string name="letter_che_desc">Son affriqué [ch]</string>
+    <string name="letter_je">Je</string>
+    <string name="letter_je_desc">Son voisé [j]</string>
+    <string name="letter_tee">Tee</string>
+    <string name="letter_tee_desc">Occlusif sourd [t]</string>
+    <string name="letter_nye">Nye</string>
+    <string name="letter_nye_desc">Son palatal [ny]</string>
+    <string name="letter_gbe">Gbe</string>
+    <string name="letter_gbe_desc">Son labio-vélaire [gb]</string>
+    <string name="letter_kpokpo">Kpokpo</string>
+    <string name="letter_kpokpo_desc">Son complexe [kp]</string>
+
+    <!-- Welcome Messages -->
+    <string name="welcome_to_adlam">Bienvenue dans Adlam</string>
+    <string name="start_learning_journey">Commencez votre voyage d\'apprentissage</string>
+    <string name="start_learning">Commencer l\'apprentissage</string>
+    
+    <!-- Example Words for Adlam Letters -->
+    <string name="example_word_alif">𞤀𞤣𞤤𞤢𞤥</string>
+    <string name="example_word_translation_alif">Adlam</string>
+    <string name="example_word_e">𞤉𞤲𞤣𞤢𞤥</string>
+    <string name="example_word_translation_e">ici</string>
+    <string name="example_word_i">𞤋𞤲𞤣𞤭</string>
+    <string name="example_word_translation_i">ceci</string>
+    <string name="example_word_o">𞤌𞤲𞤣𞤢𞤥</string>
+    <string name="example_word_translation_o">là</string>
+    <string name="example_word_u">𞤓𞤲𞤣𞤢𞤥</string>
+    <string name="example_word_translation_u">cela</string>
+    <string name="example_word_daali">𞤁𞤢𞤥𞤢</string>
+    <string name="example_word_translation_daali">sang</string>
+    <string name="example_word_laam">𞤂𞤢𞤥𞤢</string>
+    <string name="example_word_translation_laam">langue</string>
+    <string name="example_word_miim">𞤃𞤢𞤥𞤢</string>
+    <string name="example_word_translation_miim">mère</string>
+    <string name="example_word_baa">𞤄𞤢𞤥𞤢</string>
+    <string name="example_word_translation_baa">père</string>
+    <string name="example_word_sinnyiiyhe">𞤅𞤢𞤥𞤢</string>
+    <string name="example_word_translation_sinnyiiyhe">nom</string>
+    <string name="example_word_pulaar">𞤆𞤵𞤤𞤢𞤢𞤪</string>
+    <string name="example_word_translation_pulaar">Fulani</string>
+    <string name="example_word_bhe">𞤇𞤢𞤥𞤢</string>
+    <string name="example_word_translation_bhe">chèvre</string>
+    <string name="example_word_raa">𞤈𞤢𞤥𞤢</string>
+    <string name="example_word_translation_raa">rivière</string>
+    <string name="example_word_fa">𞤊𞤢𞤥𞤢</string>
+    <string name="example_word_translation_fa">aller</string>
+    <string name="example_word_yhe">𞤎𞤢𞤥𞤢</string>
+    <string name="example_word_translation_yhe">venir</string>
+    <string name="example_word_waw">𞤏𞤢𞤥𞤢</string>
+    <string name="example_word_translation_waw">dire</string>
+    <string name="example_word_nun">𞤐𞤢𞤥𞤢</string>
+    <string name="example_word_translation_nun">manger</string>
+    <string name="example_word_kaf">𞤑𞤢𞤥𞤢</string>
+    <string name="example_word_translation_kaf">boire</string>
+    <string name="example_word_yaa">𞤒𞤢𞤥𞤢</string>
+    <string name="example_word_translation_yaa">voir</string>
+    <string name="example_word_he">𞤓𞤢𞤥𞤢</string>
+    <string name="example_word_translation_he">entendre</string>
+    <string name="example_word_waw_laabi">𞤔𞤢𞤥𞤢</string>
+    <string name="example_word_translation_waw_laabi">marcher</string>
+    <string name="example_word_arre">𞤕𞤢𞤥𞤢</string>
+    <string name="example_word_translation_arre">courir</string>
+    <string name="example_word_che">𞤖𞤢𞤥𞤢</string>
+    <string name="example_word_translation_che">parler</string>
+    <string name="example_word_je">𞤗𞤢𞤥𞤢</string>
+    <string name="example_word_translation_je">dormir</string>
+    <string name="example_word_tee">𞤘𞤢𞤥𞤢</string>
+    <string name="example_word_translation_tee">se tenir debout</string>
+    <string name="example_word_nye">𞤙𞤢𞤥𞤢</string>
+    <string name="example_word_translation_nye">s\'asseoir</string>
+    <string name="example_word_gbe">𞤚𞤢𞤥𞤢</string>
+    <string name="example_word_translation_gbe">danser</string>
+    <string name="example_word_kpokpo">𞤛𞤢𞤥𞤢</string>
+    <string name="example_word_translation_kpokpo">sauter</string>
+
+    <!-- Nasal Consonant Combinations -->
+    <string name="letter_nd_combination">Nd</string>
+    <string name="letter_nd_combination_desc">Combinaison de consonnes nasales [nd]</string>
+    <string name="example_word_nd_combination">𞤐𞤁𞤢𞤤𞤢</string>
+    <string name="example_word_translation_nd_combination">lier</string>
+
+    <string name="letter_mb_combination">Mb</string>
+    <string name="letter_mb_combination_desc">Combinaison de consonnes nasales [mb]</string>
+    <string name="example_word_mb_combination">𞤐𞤄𞤢𞤤𞤢</string>
+    <string name="example_word_translation_mb_combination">embrasser</string>
+
+    <string name="letter_nj_combination">Nj</string>
+    <string name="letter_nj_combination_desc">Combinaison de consonnes nasales [nj]</string>
+    <string name="example_word_nj_combination">𞤐𞤔𞤢𞤤𞤢</string>
+    <string name="example_word_translation_nj_combination">rassembler</string>
+
+    <string name="letter_ng_combination">Ŋg</string>
+    <string name="letter_ng_combination_desc">Combinaison de consonnes nasales [ŋg]</string>
+    <string name="example_word_ng_combination">𞤐𞤘𞤢𞤤𞤢</string>
+    <string name="example_word_translation_ng_combination">sonner</string>
+
+    <string name="alphabet_detail">Détail de l\'alphabet</string>
+    <string name="letter_not_found">Lettre non trouvée</string>
+    <string name="writing_internal">Écriture interne</string>
+    <string name="adlam_alphabet_description">L\'alphabet Adlam est une écriture utilisée pour écrire la langue fulani.</string>
+</resources>

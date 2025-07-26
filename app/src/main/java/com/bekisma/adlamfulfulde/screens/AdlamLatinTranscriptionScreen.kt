@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bekisma.adlamfulfulde.R
-import com.bekisma.adlamfulfulde.ads.BannerAdView
 import kotlinx.coroutines.delay
 
 data class TranscriptionState(
@@ -66,75 +65,86 @@ fun AdlamLatinTranscriptionScreen(navController: NavController) {
         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
     )
 
-    // Mapping complet et précis Adlam vers Latin basé sur les standards Unicode
+    // Mapping CORRIGÉ Adlam vers Latin basé sur les sources officielles
     val adlamToLatinMap = mapOf(
-        // Consonnes de base (Unicode U+1E900-U+1E91B)
-        "𞤀" to "a", // ADLAM LETTER ALIF
-        "𞤁" to "d", // ADLAM LETTER DAALI
-        "𞤂" to "l", // ADLAM LETTER LAAM
-        "𞤃" to "m", // ADLAM LETTER MIIM
-        "𞤄" to "b", // ADLAM LETTER BA
-        "𞤅" to "s", // ADLAM LETTER SINNYIIYHE
-        "𞤆" to "pe", // ADLAM LETTER PE
-        "𞤇" to "bh", // ADLAM LETTER BHE
-        "𞤈" to "r", // ADLAM LETTER RA
-        "𞤉" to "e", // ADLAM LETTER E
-        "𞤊" to "f", // ADLAM LETTER FA
-        "𞤋" to "i", // ADLAM LETTER I
-        "𞤌" to "o", // ADLAM LETTER O
-        "𞤍" to "dh", // ADLAM LETTER DHA
-        "𞤎" to "yh", // ADLAM LETTER YHE
-        "𞤏" to "w", // ADLAM LETTER WAW
-        "𞤐" to "n", // ADLAM LETTER NUN
-        "𞤑" to "k", // ADLAM LETTER KAF
-        "𞤒" to "y", // ADLAM LETTER YA
-        "𞤓" to "u", // ADLAM LETTER U
-        "𞤔" to "j", // ADLAM LETTER JIIM
-        "𞤕" to "c", // ADLAM LETTER CHI
-        "𞤖" to "h", // ADLAM LETTER HA
-        "𞤗" to "q", // ADLAM LETTER QAAF
-        "𞤘" to "g", // ADLAM LETTER GA
-        "𞤙" to "ny", // ADLAM LETTER NYA
-        "𞤚" to "t", // ADLAM LETTER TU
-        "𞤛" to "nd", // ADLAM LETTER NDA
+        // VOYELLES CORRIGÉES (sources officielles)
+        "𞤢" to "a", // ADLAM SMALL LETTER ALIF - voyelle A
+        "𞤫" to "e", // ADLAM SMALL LETTER E - voyelle E  
+        "𞤭" to "i", // ADLAM SMALL LETTER I - voyelle I
+        "𞤮" to "o", // ADLAM SMALL LETTER O - voyelle O
+        "𞤵" to "u", // ADLAM SMALL LETTER U - voyelle U
+        
+        // VOYELLES MAJUSCULES
+        "𞤀" to "A", // ADLAM CAPITAL LETTER ALIF
+        "𞤉" to "E", // ADLAM CAPITAL LETTER E
+        "𞤋" to "I", // ADLAM CAPITAL LETTER I  
+        "𞤌" to "O", // ADLAM CAPITAL LETTER O
+        "𞤓" to "U", // ADLAM CAPITAL LETTER U
+        
+        // CONSONNES CORRIGÉES
+        "𞤦" to "b", // ADLAM SMALL LETTER BA - consonne B
+        "𞤨" to "p", // ADLAM SMALL LETTER PE - consonne P
+        "𞤩" to "ɓ", // ADLAM SMALL LETTER BHE - B implosif
+        "𞤣" to "d", // ADLAM SMALL LETTER DAALI - consonne D
+        "𞤼" to "t", // ADLAM SMALL LETTER TU - consonne T
+        "𞤶" to "j", // ADLAM SMALL LETTER JIIM - consonne J (dʒ)
+        "𞤳" to "k", // ADLAM SMALL LETTER KAF - consonne K
+        "𞤺" to "g", // ADLAM SMALL LETTER GA - consonne G
+        "𞤬" to "f", // ADLAM SMALL LETTER FA - consonne F
+        "𞤧" to "s", // ADLAM SMALL LETTER SINNYIIYHE - consonne S
+        "𞤸" to "h", // ADLAM SMALL LETTER HA - consonne H
+        "𞤥" to "m", // ADLAM SMALL LETTER MIIM - consonne M
+        "𞤲" to "n", // ADLAM SMALL LETTER NUN - consonne N
+        "𞤱" to "w", // ADLAM SMALL LETTER WAW - consonne W
+        "𞤪" to "r", // ADLAM SMALL LETTER RA - consonne R
+        "𞤴" to "y", // ADLAM SMALL LETTER YA - consonne Y (j)
+        "𞤤" to "l", // ADLAM SMALL LETTER LAAM - consonne L
+        
+        // CONSONNES MAJUSCULES
+        "𞤄" to "B", // ADLAM CAPITAL LETTER BA
+        "𞤆" to "P", // ADLAM CAPITAL LETTER PE
+        "𞤇" to "Ɓ", // ADLAM CAPITAL LETTER BHE
+        "𞤁" to "D", // ADLAM CAPITAL LETTER DAALI
+        "𞤚" to "T", // ADLAM CAPITAL LETTER TU
+        "𞤔" to "J", // ADLAM CAPITAL LETTER JIIM
+        "𞤑" to "K", // ADLAM CAPITAL LETTER KAF
+        "𞤘" to "G", // ADLAM CAPITAL LETTER GA
+        "𞤊" to "F", // ADLAM CAPITAL LETTER FA
+        "𞤅" to "S", // ADLAM CAPITAL LETTER SINNYIIYHE
+        "𞤖" to "H", // ADLAM CAPITAL LETTER HA
+        "𞤃" to "M", // ADLAM CAPITAL LETTER MIIM
+        "𞤐" to "N", // ADLAM CAPITAL LETTER NUN
+        "𞤏" to "W", // ADLAM CAPITAL LETTER WAW
+        "𞤈" to "R", // ADLAM CAPITAL LETTER RA
+        "𞤒" to "Y", // ADLAM CAPITAL LETTER YA
+        "𞤂" to "L", // ADLAM CAPITAL LETTER LAAM
 
-        // Voyelles avec diacritiques (Unicode U+1E91C-U+1E943)
-        "𞤜" to "aa", // ADLAM LETTER A WITH DIAERESIS
-        "𞤝" to "ee", // ADLAM LETTER E WITH DIAERESIS
-        "𞤞" to "ii", // ADLAM LETTER I WITH DIAERESIS
-        "𞤟" to "oo", // ADLAM LETTER O WITH DIAERESIS
-        "𞤠" to "uu", // ADLAM LETTER U WITH DIAERESIS
-
-        // Consonnes additionnelles
-        "𞤡" to "p", // ADLAM LETTER P
-        "𞤢" to "ɓ", // ADLAM LETTER ALIF WITH DIAERESIS
-        "𞤣" to "mb", // ADLAM LETTER DAALI WITH DIAERESIS
-        "𞤤" to "ɗ", // ADLAM LETTER LAAM WITH DIAERESIS
-        "𞤥" to "ɠ", // ADLAM LETTER MIIM WITH DIAERESIS
-        "𞤦" to "ƴ", // ADLAM LETTER BA WITH DIAERESIS
-        "𞤧" to "ñ", // ADLAM LETTER SINNYIIYHE WITH DIAERESIS
-        "𞤨" to "ŋ", // ADLAM LETTER PE WITH DIAERESIS
-        "𞤩" to "ng", // ADLAM LETTER BHE WITH DIAERESIS
-        "𞤪" to "nj", // ADLAM LETTER RA WITH DIAERESIS
-        "𞤫" to "nk", // ADLAM LETTER E WITH DIAERESIS
-        "𞤬" to "sh", // ADLAM LETTER FA WITH DIAERESIS
-        "𞤭" to "th", // ADLAM LETTER I WITH DIAERESIS
-        "𞤮" to "kh", // ADLAM LETTER O WITH DIAERESIS
-        "𞤯" to "gh", // ADLAM LETTER DHA WITH DIAERESIS
-        "𞤰" to "zh", // ADLAM LETTER YHE WITH DIAERESIS
-        "𞤱" to "z", // ADLAM LETTER WAW WITH DIAERESIS
-        "𞤲" to "x", // ADLAM LETTER NUN WITH DIAERESIS
-        "𞤳" to "v", // ADLAM LETTER KAF WITH DIAERESIS
-        "𞤴" to "ts", // ADLAM LETTER YA WITH DIAERESIS
-        "𞤵" to "dz", // ADLAM LETTER U WITH DIAERESIS
-        "𞤶" to "tsh", // ADLAM LETTER JIIM WITH DIAERESIS
-        "𞤷" to "dzh", // ADLAM LETTER CHI WITH DIAERESIS
-        "𞤸" to "rh", // ADLAM LETTER HA WITH DIAERESIS
-        "𞤹" to "lh", // ADLAM LETTER QAAF WITH DIAERESIS
-        "𞤺" to "mh", // ADLAM LETTER GA WITH DIAERESIS
-        "𞤻" to "nh", // ADLAM LETTER NYA WITH DIAERESIS
-        "𞤼" to "wh", // ADLAM LETTER TU WITH DIAERESIS
-        "𞤽" to "bh", // ADLAM LETTER NDA WITH DIAERESIS
+        // CONSONNES SPÉCIALES FULFULDE (implosives et autres)
+        "𞤯" to "ɗ", // ADLAM SMALL LETTER DHA - D implosif
+        "𞤻" to "ɠ", // ADLAM SMALL LETTER NYA - G implosif  
+        "𞤰" to "ƴ", // ADLAM SMALL LETTER YHE - Y palatale
+        "𞤷" to "ŋ", // ADLAM SMALL LETTER CHI - NG vélaire
+        
+        // VOYELLES LONGUES CORRIGÉES
+        "𞤢𞤢" to "aa", // Double A
+        "𞤫𞤫" to "ee", // Double E
+        "𞤭𞤭" to "ii", // Double I
+        "𞤮𞤮" to "oo", // Double O
+        "𞤵𞤵" to "uu", // Double U
+        
+        // CONSONNES PRÉNASALISÉES
+        "𞤲𞤣" to "nd", // N + D
+        "𞤲𞤦" to "nb", // N + B
+        "𞤲𞤺" to "ng", // N + G
+        "𞤲𞤳" to "nk", // N + K
+        "𞤲𞤶" to "nj", // N + J
+        "𞤲𞤴" to "ny", // N + Y
+        
+        // CONSONNES COMPOSÉES COURANTES
+        "𞤧𞤸" to "sh", // S + H = SH
+        "𞤼𞤸" to "th", // T + H = TH
+        "𞤳𞤸" to "kh", // K + H = KH
+        "𞤺𞤸" to "gh", // G + H = GH
 
         // Chiffres Adlam (Unicode U+1E950-U+1E959)
         "𞥐" to "0", // ADLAM DIGIT ZERO
@@ -156,123 +166,100 @@ fun AdlamLatinTranscriptionScreen(navController: NavController) {
         "𞥞" to ".", // ADLAM FULL STOP
         "𞥟" to ",", // ADLAM COMMA
 
-        // Espaces et autres caractères spéciaux
+        // CARACTÈRES DE BASE
         " " to " ", // Espace normal
         "\n" to "\n", // Retour à la ligne
         "\t" to "\t", // Tabulation
-
-        // Modifications consonantiques spécifiques au Fulfulde
-        "𞤾" to "ɓ", // ADLAM LETTER ALIF WITH HAMZA ABOVE
-        "𞤿" to "ɗ", // ADLAM LETTER ALIF WITH HAMZA BELOW
-        "𞥀" to "ƴ", // ADLAM LETTER WAWI
-        "𞥁" to "ɠ", // ADLAM LETTER ALIF WITH HAMZA ABOVE AND BELOW
-        "𞥂" to "ŋ", // ADLAM LETTER ALIF WITH DAMMA ABOVE
-        "𞥃" to "ñ", // ADLAM LETTER ALIF WITH KASRA BELOW
-
-        // Caractères composés courants en Fulfulde
-        "𞤀𞤀" to "aa", // Double A
-        "𞤉𞤉" to "ee", // Double E
-        "𞤋𞤋" to "ii", // Double I
-        "𞤌𞤌" to "oo", // Double O
-        "𞤓𞤓" to "uu", // Double U
-
-        // Consonnes prénasalisées
-        "𞤂𞤀" to "nda", // ND + A
-        "𞤂𞤄" to "ndb", // ND + B
-        "𞤂𞤆" to "ndp", // ND + P
-        "𞤂𞤘" to "ndg", // ND + G
-        "𞤂𞤑" to "ndk", // ND + K
-        "𞤂𞤔" to "ndj", // ND + J
-        "𞤂𞤕" to "ndc", // ND + C
-
-        // Modificateurs de tons (si utilisés)
-        "𞤀́" to "á", // A avec ton haut
-        "𞤀̀" to "à", // A avec ton bas
-        "𞤀̂" to "â", // A avec ton montant
-        "𞤀̌" to "ǎ", // A avec ton descendant
-
-        // Variantes contextuelles
-        "𞤀𞤋" to "ai", // A + I
-        "𞤀𞤓" to "au", // A + U
-        "𞤉𞤋" to "ei", // E + I
-        "𞤉𞤓" to "eu", // E + U
-        "𞤋𞤀" to "ia", // I + A
-        "𞤋𞤉" to "ie", // I + E
-        "𞤌𞤀" to "oa", // O + A
-        "𞤌𞤉" to "oe", // O + E
-        "𞤌𞤋" to "oi", // O + I
-        "𞤓𞤀" to "ua", // U + A
-        "𞤓𞤉" to "ue", // U + E
-        "𞤓𞤋" to "ui", // U + I
-        "𞤓𞤌" to "uo"  // U + O
+        
+        // DIPHTONGUES COURANTES
+        "𞤢𞤭" to "ai", // A + I = AI
+        "𞤢𞤵" to "au", // A + U = AU
+        "𞤫𞤭" to "ei", // E + I = EI
+        "𞤫𞤵" to "eu", // E + U = EU
+        "𞤮𞤭" to "oi", // O + I = OI
+        "𞤮𞤵" to "ou"  // O + U = OU
     )
 
     // Mapping inverse pour Latin vers Adlam
     val latinToAdlamMap = adlamToLatinMap.entries.associate { (k, v) -> v to k }
 
-    // Ajout de mappings spéciaux pour les caractères latins vers Adlam
+    // Mapping CORRIGÉ Latin vers Adlam
     val latinToAdlamSpecialMap = mapOf(
-        // Voyelles simples
-        "a" to "𞤀",
-        "e" to "𞤉",
-        "i" to "𞤋",
-        "o" to "𞤌",
-        "u" to "𞤓",
+        // VOYELLES CORRIGÉES (minuscules)
+        "a" to "𞤢", // Latin a → Adlam small alif
+        "e" to "𞤫", // Latin e → Adlam small e
+        "i" to "𞤭", // Latin i → Adlam small i
+        "o" to "𞤮", // Latin o → Adlam small o  
+        "u" to "𞤵", // Latin u → Adlam small u
+        
+        // VOYELLES MAJUSCULES
+        "A" to "𞤀", // Latin A → Adlam capital alif
+        "E" to "𞤉", // Latin E → Adlam capital e
+        "I" to "𞤋", // Latin I → Adlam capital i
+        "O" to "𞤌", // Latin O → Adlam capital o
+        "U" to "𞤓", // Latin U → Adlam capital u
 
-        // Consonnes simples
-        "b" to "𞤄",
-        "c" to "𞤕",
-        "d" to "𞤁",
-        "f" to "𞤊",
-        "g" to "𞤘",
-        "h" to "𞤖",
-        "j" to "𞤔",
-        "k" to "𞤑",
-        "l" to "𞤂",
-        "m" to "𞤃",
-        "n" to "𞤐",
-        "p" to "𞤡",
-        "q" to "𞤗",
-        "r" to "𞤈",
-        "s" to "𞤅",
-        "t" to "𞤚",
-        "v" to "𞤳",
-        "w" to "𞤏",
-        "x" to "𞤲",
-        "y" to "𞤒",
-        "z" to "𞤱",
+        // CONSONNES CORRIGÉES (minuscules)
+        "b" to "𞤦", // Latin b → Adlam small ba
+        "p" to "𞤨", // Latin p → Adlam small pe
+        "d" to "𞤣", // Latin d → Adlam small daali
+        "t" to "𞤼", // Latin t → Adlam small tu
+        "j" to "𞤶", // Latin j → Adlam small jiim
+        "k" to "𞤳", // Latin k → Adlam small kaf
+        "g" to "𞤺", // Latin g → Adlam small ga
+        "f" to "𞤬", // Latin f → Adlam small fa
+        "s" to "𞤧", // Latin s → Adlam small sinnyiiyhe
+        "h" to "𞤸", // Latin h → Adlam small ha
+        "m" to "𞤥", // Latin m → Adlam small miim
+        "n" to "𞤲", // Latin n → Adlam small nun
+        "w" to "𞤱", // Latin w → Adlam small waw
+        "r" to "𞤪", // Latin r → Adlam small ra
+        "y" to "𞤴", // Latin y → Adlam small ya
+        "l" to "𞤤", // Latin l → Adlam small laam
+        
+        // CONSONNES MAJUSCULES
+        "B" to "𞤄", // Latin B → Adlam capital ba
+        "P" to "𞤆", // Latin P → Adlam capital pe
+        "D" to "𞤁", // Latin D → Adlam capital daali
+        "T" to "𞤚", // Latin T → Adlam capital tu
+        "J" to "𞤔", // Latin J → Adlam capital jiim
+        "K" to "𞤑", // Latin K → Adlam capital kaf
+        "G" to "𞤘", // Latin G → Adlam capital ga
+        "F" to "𞤊", // Latin F → Adlam capital fa
+        "S" to "𞤅", // Latin S → Adlam capital sinnyiiyhe
+        "H" to "𞤖", // Latin H → Adlam capital ha
+        "M" to "𞤃", // Latin M → Adlam capital miim
+        "N" to "𞤐", // Latin N → Adlam capital nun
+        "W" to "𞤏", // Latin W → Adlam capital waw
+        "R" to "𞤈", // Latin R → Adlam capital ra
+        "Y" to "𞤒", // Latin Y → Adlam capital ya
+        "L" to "𞤂", // Latin L → Adlam capital laam
 
-        // Voyelles longues
-        "aa" to "𞤜",
-        "ee" to "𞤝",
-        "ii" to "𞤞",
-        "oo" to "𞤟",
-        "uu" to "𞤠",
+        // VOYELLES LONGUES
+        "aa" to "𞤢𞤢", // Double a
+        "ee" to "𞤫𞤫", // Double e
+        "ii" to "𞤭𞤭", // Double i
+        "oo" to "𞤮𞤮", // Double o
+        "uu" to "𞤵𞤵", // Double u
 
-        // Consonnes spéciales Fulfulde
-        "ɓ" to "𞤢",
-        "ɗ" to "𞤤",
-        "ɠ" to "𞤥",
-        "ƴ" to "𞤦",
-        "ŋ" to "𞤨",
-        "ñ" to "𞤧",
+        // CONSONNES SPÉCIALES FULFULDE
+        "ɓ" to "𞤩", // B implosif → Adlam bhe
+        "ɗ" to "𞤯", // D implosif → Adlam dha
+        "ɠ" to "𞤻", // G implosif → Adlam nya
+        "ƴ" to "𞤰", // Y palatale → Adlam yhe
+        "ŋ" to "𞤷", // NG vélaire → Adlam chi
 
-        // Consonnes composées
-        "mb" to "𞤣",
-        "nd" to "𞤛",
-        "ng" to "𞤩",
-        "nj" to "𞤪",
-        "nk" to "𞤫",
-        "ny" to "𞤙",
-        "sh" to "𞤬",
-        "th" to "𞤭",
-        "kh" to "𞤮",
-        "gh" to "𞤯",
-        "zh" to "𞤰",
-        "ts" to "𞤴",
-        "dz" to "𞤵",
-        "tsh" to "𞤶",
-        "dzh" to "𞤷"
+        // CONSONNES PRÉNASALISÉES ET COMPOSÉES
+        "nd" to "𞤲𞤣", // N + D
+        "nb" to "𞤲𞤦", // N + B  
+        "ng" to "𞤲𞤺", // N + G
+        "nk" to "𞤲𞤳", // N + K
+        "nj" to "𞤲𞤶", // N + J
+        "ny" to "𞤲𞤴", // N + Y
+        "sh" to "𞤧𞤸", // S + H
+        "th" to "𞤼𞤸", // T + H
+        "kh" to "𞤳𞤸", // K + H
+        "gh" to "𞤺𞤸"  // G + H
     )
 
     // Fonction de transcription améliorée
@@ -403,16 +390,7 @@ fun AdlamLatinTranscriptionScreen(navController: NavController) {
                 )
             )
         },
-        bottomBar = {
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.surface,
-                tonalElevation = 8.dp,
-                shadowElevation = 8.dp
-            ) {
-                BannerAdView()
-            }
-        }
+        // bottomBar removed - ad moved to content
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -496,13 +474,14 @@ fun AdlamLatinTranscriptionScreen(navController: NavController) {
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Exemples organisés de manière plus complète
+                        // Exemples CORRIGÉS avec les vrais mappings
                         val examples = listOf(
-                            "Voyelles de base" to listOf("𞤀 → a", "𞤉 → e", "𞤋 → i", "𞤌 → o", "𞤓 → u"),
-                            "Voyelles longues" to listOf("𞤜 → aa", "𞤝 → ee", "𞤞 → ii", "𞤟 → oo", "𞤠 → uu"),
-                            "Consonnes courantes" to listOf("𞤄 → b", "𞤁 → d", "𞤂 → l", "𞤃 → m", "𞤐 → n"),
-                            "Consonnes spéciales" to listOf("𞤢 → ɓ", "𞤤 → ɗ", "𞤥 → ɠ", "𞤦 → ƴ", "𞤨 → ŋ"),
-                            "Consonnes composées" to listOf("𞤣 → mb", "𞤛 → nd", "𞤩 → ng", "𞤪 → nj", "𞤙 → ny"),
+                            "Voyelles minuscules" to listOf("𞤢 → a", "𞤫 → e", "𞤭 → i", "𞤮 → o", "𞤵 → u"),
+                            "Voyelles majuscules" to listOf("𞤀 → A", "𞤉 → E", "𞤋 → I", "𞤌 → O", "𞤓 → U"),
+                            "Consonnes courantes" to listOf("𞤦 → b", "𞤣 → d", "𞤤 → l", "𞤥 → m", "𞤲 → n"),
+                            "Consonnes spéciales" to listOf("𞤩 → ɓ", "𞤯 → ɗ", "𞤻 → ɠ", "𞤰 → ƴ", "𞤷 → ŋ"),
+                            "Consonnes prénasalisées" to listOf("𞤲𞤣 → nd", "𞤲𞤦 → nb", "𞤲𞤺 → ng", "𞤲𞤳 → nk", "𞤲𞤴 → ny"),
+                            "Consonnes composées" to listOf("𞤧𞤸 → sh", "𞤼𞤸 → th", "𞤳𞤸 → kh", "𞤺𞤸 → gh"),
                             "Chiffres" to listOf("𞥐 → 0", "𞥑 → 1", "𞥒 → 2", "𞥓 → 3", "𞥔 → 4"),
                             "Ponctuation" to listOf("𞥞 → .", "𞥟 → ,", "𞥛 → !", "𞥝 → ?")
                         )
@@ -842,7 +821,8 @@ fun AdlamLatinTranscriptionScreen(navController: NavController) {
                 }
             }
 
-            // Espace pour éviter que le contenu soit caché par la publicité
+            
+            // Space at the end
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

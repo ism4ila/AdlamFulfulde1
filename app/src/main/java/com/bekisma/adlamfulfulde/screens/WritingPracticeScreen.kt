@@ -37,6 +37,9 @@ import com.bekisma.adlamfulfulde.R
 import kotlinx.coroutines.launch
 import kotlin.math.pow
 
+import com.bekisma.adlamfulfulde.ads.InterstitialAdManager
+import android.app.Activity
+
 // --- Enum et Données ---
 
 enum class WritingType {
@@ -591,7 +594,11 @@ fun WritingPracticeScreen(
             TopAppBar(
                 title = { Text(topBarTitle, fontWeight = FontWeight.Bold, fontSize = 20.sp) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { 
+                        InterstitialAdManager.showAd(navController.context as Activity) {
+                            navController.navigateUp() 
+                        }
+                    }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },

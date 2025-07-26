@@ -11,11 +11,16 @@ import com.bekisma.adlamfulfulde.navigation.AppNavigation
 import com.bekisma.adlamfulfulde.ui.theme.AdlamFulfuldeTheme
 import com.bekisma.adlamfulfulde.data.MenuItem
 
+import com.google.android.gms.ads.MobileAds
+
 class MainActivity : ComponentActivity() {
     private lateinit var proManager: ProManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MobileAds.initialize(this) { }
+        com.bekisma.adlamfulfulde.ads.InterstitialAdManager.loadAd(this)
 
         proManager = ProManager(this)
         

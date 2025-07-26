@@ -35,6 +35,8 @@ import com.bekisma.adlamfulfulde.navigation.getPracticeModules
 import com.bekisma.adlamfulfulde.navigation.getToolsModules
 import kotlinx.coroutines.launch
 
+import com.bekisma.adlamfulfulde.ads.BannerAdView
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleMainScreen(
@@ -60,6 +62,9 @@ fun SimpleMainScreen(
             modifier = Modifier.weight(1f),
             onNavigation = onNavigation
         )
+        
+        // Bannière publicitaire
+        BannerAdView()
     }
 }
 

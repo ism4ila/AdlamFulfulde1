@@ -41,6 +41,8 @@ import androidx.activity.ComponentActivity
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+import com.bekisma.adlamfulfulde.ads.InterstitialAdManager
+
 // Data classes for better structure
 data class AdlamLetter(val symbol: String, val soundResId: Int, val latinEquivalent: String, val example: String = "")
 
@@ -239,6 +241,7 @@ fun QuizScreen(navController: NavController) {
                                     elapsedTime = 0
                                 } else {
                                     quizCompleted = true
+                    InterstitialAdManager.showAd(context as Activity) {}
                                 }
                             }
                         },

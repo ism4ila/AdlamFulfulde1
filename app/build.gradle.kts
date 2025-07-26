@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences.core.jvm)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.material3)
+    implementation("com.google.android.gms:play-services-ads:21.5.0")
     
     // Simplified dependencies for premium features
     implementation("androidx.work:work-runtime-ktx:2.9.0")

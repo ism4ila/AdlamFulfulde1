@@ -26,8 +26,7 @@ class NavigationTest {
             "Alphabet" to "Alphabet Quiz",
             "Numbers" to "Numbers in Adlam",
             "Learn to write" to "THE ALPHABET",
-            "Quiz" to "Quiz Instructions",
-            "Vocabulary" to "Vocabulary"
+            "Quiz" to "Quiz Instructions"
         )
         
         modules.forEach { (moduleName, expectedScreen) ->

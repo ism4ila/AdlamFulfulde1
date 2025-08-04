@@ -21,7 +21,6 @@
     <string name="quiz">Quiz</string>
     <string name="the_syllables">The syllables</string>
     <string name="learn_to_write">Learn to write</string>
-    <string name="vocabulary">Vocabulary</string>
     <string name="start">Start</string>
     <string name="when_a_vowel_is_combined">"When a vowel is combined with a consonant,
                 we get a syllable or “Sigande,” in Pular.
@@ -106,6 +105,11 @@ COMPLETE and learn all adlam syllables</string>
     <string name="redo">Redo</string>
     <string name="save">Save</string>
     <string name="confirm">Confirm</string>
+    <string name="ad_mob_test_banner_id" translatable="false">ca-app-pub-7309731358576813/8916934438</string>
+
+    <!-- Production ad unit IDs -->
+    <string name="ad_mob_banner_id" translatable="false">ca-app-pub-9267930159061113/5917810504</string>
+    <string name="ad_mob_interstitial_id" translatable="false">ca-app-pub-9267930159061113/4193665293</string>
 
 
     <string name="privacy_policys">Privacy Policy</string>
@@ -118,7 +122,9 @@ COMPLETE and learn all adlam syllables</string>
     <string name="hide_guide">Hide guide</string>
     <string name="show_guide">Show guide</string>
     <string name="writing_uppercase">Writing uppercase</string>
-    <string name="show_hint">Show hint</string>
+    <string name="show_hint">Show hint (Watch ad)</string>
+    <string name="watch_ad_for_hint">Watch ad for hint</string>
+    <string name="hint_reward_earned">Hint unlocked!</string>
     <string name="play_again">Play again</string>
     <string name="share_app">Share app</string>
 
@@ -203,12 +209,6 @@ COMPLETE and learn all adlam syllables</string>
     <string name="writing_lowercase">Writing Lowercase</string>
     <string name="writing_numbers">Writing numbers</string>
 
-    <string name="vocabulary_title">Vocabulary</string>
-    <string name="vocabulary_module_title">Vocabulary</string>
-    <string name="vocabulary_module_subtitle">Learn common Adlam words</string>
-    <string name="vocabulary_empty">The vocabulary list is currently empty.</string>
-    <string name="vocabulary_detail_title">Word Detail</string>
-    <string name="vocabulary_item_not_found">Word not found.</string>
     <string name="play_word_sound_desc">Play the word\'s sound</string>
     <string name="playing_sound">Playing...</string>
     <string name="play_sound_short">Play</string>
@@ -221,7 +221,6 @@ COMPLETE and learn all adlam syllables</string>
     <string name="category_other">category_other</string>
     <string name="scroll_to_top">scroll_to_top</string>
     <string name="close_search">close_search</string>
-    <string name="search_vocabulary">search_vocabulary</string>
     <string name="replay_sound">replay_sound</string>
     <string name="difficulty_label">difficulty_label</string>
     <string name="reading_passages_empty">reading_passages_empty</string>
@@ -435,4 +434,12 @@ COMPLETE and learn all adlam syllables</string>
     <string name="letter_not_found">Letter not found</string>
     <string name="writing_internal">Writing Internal</string>
     <string name="adlam_alphabet_description">The Adlam alphabet is a script used to write the Fulani language.</string>
+    
+    <!-- Cultural Theme Names -->
+    <string name="traditional_peul">Traditionnel Peul</string>
+    <string name="ocre_earth">Terre Ocre</string>
+    <string name="indigo_wisdom">Sagesse Indigo</string>
+    <string name="gold_prosperity">Prospérité Or</string>
+    <string name="green_pasture">Pâturage Vert</string>
+    <string name="modern_dark">Moderne Sombre</string>
 </resources>

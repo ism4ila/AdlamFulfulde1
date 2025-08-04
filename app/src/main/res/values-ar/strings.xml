@@ -21,7 +21,6 @@
     <string name="quiz">اختبار</string>
     <string name="the_syllables">المقاطع</string>
     <string name="learn_to_write">تعلم الكتابة</string>
-    <string name="vocabulary">المفردات</string>
     <string name="start">ابدأ</string>
     <string name="when_a_vowel_is_combined">"عندما يتم دمج حرف متحرك مع حرف ساكن،
                 نحصل على مقطع لفظي أو "سيغاندي" في لغة البولار.
@@ -202,12 +201,6 @@
     <string name="writing_lowercase">الكتابة بأحرف صغيرة</string>
     <string name="writing_numbers">كتابة الأرقام</string>
 
-    <string name="vocabulary_title">المفردات</string>
-    <string name="vocabulary_module_title">المفردات</string>
-    <string name="vocabulary_module_subtitle">تعلم كلمات أدلام الشائعة</string>
-    <string name="vocabulary_empty">قائمة المفردات فارغة حاليًا.</string>
-    <string name="vocabulary_detail_title">تفاصيل الكلمة</string>
-    <string name="vocabulary_item_not_found">لم يتم العثور على الكلمة.</string>
     <string name="play_word_sound_desc">تشغيل صوت الكلمة</string>
     <string name="playing_sound">جارٍ التشغيل ...</string>
     <string name="play_sound_short">تشغيل</string>
@@ -220,7 +213,6 @@
     <string name="category_other">فئة_أخرى</string>
     <string name="scroll_to_top">التمرير_إلى_الأعلى</string>
     <string name="close_search">إغلاق_البحث</string>
-    <string name="search_vocabulary">بحث_في_المفردات</string>
     <string name="replay_sound">إعادة_تشغيل_الصوت</string>
     <string name="difficulty_label">تسمية_الصعوبة</string>
     <string name="reading_passages_empty">مقاطع_القراءة_فارغة</string>

@@ -1,10 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <!-- Couleurs traditionnelles de la culture peule -->
+    
+    <!-- === COULEURS TRADITIONNELLES PEULES === -->
+    <color name="peul_ocre">#FFCC8854</color>
+    <color name="peul_ocre_light">#FFE6B584</color>
+    <color name="peul_ocre_dark">#FFA0622B</color>
+    <color name="peul_ocre_container">#FFF5E6D3</color>
+    
+    <color name="peul_red_earth">#FFB85C3E</color>
+    <color name="peul_red_earth_light">#FFD4896F</color>
+    <color name="peul_red_earth_dark">#FF8B3A1F</color>
+    <color name="peul_red_container">#FFF0E0DB</color>
+    
+    <color name="peul_white">#FFFFFFFF</color>
+    <color name="peul_white_soft">#FFFAF7F2</color>
+    <color name="peul_white_ivory">#FFF7F3ED</color>
+    
+    <color name="peul_indigo">#FF2C5F7C</color>
+    <color name="peul_indigo_light">#FF6B8FA3</color>
+    <color name="peul_indigo_dark">#FF1A3D52</color>
+    <color name="peul_indigo_container">#FFE8F1F5</color>
+    
+    <color name="peul_gold">#FFE6B800</color>
+    <color name="peul_gold_light">#FFF2D64D</color>
+    <color name="peul_gold_dark">#FFB8900D</color>
+    <color name="peul_gold_container">#FFFAF5E6</color>
+    
+    <!-- === COULEURS COMPLÉMENTAIRES === -->
+    <color name="peul_green">#FF5C8A3A</color>
+    <color name="peul_green_light">#FF8DB66B</color>
+    <color name="peul_green_dark">#FF3E5C26</color>
+    <color name="peul_green_container">#FFEDF3E7</color>
+    
+    <color name="peul_brown">#FF8B4513</color>
+    <color name="peul_brown_light">#FFB87556</color>
+    <color name="peul_brown_dark">#FF5D2F0C</color>
+    <color name="peul_brown_container">#FFF2E8E2</color>
+    
+    <!-- === COULEURS NEUTRES === -->
+    <color name="peul_neutral_light">#FFF5F2EE</color>
+    <color name="peul_neutral_medium">#FFE0D7D0</color>
+    <color name="peul_neutral_dark">#FF6B5D52</color>
+    <color name="peul_neutral_charcoal">#FF3A332B</color>
+    
+    <!-- === COULEURS D'ACCENT === -->
+    <color name="peul_accent_warm">#FFD4A574</color>
+    <color name="peul_accent_cool">#FF7BA3C0</color>
+    <color name="peul_accent_vibrant">#FFE08B47</color>
+    
+    <!-- === COULEURS DE STATUT === -->
+    <color name="peul_success">#FF6B8A3F</color>
+    <color name="peul_warning">#FFE6B800</color>
+    <color name="peul_error">#FFB85C3E</color>
+    <color name="peul_info">#FF2C5F7C</color>
+    
+    <!-- === COULEURS DE SURFACE === -->
+    <color name="peul_surface_light">#FFFAF7F2</color>
+    <color name="peul_surface_medium">#FFF0ECE5</color>
+    <color name="peul_surface_dark">#FF1A1612</color>
+    <color name="peul_surface_elevated">#FFFFFFFF</color>
+    
+    <!-- Couleurs de base conservées pour compatibilité -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Educational Ad Colors - adaptées au thème peul -->
+    <color name="educational_ad_background">@color/peul_white_soft</color>
+    <color name="educational_ad_border">@color/peul_neutral_medium</color>
+    <color name="ad_icon_background">@color/peul_ocre_container</color>
+    <color name="media_background">@color/peul_surface_light</color>
 </resources>

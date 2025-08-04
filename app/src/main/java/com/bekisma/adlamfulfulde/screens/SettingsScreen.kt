@@ -118,13 +118,13 @@ fun SettingsScreen(
             item {
                 SettingsCard(
                     title = stringResource(R.string.color_theme),
-                    description = when (currentColorTheme) { // Uses the imported ColorTheme
-                        ColorTheme.DEFAULT -> stringResource(R.string.default_theme)
-                        ColorTheme.GREEN -> stringResource(R.string.green)
-                        ColorTheme.BLUE -> stringResource(R.string.blue)
-                        ColorTheme.PURPLE -> stringResource(R.string.purple)
-                        ColorTheme.ORANGE -> stringResource(R.string.orange)
-                        ColorTheme.PURple -> TODO()
+                    description = when (currentColorTheme) {
+                        ColorTheme.TRADITIONAL_PEUL -> stringResource(R.string.traditional_peul)
+                        ColorTheme.OCRE_EARTH -> stringResource(R.string.ocre_earth)
+                        ColorTheme.INDIGO_WISDOM -> stringResource(R.string.indigo_wisdom)
+                        ColorTheme.GOLD_PROSPERITY -> stringResource(R.string.gold_prosperity)
+                        ColorTheme.GREEN_PASTURE -> stringResource(R.string.green_pasture)
+                        ColorTheme.MODERN_DARK -> stringResource(R.string.modern_dark)
                     },
                     icon = Icons.Outlined.Palette,
                     onClick = { showColorThemeDialog = true }
@@ -430,33 +430,39 @@ fun ColorThemeDialog(
                 ) {
                     // Use the imported ColorTheme enum constants directly
                     ColorThemeOption(
-                        color = Color(0xFF6750A4), // Default purple primary
-                        isSelected = currentColorTheme == ColorTheme.DEFAULT,
-                        onClick = { onColorThemeSelected(ColorTheme.DEFAULT) } // Passes the imported ColorTheme
+                        color = Color(0xFFCC8854), // Traditional Peul ocre
+                        isSelected = currentColorTheme == ColorTheme.TRADITIONAL_PEUL,
+                        onClick = { onColorThemeSelected(ColorTheme.TRADITIONAL_PEUL) }
                     )
 
                     ColorThemeOption(
-                        color = Color(0xFF1B863E), // Green
-                        isSelected = currentColorTheme == ColorTheme.GREEN,
-                        onClick = { onColorThemeSelected(ColorTheme.GREEN) } // Passes the imported ColorTheme
+                        color = Color(0xFFB85C3E), // Ocre Earth
+                        isSelected = currentColorTheme == ColorTheme.OCRE_EARTH,
+                        onClick = { onColorThemeSelected(ColorTheme.OCRE_EARTH) }
                     )
 
                     ColorThemeOption(
-                        color = Color(0xFF1976D2), // Blue
-                        isSelected = currentColorTheme == ColorTheme.BLUE,
-                        onClick = { onColorThemeSelected(ColorTheme.BLUE) } // Passes the imported ColorTheme
+                        color = Color(0xFF2C5F7C), // Indigo Wisdom
+                        isSelected = currentColorTheme == ColorTheme.INDIGO_WISDOM,
+                        onClick = { onColorThemeSelected(ColorTheme.INDIGO_WISDOM) }
                     )
 
                     ColorThemeOption(
-                        color = Color(0xFF9C27B0), // Purple
-                        isSelected = currentColorTheme == ColorTheme.PURPLE,
-                        onClick = { onColorThemeSelected(ColorTheme.PURPLE) } // Passes the imported ColorTheme
+                        color = Color(0xFFE6B800), // Gold Prosperity
+                        isSelected = currentColorTheme == ColorTheme.GOLD_PROSPERITY,
+                        onClick = { onColorThemeSelected(ColorTheme.GOLD_PROSPERITY) }
                     )
 
                     ColorThemeOption(
-                        color = Color(0xFFE65100), // Orange
-                        isSelected = currentColorTheme == ColorTheme.ORANGE,
-                        onClick = { onColorThemeSelected(ColorTheme.ORANGE) } // Passes the imported ColorTheme
+                        color = Color(0xFF5C8A3A), // Green Pasture
+                        isSelected = currentColorTheme == ColorTheme.GREEN_PASTURE,
+                        onClick = { onColorThemeSelected(ColorTheme.GREEN_PASTURE) }
+                    )
+
+                    ColorThemeOption(
+                        color = Color(0xFF3A332B), // Modern Dark
+                        isSelected = currentColorTheme == ColorTheme.MODERN_DARK,
+                        onClick = { onColorThemeSelected(ColorTheme.MODERN_DARK) }
                     )
                 }
 

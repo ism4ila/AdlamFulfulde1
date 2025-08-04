@@ -132,7 +132,7 @@ class RobustnessTest {
             try {
                 // Perform memory-intensive operations
                 composeTestRule.onNodeWithContentDescription("Menu Icon").performClick()
-                composeTestRule.onNodeWithText("Vocabulary").performClick()
+                composeTestRule.onNodeWithText("Alphabet").performClick()
                 composeTestRule.onNodeWithContentDescription("Back").performClick()
                 composeTestRule.onNodeWithContentDescription("Back").performClick()
             } catch (e: Exception) {

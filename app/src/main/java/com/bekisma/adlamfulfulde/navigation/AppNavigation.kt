@@ -62,8 +62,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.bekisma.adlamfulfulde.R
-import com.bekisma.adlamfulfulde.screens.vocabulary.EnhancedVocabularyListScreen
-import com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyDetailScreen
 import com.bekisma.adlamfulfulde.screens.writing.CulturalWordsScreen
 import com.bekisma.adlamfulfulde.screens.writing.ComparisonModeScreen
 
@@ -188,7 +186,7 @@ fun AppNavigation(
         composable("settings") {
             val scope = androidx.compose.runtime.rememberCoroutineScope()
             val currentTheme = themeManager.themeMode.collectAsState(initial = ThemeMode.SYSTEM).value
-            val currentColorTheme = themeManager.colorTheme.collectAsState(initial = ColorTheme.DEFAULT).value
+            val currentColorTheme = themeManager.colorTheme.collectAsState(initial = ColorTheme.TRADITIONAL_PEUL).value
             SettingsScreen(
                 navController = navController,
                 currentTheme = currentTheme,
@@ -209,17 +207,6 @@ fun AppNavigation(
             DetailAlphabetScreen(letter = letter ?: "", navController = navController)
         }
 
-        // Routes pour le Vocabulaire
-        composable("vocabulary_list") {
-            EnhancedVocabularyListScreen(navController = navController)
-        }
-        composable(
-            route = "vocabulary_detail/{itemId}",
-            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getInt("itemId")
-            VocabularyDetailScreen(navController = navController, itemId = itemId)
-        }
 
         // -- NOUVELLES ROUTES POUR LA LECTURE GUIDÉE --
         composable("reading_passage_list") {
@@ -241,24 +228,6 @@ fun AppNavigation(
             )
         }
         
-        // Vocabulary learning screens
-        composable("vocabulary_flashcards") {
-            com.bekisma.adlamfulfulde.screens.vocabulary.FlashcardScreen(
-                onNavigateBack = { navController.popBackStack() }
-            )
-        }
-        
-        composable("vocabulary_quiz") {
-            com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyQuizScreen(
-                onNavigateBack = { navController.popBackStack() }
-            )
-        }
-        
-        composable("vocabulary_analytics") {
-            com.bekisma.adlamfulfulde.screens.vocabulary.VocabularyAnalyticsScreen(
-                onNavigateBack = { navController.popBackStack() }
-            )
-        }
         
         // Alphabet Learning Routes
         

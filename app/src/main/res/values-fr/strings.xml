@@ -20,7 +20,6 @@
     <string name="quiz">Quiz</string>
     <string name="the_syllables">Les syllabes</string>
     <string name="learn_to_write">Apprendre à écrire</string>
-    <string name="vocabulary">Vocabulaire</string>
     <string name="start">Commencer</string>
     <string name="when_a_vowel_is_combined">"Quand une voyelle est combinée avec une consonne,
                 nous obtenons une syllabe ou \"Sigande\" en pular.
@@ -199,12 +198,6 @@ COMPLÉTEZ et apprenez toutes les syllabes adlam</string>
     <string name="writing_lowercase">Écriture en minuscules</string>
     <string name="writing_numbers">Écriture des nombres</string>
 
-    <string name="vocabulary_title">Vocabulaire</string>
-    <string name="vocabulary_module_title">Vocabulaire</string>
-    <string name="vocabulary_module_subtitle">Apprendre les mots Adlam courants</string>
-    <string name="vocabulary_empty">La liste de vocabulaire est actuellement vide.</string>
-    <string name="vocabulary_detail_title">Détail du mot</string>
-    <string name="vocabulary_item_not_found">Mot non trouvé.</string>
     <string name="play_word_sound_desc">Jouer le son du mot</string>
     <string name="playing_sound">En cours de lecture...</string>
     <string name="play_sound_short">Jouer</string>

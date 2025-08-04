@@ -102,13 +102,13 @@ class PerformanceTest {
         // Navigate to a screen with scrollable content
         composeTestRule.onNodeWithContentDescription("Menu Icon").performClick()
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithText("Vocabulary").performClick()
+        composeTestRule.onNodeWithText("Alphabet").performClick()
         composeTestRule.waitForIdle()
         
         // Test scrolling performance
         val scrollTime = measureTimeMillis {
             try {
-                composeTestRule.onNodeWithText("Vocabulary").performScrollTo()
+                composeTestRule.onNodeWithText("Alphabet").performScrollTo()
                 composeTestRule.waitForIdle()
             } catch (e: Exception) {
                 // Screen might not be scrollable

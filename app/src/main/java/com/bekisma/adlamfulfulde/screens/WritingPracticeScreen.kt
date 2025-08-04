@@ -1,5 +1,6 @@
 package com.bekisma.adlamfulfulde.screens // Ou ton package approprié
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -32,13 +33,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavController
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.bekisma.adlamfulfulde.R
+import com.bekisma.adlamfulfulde.ads.InterstitialAdHelper
+import com.bekisma.adlamfulfulde.ads.InterstitialAdTrigger
 import kotlinx.coroutines.launch
 import kotlin.math.pow
 
-import com.bekisma.adlamfulfulde.ads.InterstitialAdManager
-import android.app.Activity
+import com.bekisma.adlamfulfulde.ads.FixedInlineBannerAd
 
 // --- Enum et Données ---
 
@@ -580,6 +583,7 @@ fun WritingPracticeScreen(
     // Animation
     val animationProgress = remember { Animatable(0f) }
     val coroutineScope = rememberCoroutineScope()
+    
 
     // Couleurs pour le feedback du tracé
 
@@ -595,9 +599,14 @@ fun WritingPracticeScreen(
                 title = { Text(topBarTitle, fontWeight = FontWeight.Bold, fontSize = 20.sp) },
                 navigationIcon = {
                     IconButton(onClick = { 
-                        InterstitialAdManager.showAd(navController.context as Activity) {
-                            navController.navigateUp() 
-                        }
+                        val activity = navController.context as Activity
+                        InterstitialAdHelper.showInterstitialIfAppropriate(
+                            activity = activity,
+                            transitionPoint = InterstitialAdHelper.TransitionPoint.WRITING_SESSION_END,
+                            onAdShown = {},
+                            onAdDismissed = {},
+                            onContinue = { navController.navigateUp() }
+                        )
                     }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
@@ -701,6 +710,10 @@ fun WritingPracticeScreen(
                 .fillMaxSize()
                 .padding(paddingValues) // Applique le padding du Scaffold
         ) {
+            // Bannière publicitaire en haut
+            FixedInlineBannerAd(
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
 
             Box(
                 modifier = Modifier

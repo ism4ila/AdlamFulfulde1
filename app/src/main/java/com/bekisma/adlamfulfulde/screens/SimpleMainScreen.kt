@@ -35,7 +35,7 @@ import com.bekisma.adlamfulfulde.navigation.getPracticeModules
 import com.bekisma.adlamfulfulde.navigation.getToolsModules
 import kotlinx.coroutines.launch
 
-import com.bekisma.adlamfulfulde.ads.BannerAdView
+import com.bekisma.adlamfulfulde.ads.StickyBottomBannerAd
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,26 +45,32 @@ fun SimpleMainScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     
-    // Design moderne avec bannière intégrée naturellement
-    Column(modifier = Modifier.fillMaxSize()) {
-        // TopBar moderne
-        ModernTopBar(
-            onMenuClick = {
-                coroutineScope.launch {
-                    drawerState.open()
+    // Box pour superposer la bannière collante
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Contenu principal
+        Column(modifier = Modifier.fillMaxSize()) {
+            // TopBar moderne
+            ModernTopBar(
+                onMenuClick = {
+                    coroutineScope.launch {
+                        drawerState.open()
+                    }
                 }
-            }
+            )
+            
+            // Contenu principal avec padding pour la bannière collante
+            ModernMainContent(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(bottom = 60.dp), // Espace pour la bannière
+                onNavigation = onNavigation
+            )
+        }
+        
+        // Bannière publicitaire collante en bas
+        StickyBottomBannerAd(
+            modifier = Modifier.align(Alignment.BottomCenter)
         )
-        
-        
-        // Contenu principal avec design moderne
-        ModernMainContent(
-            modifier = Modifier.weight(1f),
-            onNavigation = onNavigation
-        )
-        
-        // Bannière publicitaire
-        BannerAdView()
     }
 }
 
@@ -130,7 +136,7 @@ private fun ModernMainContent(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 60.dp),
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 80.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         // Hero Section moderne
@@ -167,6 +173,8 @@ private fun ModernMainContent(
                 onNavigation = onNavigation
             )
         }
+        
+        // Native ads removed - only keeping banner and interstitial ads
     }
 }
 

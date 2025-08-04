@@ -1,18 +1,20 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
     namespace = "com.bekisma.adlamfulfulde"
-    compileSdk = 35
+    compileSdk = 34
 
     flavorDimensions += "version"  // Correction: utilisation de += au lieu de ()
 
     defaultConfig {
         applicationId = "com.bekisma.adlamfulfulde"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 44
         versionName = "3.6.1"
 
@@ -20,26 +22,44 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        
+        // Disable Firebase Analytics for AdMob only
+        manifestPlaceholders["firebase_analytics_collection_enabled"] = "false"
     }
 
     productFlavors {
         create("free") {
             dimension = "version"
             applicationId = "com.bekisma.adlamfulfulde"
-            versionCode = 44
+            versionCode = 45
+            versionName = "3.6.1"
+            buildConfigField("boolean", "ENABLE_ADS", "true")
+            buildConfigField("boolean", "IS_PRO_VERSION", "false")
+        }
+        
+        create("pro") {
+            dimension = "version"
+            applicationId = "com.bekisma.adlamfulfulde.pro"
+            versionCode = 45
             versionName = "3.6.1"
             buildConfigField("boolean", "ENABLE_ADS", "false")
-            buildConfigField("boolean", "IS_PRO_VERSION", "false")
+            buildConfigField("boolean", "IS_PRO_VERSION", "true")
         }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
         }
     }
     
@@ -62,7 +82,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 
     packaging {
@@ -101,14 +121,26 @@ dependencies {
     implementation(libs.androidx.datastore.preferences.core.jvm)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.material3)
-    implementation("com.google.android.gms:play-services-ads:21.5.0")
-    
+    implementation("com.google.android.gms:play-services-ads:23.5.0")
+    implementation("com.google.android.ump:user-messaging-platform:2.2.0")
+
+
     // Simplified dependencies for premium features
     implementation("androidx.work:work-runtime-ktx:2.9.0")
     
     // Additional dependencies for premium features
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-process:2.7.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    
+    // Hilt Dependency Injection
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-compiler:2.48")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    
+    // Remove deprecated hilt-lifecycle-viewmodel dependency
+    // ViewModels are now supported natively with @HiltViewModel
+    
 
     // Unit testing
     testImplementation(libs.junit)

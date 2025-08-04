@@ -127,21 +127,6 @@ class MainActivityTest {
         composeTestRule.onNodeWithText("Quiz Instructions").assertIsDisplayed()
     }
 
-    @Test
-    fun testVocabularyModuleNavigation() {
-        composeTestRule.waitForIdle()
-        
-        // Open drawer
-        composeTestRule.onNodeWithContentDescription("Menu Icon").performClick()
-        composeTestRule.waitForIdle()
-        
-        // Click on Vocabulary
-        composeTestRule.onNodeWithText("Vocabulary").performClick()
-        composeTestRule.waitForIdle()
-        
-        // Should navigate to vocabulary screen
-        composeTestRule.onNodeWithText("Vocabulary").assertIsDisplayed()
-    }
 
     @Test
     fun testSettingsNavigation() {

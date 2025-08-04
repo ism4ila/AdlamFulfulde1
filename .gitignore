@@ -1,1 +1,17 @@
-nul
+# Gradle files
+.gradle/
+build/
+
+# Android Studio files
+.idea/
+.claude/
+*.iml
+*.hprof
+local.properties
+
+# Keystore files
+*.jks
+key/
+
+# Google services
+app/google-services.json

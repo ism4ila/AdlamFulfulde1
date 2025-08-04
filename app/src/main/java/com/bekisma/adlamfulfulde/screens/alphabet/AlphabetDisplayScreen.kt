@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
@@ -31,6 +32,7 @@ import com.bekisma.adlamfulfulde.data.alphabet.LetterCategory
 import com.bekisma.adlamfulfulde.data.alphabet.LetterDifficulty
 import com.bekisma.adlamfulfulde.utils.AudioPlayer
 import com.bekisma.adlamfulfulde.utils.getDifficultyColor
+import com.bekisma.adlamfulfulde.ads.FixedInlineBannerAd
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +43,7 @@ fun AlphabetDisplayScreen(
     val allLetters = AdlamLetter.values().toList()
     
     var searchQuery by remember { mutableStateOf("") }
+    
     
     val filteredLetters = remember(searchQuery) {
         allLetters.filter { letter ->
@@ -65,19 +68,21 @@ fun AlphabetDisplayScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            
-            
-            
+            // Contenu principal avec padding pour la bannière
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(
+                    top = 80.dp, // Espace pour la bannière fixe
+                    bottom = 16.dp
+                ),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -104,6 +109,18 @@ fun AlphabetDisplayScreen(
                 }
             }
             
+            // Bannière publicitaire fixe en haut
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                FixedInlineBannerAd(
+                    verticalPadding = 8
+                )
+            }
         }
     }
 }

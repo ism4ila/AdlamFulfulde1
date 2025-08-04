@@ -131,7 +131,7 @@ class AdvancedQuizManager {
                 correctAnswer = "𞤔𞤢𞤤𞤢𞤥",
                 explanation = "𞤔𞤢𞤤𞤢𞤥 (jaamu) means 'hello' in Fulfulde using Adlam script.",
                 hints = listOf("It starts with 𞤔", "It's a common greeting"),
-                category = "vocabulary",
+                category = "language",
                 points = 20,
                 timeLimit = 60000
             ),

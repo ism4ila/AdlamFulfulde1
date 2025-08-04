@@ -16,9 +16,12 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
+import org.robolectric.annotation.LooperMode
+
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
+@LooperMode(LooperMode.Mode.PAUSED)
 class AlphabetManagerTest {
 
     private lateinit var context: Context

@@ -1,5 +1,7 @@
 package com.bekisma.adlamfulfulde.screens
 
+import android.app.Activity
+
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.MediaPlayer
@@ -41,7 +43,9 @@ import androidx.activity.ComponentActivity
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-import com.bekisma.adlamfulfulde.ads.InterstitialAdManager
+import com.bekisma.adlamfulfulde.ads.SimpleInterstitialManager
+import com.bekisma.adlamfulfulde.ads.FixedInlineBannerAd
+import com.bekisma.adlamfulfulde.navigation.Screen
 
 // Data classes for better structure
 data class AdlamLetter(val symbol: String, val soundResId: Int, val latinEquivalent: String, val example: String = "")
@@ -93,6 +97,9 @@ fun QuizScreen(navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
 
     DisposableEffect(Unit) {
+        // Précharger les pubs interstitielles
+        SimpleInterstitialManager.preloadAd(context)
+        
         onDispose {
             mediaPlayer.release()
         }
@@ -241,13 +248,21 @@ fun QuizScreen(navController: NavController) {
                                     elapsedTime = 0
                                 } else {
                                     quizCompleted = true
-                    InterstitialAdManager.showAd(context as Activity) {}
+                                    updateBestScore()
+                                    
+                                    val activity = context as? Activity
+                                    if (activity != null) {
+                                        SimpleInterstitialManager.showAd(activity)
+                                    }
                                 }
                             }
                         },
                         selectedDifficulty = selectedDifficulty,
                         showHint = showHint,
-                        onShowHint = { showHint = true },
+                        onShowHint = { 
+                            // Donner l'indice directement sans pub
+                            showHint = true
+                        },
                         elapsedTime = elapsedTime,
                         updateElapsedTime = { elapsedTime++ }
                     )
@@ -558,7 +573,12 @@ fun QuizCompletedScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Bannière publicitaire après les statistiques
+            FixedInlineBannerAd()
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = onRestart,

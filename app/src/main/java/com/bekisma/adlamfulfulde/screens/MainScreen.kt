@@ -3,32 +3,25 @@ package com.bekisma.adlamfulfulde.screens
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.pager.*
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.painter.Painter
@@ -48,11 +41,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.compose.foundation.isSystemInDarkTheme
+import com.bekisma.adlamfulfulde.ads.StickyTopBannerAd
 import com.bekisma.adlamfulfulde.R
 import com.bekisma.adlamfulfulde.data.MenuItem
 import com.bekisma.adlamfulfulde.navigation.getBasicsModules
 import com.bekisma.adlamfulfulde.navigation.getPracticeModules
 import com.bekisma.adlamfulfulde.navigation.getToolsModules
+import com.bekisma.adlamfulfulde.viewmodel.MainScreenViewModel
+import com.bekisma.adlamfulfulde.viewmodel.MainScreenUiState
+import com.bekisma.adlamfulfulde.ui.components.AccessibleCard
+import com.bekisma.adlamfulfulde.ui.components.AccessibleModuleCard
+import com.bekisma.adlamfulfulde.ui.components.AccessibleLearningCard
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -61,73 +61,107 @@ private const val SPLASH_DELAY_MS = 300L
 @Composable
 fun MainScreen(
     drawerState: DrawerState,
-    onNavigation: (MenuItem) -> Unit
+    onNavigation: (MenuItem) -> Unit,
+    viewModel: MainScreenViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val configuration = LocalConfiguration.current
-    val isTablet = configuration.screenWidthDp >= 600
+    val uiState by viewModel.uiState.collectAsState()
+    
+    // Update device type and theme in ViewModel
+    LaunchedEffect(configuration.screenWidthDp) {
+        val isTablet = configuration.screenWidthDp >= 600
+        viewModel.updateDeviceType(isTablet)
+    }
+    
     val isDarkTheme = isSystemInDarkTheme()
+    LaunchedEffect(isDarkTheme) {
+        viewModel.updateTheme(isDarkTheme)
+    }
 
-    AdaptiveMainScreenContent(
-        drawerState = drawerState,
-        onNavigation = onNavigation,
-        onMenuClick = {
+    // Stable callback to avoid recomposition - using remember(key1) for proper dependency tracking
+    val onMenuClick: () -> Unit = remember(drawerState) {
+        {
             coroutineScope.launch {
                 drawerState.open()
             }
-        },
-        isTablet = isTablet,
-        isDarkTheme = isDarkTheme
+        }
+    }
+    
+    val handleNavigation: (MenuItem) -> Unit = remember(onNavigation, viewModel) {
+        { item: MenuItem ->
+            viewModel.selectModule(item)
+            try {
+                onNavigation(item)
+            } catch (e: Exception) {
+                viewModel.setError("Navigation failed: ${e.message}")
+            }
+        }
+    }
+
+    AdaptiveMainScreenContent(
+        uiState = uiState,
+        drawerState = drawerState,
+        onNavigation = handleNavigation,
+        onMenuClick = onMenuClick,
+        onErrorDismiss = { viewModel.clearError() }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AdaptiveMainScreenContent(
+    uiState: MainScreenUiState,
     drawerState: DrawerState,
     onNavigation: (MenuItem) -> Unit,
     onMenuClick: () -> Unit,
-    isTablet: Boolean,
-    isDarkTheme: Boolean
+    onErrorDismiss: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            topBar = {
-                AdaptiveTopBar(onMenuClick = onMenuClick, isDarkTheme = isDarkTheme)
-            },
-            containerColor = if (isDarkTheme) {
-                MaterialTheme.colorScheme.background
-            } else {
-                Color(0xFFFFF8E1)
-            }
-        ) { paddingValues ->
-            if (isTablet) {
-                TabletMainScreenBody(
-                    paddingValues = paddingValues,
-                    onNavigation = onNavigation,
-                    isDarkTheme = isDarkTheme
-                )
-            } else {
-                PhoneMainScreenBody(
-                    paddingValues = paddingValues,
-                    onNavigation = onNavigation,
-                    isDarkTheme = isDarkTheme
-                )
+        // Error handling
+        uiState.errorMessage?.let { errorMessage ->
+            LaunchedEffect(errorMessage) {
+                // Could show a snackbar or toast here
+                onErrorDismiss()
             }
         }
         
-        // Fixed banner at bottom 
-//        Surface(
-//            modifier = Modifier
-//                .align(Alignment.BottomCenter)
-//                .fillMaxWidth()
-//                .height(60.dp)
-//                .zIndex(10f),
-//            color = MaterialTheme.colorScheme.surface,
-//            shadowElevation = 8.dp,
-//            tonalElevation = 3.dp
-//        ) {
-//        }
+        Box(modifier = Modifier.fillMaxSize()) {
+            Scaffold(
+                topBar = {
+                    AdaptiveTopBar(onMenuClick = onMenuClick, isDarkTheme = uiState.isDarkTheme)
+                },
+                containerColor = MaterialTheme.colorScheme.background
+            ) { paddingValues ->
+                val modifiedPadding = PaddingValues(
+                    start = paddingValues.calculateStartPadding(androidx.compose.ui.unit.LayoutDirection.Ltr),
+                    top = paddingValues.calculateTopPadding() + 60.dp, // Espace pour bannière du haut
+                    end = paddingValues.calculateEndPadding(androidx.compose.ui.unit.LayoutDirection.Ltr),
+                    bottom = paddingValues.calculateBottomPadding()
+                )
+                
+                if (uiState.isTablet) {
+                    TabletMainScreenBody(
+                        paddingValues = modifiedPadding,
+                        onNavigation = onNavigation,
+                        isDarkTheme = uiState.isDarkTheme,
+                        learningProgress = uiState.learningProgress
+                    )
+                } else {
+                    PhoneMainScreenBody(
+                        paddingValues = modifiedPadding,
+                        onNavigation = onNavigation,
+                        isDarkTheme = uiState.isDarkTheme,
+                        learningProgress = uiState.learningProgress
+                    )
+                }
+            }
+            
+            // Bannière collante en haut
+            StickyTopBannerAd(
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
     }
 }
 
@@ -215,7 +249,8 @@ private fun AdaptiveTopBar(
 private fun PhoneMainScreenBody(
     paddingValues: PaddingValues,
     onNavigation: (MenuItem) -> Unit,
-    isDarkTheme: Boolean
+    isDarkTheme: Boolean,
+    learningProgress: Float = 0.35f
 ) {
     LazyColumn(
         modifier = Modifier
@@ -223,19 +258,11 @@ private fun PhoneMainScreenBody(
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = if (isDarkTheme) {
-                        listOf(
-                            MaterialTheme.colorScheme.background,
-                            MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f),
-                            MaterialTheme.colorScheme.background
-                        )
-                    } else {
-                        listOf(
-                            Color(0xFFFFF8E1),
-                            Color(0xFFFFFFFF),
-                            Color(0xFFF3E5F5)
-                        )
-                    }
+                    colors = listOf(
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f),
+                        MaterialTheme.colorScheme.background
+                    )
                 )
             ),
         contentPadding = PaddingValues(
@@ -974,65 +1001,40 @@ private fun ModernWelcomeCard(onStartClick: (MenuItem) -> Unit) {
 }
 
 @Composable
-private fun ModernProgressCard() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(120.dp),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.resume_learning),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Continue your journey with Adlam",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                LinearProgressIndicator(
-                    progress = { 0.35f },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(6.dp)
-                        .clip(RoundedCornerShape(3.dp)),
-                    color = MaterialTheme.colorScheme.primary,
-                    trackColor = MaterialTheme.colorScheme.primaryContainer,
-                )
-            }
-            
+private fun ModernProgressCard(
+    learningProgress: Float = 0.35f,
+    onResumeClick: () -> Unit = {}
+) {
+    AccessibleLearningCard(
+        title = stringResource(R.string.resume_learning),
+        subtitle = "Continue your journey with Adlam",
+        progress = learningProgress,
+        onClick = onResumeClick,
+        modifier = Modifier.fillMaxWidth(),
+        leadingIcon = {
             Box(
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(48.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                            )
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "35%",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                Icon(
+                    Icons.Default.PlayArrow,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
-    }
+    )
 }
 
 @Composable
@@ -1131,7 +1133,35 @@ private fun ModernModuleSection(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 modules.forEach { module ->
-                    AdaptiveModuleCard(module, accentColor, false) { onNavigation(module) }
+                    AccessibleModuleCard(
+                        title = stringResource(module.titleRes),
+                        subtitle = stringResource(module.subtitleRes),
+                        onClick = { onNavigation(module) },
+                        leadingIcon = {
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(accentColor.copy(alpha = 0.1f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(id = module.imageRes),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(28.dp),
+                                    contentScale = ContentScale.Fit
+                                )
+                            }
+                        },
+                        trailingIcon = {
+                            Icon(
+                                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                contentDescription = null,
+                                tint = accentColor,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    )
                 }
             }
         }
@@ -1142,7 +1172,8 @@ private fun ModernModuleSection(
 private fun TabletMainScreenBody(
     paddingValues: PaddingValues,
     onNavigation: (MenuItem) -> Unit,
-    isDarkTheme: Boolean
+    isDarkTheme: Boolean,
+    learningProgress: Float = 0.35f
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 320.dp),
@@ -1196,11 +1227,48 @@ private fun AdaptiveWelcomeCard(
     onStartClick: (MenuItem) -> Unit,
     isDarkTheme: Boolean
 ) {
-    Card(
+    var isPressed by remember { mutableStateOf(false) }
+    val animatedScale by animateFloatAsState(
+        targetValue = if (isPressed) 0.98f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        label = "welcome_scale"
+    )
+    
+    val infiniteTransition = rememberInfiniteTransition(label = "welcome_glow")
+    val shimmerAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = 0.7f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "shimmer"
+    )
+
+    AccessibleCard(
+        onClick = {
+            onStartClick(MenuItem(
+                R.drawable.iconapp,
+                R.string.alphabet_learning,
+                R.string.discover_the_adlam_alphabet,
+                "alphabet"
+            ))
+        },
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.dp),
-        shape = RoundedCornerShape(24.dp),
+            .height(200.dp)
+            .scale(animatedScale)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        isPressed = true
+                        tryAwaitRelease() 
+                        isPressed = false
+                    }
+                )
+            },
+        shape = RoundedCornerShape(28.dp),
+        contentDescription = "${stringResource(R.string.welcome_to_adlam)}, ${stringResource(R.string.start_learning_journey)}",
         colors = CardDefaults.cardColors(
             containerColor = if (isDarkTheme) {
                 MaterialTheme.colorScheme.primaryContainer
@@ -1208,79 +1276,127 @@ private fun AdaptiveWelcomeCard(
                 Color(0xFFFFE0E6)
             }
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(
-                        Icons.Default.Celebration,
-                        contentDescription = null,
-                        modifier = Modifier.size(36.dp),
-                        tint = if (isDarkTheme) Color(0xFF6200EA) else Color(0xFFE91E63)
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Dynamic gradient background
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.sweepGradient(
+                            colors = listOf(
+                                if (isDarkTheme) MaterialTheme.colorScheme.primaryContainer else Color(0xFFFFE0E6),
+                                if (isDarkTheme) Color(0xFF6200EA).copy(alpha = 0.1f) else Color(0xFFE91E63).copy(alpha = 0.1f),
+                                if (isDarkTheme) MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f) else Color(0xFFFFE0E6).copy(alpha = 0.7f),
+                                if (isDarkTheme) MaterialTheme.colorScheme.primaryContainer else Color(0xFFFFE0E6)
+                            ),
+                            center = Offset(0.3f, 0.3f)
+                        )
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
+            )
+            
+            // Subtle shimmer overlay
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.White.copy(alpha = shimmerAlpha * 0.1f),
+                                Color.Transparent
+                            ),
+                            start = Offset(0f, 0f),
+                            end = Offset(1000f, 1000f)
+                        )
+                    )
+            )
+            
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    brush = Brush.radialGradient(
+                                        colors = listOf(
+                                            if (isDarkTheme) Color(0xFF6200EA).copy(alpha = 0.3f) else Color(0xFFE91E63).copy(alpha = 0.3f),
+                                            if (isDarkTheme) Color(0xFF6200EA).copy(alpha = 0.1f) else Color(0xFFE91E63).copy(alpha = 0.1f)
+                                        )
+                                    )
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.Celebration,
+                                contentDescription = null,
+                                modifier = Modifier.size(28.dp),
+                                tint = if (isDarkTheme) Color(0xFF6200EA) else Color(0xFFE91E63)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = stringResource(R.string.welcome_to_adlam),
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = if (isDarkTheme) Color(0xFF6200EA) else Color(0xFFE91E63)
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
                     Text(
-                        text = stringResource(R.string.welcome_to_adlam),
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = if (isDarkTheme) Color(0xFF6200EA) else Color(0xFFE91E63)
+                        text = stringResource(R.string.start_learning_journey),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = if (isDarkTheme) {
+                            MaterialTheme.colorScheme.onPrimaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        },
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                        lineHeight = 24.sp
                     )
                 }
                 
-                Spacer(modifier = Modifier.height(12.dp))
-                
-                Text(
-                    text = stringResource(R.string.start_learning_journey),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = if (isDarkTheme) {
-                        MaterialTheme.colorScheme.onPrimaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.onSurface
-                    },
-                    textAlign = TextAlign.Center,
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
-                )
-            }
-            
-            FilledTonalButton(
-                onClick = {
-                    onStartClick(MenuItem(
-                        R.drawable.iconapp,
-                        R.string.alphabet_learning,
-                        R.string.discover_the_adlam_alphabet,
-                        "alphabet"
-                    ))
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                colors = ButtonDefaults.filledTonalButtonColors(
-                    containerColor = if (isDarkTheme) Color(0xFF6200EA) else Color(0xFFE91E63),
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(20.dp)
-            ) {
-                Icon(
-                    Icons.Default.PlayArrow,
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = stringResource(R.string.start_learning),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
+                ) {
+                    Icon(
+                        Icons.Default.RocketLaunch,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = if (isDarkTheme) Color(0xFF6200EA) else Color(0xFFE91E63)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = stringResource(R.string.start_learning),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = if (isDarkTheme) Color(0xFF6200EA) else Color(0xFFE91E63)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = if (isDarkTheme) Color(0xFF6200EA) else Color(0xFFE91E63)
+                    )
+                }
             }
         }
     }

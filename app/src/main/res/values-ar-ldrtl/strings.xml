@@ -26,7 +26,6 @@
     <string name="category_other">category_other</string>
     <string name="scroll_to_top">scroll_to_top</string>
     <string name="close_search">close_search</string>
-    <string name="search_vocabulary">search_vocabulary</string>
     <string name="replay_sound">replay_sound</string>
     <string name="difficulty_label">difficulty_label</string>
     <string name="reading_passages_empty">reading_passages_empty</string>
@@ -51,7 +50,6 @@
     <string name="quiz"></string>
     <string name="the_syllables"></string>
     <string name="learn_to_write"></string>
-    <string name="vocabulary"></string>
     <string name="start"></string>
     <string name="when_a_vowel_is_combined"></string>
     <string name="th_adl_alp"></string>

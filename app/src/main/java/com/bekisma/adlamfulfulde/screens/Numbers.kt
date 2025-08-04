@@ -43,6 +43,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.isSystemInDarkTheme
 import com.bekisma.adlamfulfulde.R // Assure-toi que c'est le bon chemin pour R
 import com.bekisma.adlamfulfulde.ui.theme.AdlamFulfuldeTheme // Ton thème
+import com.bekisma.adlamfulfulde.ads.FixedInlineBannerAd
+import com.bekisma.adlamfulfulde.ads.InterstitialAdHelper
+import com.bekisma.adlamfulfulde.ads.InterstitialAdTrigger
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive // Importation corrigée
 import kotlinx.coroutines.launch
@@ -109,6 +112,9 @@ fun NumbersScreen(navController: NavController) {
     val mediaPlayer = remember { MediaPlayer() }
     val hapticFeedback = LocalHapticFeedback.current
     val isDarkTheme = isSystemInDarkTheme()
+    
+    // Gestion des interstitielles pour la transition vers les chiffres
+    var showInterstitialOnEntry by remember { mutableStateOf(true) }
 
     // State variables
     var currentMode by remember { mutableStateOf(ScreenMode.LEARNING) }
@@ -170,6 +176,14 @@ fun NumbersScreen(navController: NavController) {
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
+                // Bannière publicitaire en haut (mode apprentissage seulement)
+                if (currentMode == ScreenMode.LEARNING) {
+                    FixedInlineBannerAd(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        verticalPadding = 8
+                    )
+                }
+                
                 // Mode tabs
                 ModeSelector(
                     currentMode = currentMode,
@@ -260,6 +274,21 @@ fun NumbersScreen(navController: NavController) {
             }
         )
     }
+    
+    // Gestion de l'interstitielle à l'entrée du module chiffres
+    InterstitialAdTrigger(
+        transitionPoint = InterstitialAdHelper.TransitionPoint.MODULE_TRANSITION,
+        shouldTrigger = showInterstitialOnEntry,
+        onAdShown = {
+            Log.d("NumbersScreen", "Interstitial ad shown on entry")
+        },
+        onAdDismissed = {
+            Log.d("NumbersScreen", "Interstitial ad dismissed")
+        },
+        onContinue = {
+            showInterstitialOnEntry = false
+        }
+    )
 }
 
 // --- Data Provider ---

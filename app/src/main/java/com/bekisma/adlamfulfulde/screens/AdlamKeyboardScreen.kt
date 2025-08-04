@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bekisma.adlamfulfulde.R
+import com.bekisma.adlamfulfulde.ads.InterstitialAdHelper
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -215,7 +216,16 @@ fun AdlamKeyboardScreen(navController: NavController) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { 
+                        val activity = navController.context as android.app.Activity
+                        InterstitialAdHelper.showInterstitialIfAppropriate(
+                            activity = activity,
+                            transitionPoint = InterstitialAdHelper.TransitionPoint.TOOL_EXIT,
+                            onAdShown = {},
+                            onAdDismissed = {},
+                            onContinue = { navController.navigateUp() }
+                        )
+                    }) {
                         Icon(
                 Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(R.string.back),

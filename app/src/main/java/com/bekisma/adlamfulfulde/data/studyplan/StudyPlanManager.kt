@@ -24,7 +24,6 @@ enum class StudyModule {
     ALPHABET,
     NUMBERS,
     WRITING,
-    VOCABULARY,
     READING,
     QUIZ,
     PRONUNCIATION
@@ -120,10 +119,10 @@ class StudyPlanManager {
                 difficulty = "Advanced"
             ),
             StudyPlan(
-                name = "Vocabulary Focus",
+                name = "Reading Focus",
                 goal = StudyGoal.MODERATE_PROGRESS,
                 learningStyle = LearningStyle.READING_WRITING,
-                targetModules = listOf(StudyModule.VOCABULARY, StudyModule.READING, StudyModule.WRITING),
+                targetModules = listOf(StudyModule.READING, StudyModule.WRITING),
                 dailyTimeMinutes = 30,
                 weeklySchedule = mapOf(1 to true, 2 to false, 3 to true, 4 to false, 5 to true, 6 to true, 7 to false),
                 duration = 10,
@@ -207,7 +206,7 @@ class StudyPlanManager {
     }
     
     private fun prioritizeAudioModules(modules: List<StudyModule>): List<StudyModule> {
-        val priority = listOf(StudyModule.PRONUNCIATION, StudyModule.READING, StudyModule.VOCABULARY)
+        val priority = listOf(StudyModule.PRONUNCIATION, StudyModule.READING)
         return modules.sortedBy { module -> priority.indexOf(module).takeIf { it >= 0 } ?: Int.MAX_VALUE }
     }
     
@@ -217,7 +216,7 @@ class StudyPlanManager {
     }
     
     private fun prioritizeTextModules(modules: List<StudyModule>): List<StudyModule> {
-        val priority = listOf(StudyModule.READING, StudyModule.VOCABULARY, StudyModule.WRITING)
+        val priority = listOf(StudyModule.READING, StudyModule.WRITING)
         return modules.sortedBy { module -> priority.indexOf(module).takeIf { it >= 0 } ?: Int.MAX_VALUE }
     }
     
